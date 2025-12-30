@@ -1,0 +1,77 @@
+/*
+ * This file is part of the Quick Shulker Multi project, licensed under the
+ * GNU Lesser General Public License v3.0
+ *
+ * Copyright (C) 2025  Fallen_Breath and contributors
+ *
+ * Quick Shulker Multi is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Quick Shulker Multi is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Quick Shulker Multi.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package net.kyrptonaught.quickshulker.mixin;
+
+import net.kyrptonaught.quickshulker.util.BundleHelper;
+import net.kyrptonaught.quickshulker.QuickShulkerMod;
+import net.kyrptonaught.quickshulker.client.ClientUtil;
+import net.kyrptonaught.quickshulker.network.QuickBundlePacket;
+import net.kyrptonaught.shulkerutils.ShulkerUtils;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.StackReference;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.util.ClickType;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+@Mixin(Item.class)
+public abstract class ItemMixin {
+
+    @Inject(method = "onClicked", at = @At("HEAD"), cancellable = true)
+    public void QS$onClicked(ItemStack hostStack, ItemStack insertStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference, CallbackInfoReturnable<Boolean> cir) {
+        if (BundleHelper.shouldAttemptBundle(player, clickType, hostStack, insertStack, QuickShulkerMod.getConfig().supportsBundlingInsert)) {
+            if (ShulkerUtils.isShulkerItem(hostStack) || !player.getWorld().isClient) {
+                BundleHelper.bundleItemIntoStack(player, hostStack, insertStack, cir);
+            } else if (slot.inventory instanceof PlayerInventory && ClientUtil.isCreativeScreen(player)) {//stupid creative menu shiz
+                QuickBundlePacket.sendPacket(ClientUtil.getPlayerInvSlot(player.currentScreenHandler, slot), insertStack);
+                BundleHelper.bundleItemIntoStack(player, hostStack, insertStack, cir);
+            }
+        } else if (BundleHelper.shouldAttemptTransfer(player, clickType, hostStack, insertStack, QuickShulkerMod.getConfig().supportsBundlingTransfer)) {
+            BundleHelper.transferItemsToShulker(player, hostStack, insertStack, cir);
+        }
+    }
+
+    @Inject(method = "onStackClicked", at = @At("HEAD"), cancellable = true)
+    public void QS$onStackClicked(ItemStack hostStack, Slot slot, ClickType clickType, PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
+        ItemStack insertStack = slot.getStack();
+        if (BundleHelper.shouldAttemptBundle(player, clickType, hostStack, insertStack, QuickShulkerMod.getConfig().supportsBundlingPickup)) {//bundle stack into held item
+            if (ShulkerUtils.isShulkerItem(hostStack) || !player.getWorld().isClient) {
+                BundleHelper.bundleItemIntoStack(player, hostStack, insertStack, slot, cir);
+            } else if (slot.inventory instanceof PlayerInventory && ClientUtil.isCreativeScreen(player)) { //stupid creative menu shiz
+                QuickBundlePacket.BundleIntoHeld.sendPacket(insertStack, hostStack, ClientUtil.getPlayerInvSlot(player.currentScreenHandler, slot));
+                BundleHelper.bundleItemIntoStack(player, hostStack, insertStack, slot, cir);
+                //QuickBundlePacket.sendCreativeSlotUpdate(insertStack, slot); // It doesn't seem to be doing anything
+            }
+        } else if (BundleHelper.shouldAttemptUnBundle(player, clickType, hostStack, insertStack, QuickShulkerMod.getConfig().supportsBundlingExtract)) {//unbundle held stack into slot
+            if (ShulkerUtils.isShulkerItem(hostStack) || !player.getWorld().isClient) {
+                BundleHelper.unbundleStackIntoSlot(player, hostStack, slot, cir);
+            } else if (slot.inventory instanceof PlayerInventory && ClientUtil.isCreativeScreen(player)) { //stupid creative menu shiz
+                QuickBundlePacket.UnbundlePacket.sendPacket(ClientUtil.getPlayerInvSlot(player.currentScreenHandler, slot), hostStack);
+                BundleHelper.unbundleStackIntoSlot(player, hostStack, slot, cir);
+            }
+        }
+    }
+}
