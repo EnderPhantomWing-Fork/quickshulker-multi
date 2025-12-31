@@ -256,7 +256,12 @@ public class ConfigScreen extends Screen {
     }
 
     private void drawHeaderAndFooterSeparators(DrawContext context) {
+        //#if MC >= 1.21.5
+        //$$
+        //#else
         RenderSystem.enableBlend();
+        //#endif
+
         //#if MC >= 1.21.2
         //$$ context.drawTexture(RenderLayer::getGuiTextured, Screen.HEADER_SEPARATOR_TEXTURE, 0, 55, 0.0f, 0.0f, this.width, 2, 32, 2);
         //$$ context.drawTexture(RenderLayer::getGuiTextured, Screen.FOOTER_SEPARATOR_TEXTURE, 0, this.height -30, 0.0f, 0.0f, this.width, 2, 32, 2);
@@ -264,7 +269,12 @@ public class ConfigScreen extends Screen {
         context.drawTexture(Screen.HEADER_SEPARATOR_TEXTURE, 0, 55, 0.0f, 0.0f, this.width, 2, 32, 2);
         context.drawTexture(Screen.FOOTER_SEPARATOR_TEXTURE, 0, this.height -30, 0.0f, 0.0f, this.width, 2, 32, 2);
         //#endif
+
+        //#if MC >= 1.21.5
+        //$$
+        //#else
         RenderSystem.disableBlend();
+        //#endif
     }
 
     private void drawDirtTextureBlurred(DrawContext context, int x, int y, int width, int height) {

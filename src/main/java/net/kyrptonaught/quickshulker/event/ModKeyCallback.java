@@ -42,7 +42,11 @@ public class ModKeyCallback {
                 if (player.getMainHandStack().isEmpty() && !player.getOffHandStack().isEmpty())
                     ClientUtil.CheckAndSend(player.getOffHandStack(), 45);
                 else
+                    //#if MC >= 1.21.5
+                    //$$ ClientUtil.CheckAndSend(player.getMainHandStack(), 36 + player.getInventory().getSelectedSlot());
+                    //#else
                     ClientUtil.CheckAndSend(player.getMainHandStack(), 36 + player.getInventory().selectedSlot);
+                    //#endif
             }
         }
     }
