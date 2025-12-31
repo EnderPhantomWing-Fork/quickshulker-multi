@@ -30,6 +30,10 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
+//#if MC >= 1.21.8
+//$$ import net.minecraft.client.gl.RenderPipelines;
+//#else
+//#endif
 
 public class NotSuckyButton extends ButtonWidget {
     int buttonColor = 16777215;
@@ -54,8 +58,16 @@ public class NotSuckyButton extends ButtonWidget {
         //context.getMatrices().translate(0, 0,  1);
 
         if (disableHover) hovered = false;
-
-        //#if MC >= 1.21.2
+        //#if MC >= 1.21.8
+        //$$ context.drawGuiTexture(
+        //$$         RenderPipelines.GUI_TEXTURED,
+        //$$         TEXTURES.get(this.active, this.isSelected()),
+        //$$         this.getX(),
+        //$$         this.getY(),
+        //$$         this.getWidth(),
+        //$$         this.getHeight(),
+        //$$         ColorHelper.getWhite(this.alpha));
+        //#elseif MC >= 1.21.2
         //$$ context.drawGuiTexture(
         //$$         RenderLayer::getGuiTextured,
         //$$         TEXTURES.get(this.active, this.isSelected()),

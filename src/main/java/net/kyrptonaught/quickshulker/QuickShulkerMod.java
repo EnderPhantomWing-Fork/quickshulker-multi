@@ -130,7 +130,11 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                     .setItem(CraftingTableBlock.class)
                     .ignoreSingleStackCheck(true)
                     .setOpenAction(((player, stack) -> player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) ->
+                            //#if MC >= 1.21.8
+                            //$$ new CraftingScreenHandler(i, playerInventory, ScreenHandlerContext.create(player.getWorld(), player.getBlockPos())), Text.translatable("container.crafting")))))
+                            //#else
                             new CraftingScreenHandler(i, playerInventory, ScreenHandlerContext.create(player.getEntityWorld(), player.getBlockPos())), Text.translatable("container.crafting")))))
+                            //#endif
                     .register();
 
         if (getConfig().quickStonecutter)
@@ -138,7 +142,11 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                     .setItem(StonecutterBlock.class)
                     .ignoreSingleStackCheck(true)
                     .setOpenAction(((player, stack) -> player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) ->
+                            //#if MC >= 1.21.8
+                            //$$ new StonecutterScreenHandler(i, playerInventory, ScreenHandlerContext.create(player.getWorld(), player.getBlockPos())), Text.translatable("container.stonecutter")))))
+                            //#else
                             new StonecutterScreenHandler(i, playerInventory, ScreenHandlerContext.create(player.getEntityWorld(), player.getBlockPos())), Text.translatable("container.stonecutter")))))
+                            //#endif
                     .register();
 
         if(ModUtils.isModLoad(ModIds.reinfshulker) && QuickShulkerMod.getConfig().quickShulkerBox) {

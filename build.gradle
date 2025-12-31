@@ -19,10 +19,12 @@ preprocess {
 	def mc12103 = createNode('1.21.3', 1_21_03, '')
 	def mc12104 = createNode('1.21.4', 1_21_04, '')
 	def mc12105 = createNode('1.21.5', 1_21_05, '')
+	def mc12108 = createNode('1.21.8', 1_21_08, '')
 
 	mc12101.link(mc12103, null)
 	mc12103.link(mc12104, null)
 	mc12104.link(mc12105, null)
+	mc12105.link(mc12108, null)
 
 	// See https://github.com/Fallen-Breath/fabric-mod-template/blob/1d72d77a1c5ce0bf060c2501270298a12adab679/build.gradle#L55-L63
 	for (final def node in getNodes()) {

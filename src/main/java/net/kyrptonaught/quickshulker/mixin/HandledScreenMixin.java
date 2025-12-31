@@ -72,7 +72,11 @@ public abstract class HandledScreenMixin{
     }
 
     @Inject(
+            //#if MC >= 1.21.8
+            //$$ method = "renderMain(Lnet/minecraft/client/gui/DrawContext;IIF)V",
+            //#else
             method = "render(Lnet/minecraft/client/gui/DrawContext;IIF)V",
+            //#endif
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/screen/ingame/HandledScreen;drawForeground(Lnet/minecraft/client/gui/DrawContext;II)V",

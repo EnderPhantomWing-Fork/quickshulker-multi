@@ -74,6 +74,12 @@ dependencies {
 		modImplementation("com.terraformersmc:modmenu:14.0.0-rc.2") { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6429113") { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation "atonkish.reinfcore:reinforced-core:4.0.6+1.21.5"
+	} else if (mcVersion == 12108) {
+		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+		modImplementation("com.terraformersmc:modmenu:15.0.0") { exclude group: "net.fabricmc.fabric-api" }
+		modImplementation ("curse.maven:peek-693418:6945349") { exclude group: "net.fabricmc.fabric-api" }
+		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6813003") { exclude group: "net.fabricmc.fabric-api" }
+		modImplementation "atonkish.reinfcore:reinforced-core:4.0.7+1.21.8"
 	}
 
 	include(autoImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
@@ -85,21 +91,6 @@ dependencies {
 //	// [FEATURE] MIXIN_AUDITOR
 //	autoRuntimeOnly 'me.fallenbreath:mixin-auditor:0.1.0'  // FIXME: update for unobfuscated version
 
-//	} else if (mcVersion = 12105) {
-//		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//
-//		modImplementation("com.terraformersmc:modmenu:14.0.0-rc.2") { exclude group: "net.fabricmc.fabric-api" }
-//
-//		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6429113") { exclude group: "net.fabricmc.fabric-api" }
-//		modImplementation "atonkish.reinfcore:reinforced-core:4.0.6+1.21.5"
-//	} else if (mcVersion = 12108) {
-//		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//
-//		modImplementation("com.terraformersmc:modmenu:15.0.0") { exclude group: "net.fabricmc.fabric-api" }
-//
-//		modImplementation ("curse.maven:peek-693418:6945349") { exclude group: "net.fabricmc.fabric-api" }
-//		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6813003") { exclude group: "net.fabricmc.fabric-api" }
-//		modImplementation "atonkish.reinfcore:reinforced-core:4.0.7+1.21.8"
 //	} else if (mcVersion = 12110) {
 //		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 //
