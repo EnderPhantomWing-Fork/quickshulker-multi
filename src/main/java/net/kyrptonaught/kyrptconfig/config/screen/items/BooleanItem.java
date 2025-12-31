@@ -24,6 +24,10 @@ import net.kyrptonaught.kyrptconfig.config.screen.NotSuckyButton;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.DyeColor;
+//#if MC >= 1.21.10
+//$$ import net.minecraft.client.gui.Click;
+//#else
+//#endif
 
 public class BooleanItem extends ConfigItem<Boolean> {
     private final NotSuckyButton boolWidget;
@@ -49,11 +53,19 @@ public class BooleanItem extends ConfigItem<Boolean> {
         }
     }
 
+    //#if MC >= 1.21.10
+    //$$  @Override
+    //$$  public void mouseClicked(Click click, boolean doubled) {
+    //$$      super.mouseClicked(click, doubled);
+    //$$      boolWidget.mouseClicked(click, doubled);
+    //$$  }
+    //#else
     @Override
     public void mouseClicked(double mouseX, double mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
         boolWidget.mouseClicked(mouseX, mouseY, button);
     }
+    //#endif
 
     @Override
     public void render(DrawContext context, int x, int y, int mouseX, int mouseY, float delta) {

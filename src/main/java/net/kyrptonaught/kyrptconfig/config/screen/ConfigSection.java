@@ -25,6 +25,12 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
+//#if MC >= 1.21.10
+//$$ import net.minecraft.client.input.CharInput;
+//$$ import net.minecraft.client.gui.Click;
+//$$ import net.minecraft.client.input.KeyInput;
+//#else
+//#endif
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -82,6 +88,25 @@ public class ConfigSection extends Screen {
         }
     }
 
+    //#if MC >= 1.21.10
+    //$$ @Override
+    //$$ public boolean charTyped(CharInput input) {
+    //$$     for (ConfigItem<?> configItem : configs) {
+    //$$         if (configItem.charTyped(input))
+    //$$             return true;
+    //$$     }
+    //$$     return false;
+    //$$ }
+    //
+    //$$ @Override
+    //$$ public boolean mouseClicked(Click click, boolean doubled) {
+    //$$     for (ConfigItem<?> configItem : configs) {
+    //$$         configItem.mouseClicked(click, doubled);
+    //$$     }
+    //$$     mouseScrolled(click.x(), click.y(), 0,0); // update scroll if option changes screen size
+    //$$     return false;
+    //$$ }
+    //#else
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         for (ConfigItem<?> configItem : configs) {
             if (configItem.keyPressed(keyCode, scanCode, modifiers))
@@ -106,6 +131,7 @@ public class ConfigSection extends Screen {
         mouseScrolled(mouseX, mouseY, 0,0); // update scroll if option changes screen size
         return false;
     }
+    //#endif
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {

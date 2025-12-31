@@ -32,6 +32,11 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+//#if MC >= 1.21.10
+//$$ import net.minecraft.client.gui.Click;
+//$$ import net.minecraft.client.input.KeyInput;
+//#else
+//#endif
 import org.lwjgl.glfw.GLFW;
 
 public class KeybindItem extends ConfigItem<String> {
@@ -102,6 +107,20 @@ public class KeybindItem extends ConfigItem<String> {
         return this.value != null && !this.value.isEmpty() && !this.value.isBlank() && !this.value.equals("key.keyboard.unknown");
     }
 
+    //#if MC >= 1.21.10
+    //$$ @Override
+    //$$ public boolean keyPressed(KeyInput input) {
+    //$$     if (isListening) {
+    //$$         if (input.getKeycode() == GLFW.GLFW_KEY_ESCAPE) {
+    //$$             setValue("");
+    //$$             return true;
+    //$$         }
+    //$$         setValue(InputUtil.fromKeyCode(input).getTranslationKey());
+    //$$         return true;
+    //$$     }
+    //$$     return false;
+    //$$ }
+    //#else
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (isListening) {
@@ -109,12 +128,28 @@ public class KeybindItem extends ConfigItem<String> {
                 setValue("");
                 return true;
             }
+            //#if MC >= 1.21.10
+            //$$ setValue(InputUtil.fromKeyCode(input).getTranslationKey());
+            //#else
             setValue(InputUtil.fromKeyCode(keyCode, scanCode).getTranslationKey());
+            //#endif
             return true;
         }
         return false;
     }
+    //#endif
 
+    //#if MC >= 1.21.10
+    //$$ @Override
+    //$$ public void mouseClicked(Click click, boolean doubled) {
+    //$$     super.mouseClicked(click, doubled);
+    //$$     boolean handled;
+    //$$     handled = (keyButton.mouseClicked(click, doubled) || resetButton.mouseClicked(click, doubled));
+    //$$     if (isListening && !handled) {
+    //$$         setValue(InputUtil.Type.MOUSE.createFromCode(click.button()).getTranslationKey());
+    //$$     }
+    //$$ }
+    //#else
     @Override
     public void mouseClicked(double mouseX, double mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
@@ -124,6 +159,7 @@ public class KeybindItem extends ConfigItem<String> {
             setValue(InputUtil.Type.MOUSE.createFromCode(button).getTranslationKey());
         }
     }
+    //#endif
 
     @Override
     public void render(DrawContext context, int x, int y, int mouseX, int mouseY, float delta) {

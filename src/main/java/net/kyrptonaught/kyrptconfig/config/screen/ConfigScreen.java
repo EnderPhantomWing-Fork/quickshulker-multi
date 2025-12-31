@@ -29,7 +29,12 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
-//#if MC >= 1.21.8
+//#if MC >= 1.21.10
+//$$ import net.minecraft.client.input.CharInput;
+//$$ import net.minecraft.client.input.KeyInput;
+//$$ import net.minecraft.client.gui.Click;
+//$$ import net.minecraft.client.gl.RenderPipelines;
+//#elseif MC >= 1.21.8
 //$$ import net.minecraft.client.gl.RenderPipelines;
 //#else
 //#endif
@@ -155,6 +160,31 @@ public class ConfigScreen extends Screen {
         this.selectedSection = selectedSection;
     }
 
+    //#if MC >= 1.21.10
+    //$$ @Override
+    //$$  public boolean keyPressed(KeyInput input) {
+    //$$      if (sections.get(selectedSection).keyPressed(input)) return true;
+    //$$      return super.keyPressed(input);
+    //$$  }
+    //
+    //$$  @Override
+    //$$  public boolean charTyped(CharInput input) {
+    //$$      return sections.get(selectedSection).charTyped(input);
+    //$$  }
+    //
+    //$$  @Override
+    //$$  public boolean mouseClicked(Click click, boolean doubled) {
+    //$$      super.mouseClicked(click, doubled);
+    //
+    //$$      if (scrollLeftBTN.mouseClicked(click, doubled) || scrollRightBTN.mouseClicked(click, doubled))
+    //$$          return true;
+    //
+    //$$      for (ConfigSection section : sections)
+    //$$          if (section.sectionSelectionBTN.mouseClicked(click, doubled)) return true;
+    //
+    //$$      return sections.get(selectedSection).mouseClicked(click, doubled);
+    //$$  }
+    //#else
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (sections.get(selectedSection).keyPressed(keyCode, scanCode, modifiers)) return true;
@@ -178,6 +208,7 @@ public class ConfigScreen extends Screen {
 
         return sections.get(selectedSection).mouseClicked(mouseX, mouseY, button);
     }
+    //#endif
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {

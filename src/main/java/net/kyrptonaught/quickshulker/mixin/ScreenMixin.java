@@ -41,6 +41,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+//#if MC >= 1.21.10
+//$$ import net.minecraft.client.gui.Click;
+//$$ import net.minecraft.client.input.KeyInput;
+//#else
+//#endif
 
 @Mixin(HandledScreen.class)
 @Environment(EnvType.CLIENT)
@@ -63,6 +68,39 @@ public abstract class ScreenMixin {
         }
     }
 
+    //#if MC >= 1.21.10
+    //$$ @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
+    //$$ private void QS$keyPressed(KeyInput input, CallbackInfoReturnable<Boolean> cir) {
+    //$$     if (QuickShulkerMod.getConfig().keybingInInv) {
+    //$$         if (QuickShulkerModClient.getKeybinding().matches(input.getKeycode(), InputUtil.Type.KEYSYM)) {
+    //$$             if (handleTrigger())
+    //$$                 cir.setReturnValue(true);
+    //$$         }
+    //$$     }
+    //$$ }
+    //
+    //$$ @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
+    //$$ private void QS$mousePressed(Click click, boolean doubled, CallbackInfoReturnable<Boolean> cir) {
+    //$$     if (QuickShulkerMod.getConfig().rightClickInv) {
+    //$$         if (this.handler.getCursorStack().isEmpty() && click.button() == 1 && this.focusedSlot != null && this.focusedSlot.getStack().getCount() == 1) {
+    //$$             if (handleTrigger()) {
+    //$$                 this.cancelNextRelease = true;
+    //$$                 cir.setReturnValue(true);
+    //$$                 return;
+    //$$             }
+    //$$         }
+    //$$     }
+    //$$     if (QuickShulkerMod.getConfig().keybingInInv) {
+    //$$         if (QuickShulkerModClient.getKeybinding().matches(click.button(), InputUtil.Type.MOUSE)) {
+    //$$             if (handleTrigger()) {
+    //$$                 this.cancelNextRelease = true;
+    //$$                 cir.setReturnValue(true);
+    //$$                 return;
+    //$$             }
+    //$$         }
+    //$$     }
+    //$$ }
+    //#else
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void QS$keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (QuickShulkerMod.getConfig().keybingInInv) {
@@ -94,6 +132,7 @@ public abstract class ScreenMixin {
             }
         }
     }
+    //#endif
 
     @Unique
     private boolean handleTrigger() {

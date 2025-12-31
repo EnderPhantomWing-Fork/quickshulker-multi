@@ -27,6 +27,12 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Language;
 import net.minecraft.util.math.ColorHelper;
+//#if MC >= 1.21.10
+//$$ import net.minecraft.client.gui.Click;
+//$$ import net.minecraft.client.input.CharInput;
+//$$ import net.minecraft.client.input.KeyInput;
+//#else
+//#endif
 
 import java.util.ArrayList;
 import java.util.List;
@@ -150,19 +156,35 @@ public abstract class ConfigItem<T> {
     public void tick() {
     }
 
+    //#if MC >= 1.21.10
+    //$$ public void mouseClicked(Click click, boolean doubled) {
+    //$$     if (isHidden) return;
+    //$$     if (resetButton != null)
+    //$$         resetButton.mouseClicked(click, doubled);
+    //$$ }
+    //#else
     public void mouseClicked(double mouseX, double mouseY, int button) {
         if (isHidden) return;
         if (resetButton != null)
             resetButton.mouseClicked(mouseX, mouseY, button);
     }
+    //#endif
 
+    //#if MC >= 1.21.10
+    //$$ public boolean charTyped(CharInput input) { return false; }
+    //#else
     public boolean charTyped(char chr, int modifiers) {
         return false;
     }
+    //#endif
 
+    //#if MC >= 1.21.10
+    //$$ public boolean keyPressed(KeyInput input) { return false; }
+    //#else
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         return false;
     }
+    //#endif
 
     public void render(DrawContext context, int x, int y, int mouseX, int mouseY, float delta) {
         if (isHidden) return;

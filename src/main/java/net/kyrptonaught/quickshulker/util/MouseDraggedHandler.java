@@ -35,6 +35,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+//#if MC >= 1.21.10
+//$$ import net.minecraft.client.gui.Click;
+//#else
+//#endif
 
 import java.util.Set;
 
@@ -60,6 +64,70 @@ public class MouseDraggedHandler {
         return true;
     }
 
+    //#if MC >= 1.21.10
+    //$$ public static boolean beforeMouseClick(HandledScreen<?> screen, Click click){
+    //$$     if(!QuickShulkerMod.getConfig().supportsMouseDragged) return false;
+    //$$     Slot slot = ((HandledScreenInvoker) screen).QS$getSlotAt(click.x(), click.y());
+    //$$     if(slot != null && click.button() == 1){
+    //$$         MinecraftClient client = ((ScreenAccessor) screen).getClient();
+    //$$         ItemStack itemStack  = screen.getScreenHandler().getCursorStack();
+    //$$         Inventory inv = Util.getQuickItemInventory(client.player, itemStack);
+    //$$         if(inv == null) return false;
+    //$$         if(slot.hasStack()){
+    //$$             dragMode = DragMode.BUNDLE;
+    //$$         }else{
+    //$$             dragMode = DragMode.UNBUNDLE;
+    //$$         }
+    //$$         DRAGGED_SLOTS.clear();
+    //$$         return true;
+    //$$     }
+    //$$     return false;
+    //$$ }
+    //
+    //$$ public static boolean beforeMouseDragged(HandledScreen<?> screen, Click click){
+    //$$     if(!QuickShulkerMod.getConfig().supportsMouseDragged) return false;
+    //$$     boolean result = false;
+    //$$     if(dragMode != null){
+    //$$         MinecraftClient client = ((ScreenAccessor) screen).getClient();
+    //$$         ScreenHandler handler = screen.getScreenHandler();
+    //$$         ItemStack itemStack = handler.getCursorStack();
+    //$$         if(click.button() != 1){
+    //$$             dragMode = null;
+    //$$             DRAGGED_SLOTS.clear();
+    //$$             return false;
+    //$$         }
+    //$$         Slot slot = ((HandledScreenInvoker) screen).QS$getSlotAt(click.x(), click.y());
+    //$$         if(slot != null && (handler.canInsertIntoSlot(slot) || slot.canTakeItems(client.player))){
+    //$$             if(dragMode == DragMode.BUNDLE){
+    //$$                 if(slot.hasStack() && canInsertIntoContainer(client.player, itemStack, slot.getStack()) && !ShulkerUtils.isShulkerItem(slot.getStack()) && !DRAGGED_SLOTS.contains(slot)){
+    //$$                     DRAGGED_SLOTS.add(slot);
+    //$$                     ((HandledScreenInvoker) screen).QS$onMouseClick(slot, slot.id, click.button(), SlotActionType.PICKUP);
+    //$$                     result = true;
+    //$$                 }
+    //$$             }else{
+    //$$                 if(!slot.hasStack() && !isContainerEmpty(client.player, itemStack) && !DRAGGED_SLOTS.contains(slot)){
+    //$$                     DRAGGED_SLOTS.add(slot);
+    //$$                     ((HandledScreenInvoker) screen).QS$onMouseClick(slot, slot.id, click.button(), SlotActionType.PICKUP);
+    //$$                     result = true;
+    //$$                 }
+    //$$             }
+    //$$         }
+    //$$     }
+    //$$     return result;
+    //$$ }
+    //
+    //$$ public static boolean beforeMouseReleased(HandledScreen<?> screen, Click click){
+    //$$     if(!QuickShulkerMod.getConfig().supportsMouseDragged) return false;
+    //$$     if(dragMode != null){
+    //$$         dragMode = null;
+    //$$         if(click.button() == 1 && !DRAGGED_SLOTS.isEmpty()){
+    //$$             DRAGGED_SLOTS.clear();
+    //$$             return true;
+    //$$         }
+    //$$     }
+    //$$     return false;
+    //$$ }
+    //#else
     public static boolean beforeMouseClick(HandledScreen<?> screen, double mouseX, double mouseY, int button){
         if(!QuickShulkerMod.getConfig().supportsMouseDragged) return false;
         Slot slot = ((HandledScreenInvoker) screen).QS$getSlotAt(mouseX, mouseY);
@@ -122,6 +190,7 @@ public class MouseDraggedHandler {
         }
         return false;
     }
+    //#endif
 
     public static void beforeDrawForeground(HandledScreen<?> screen, DrawContext context, int mouseX, int mouseY){
         ScreenHandler handler = screen.getScreenHandler();

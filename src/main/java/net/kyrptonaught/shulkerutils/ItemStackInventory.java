@@ -26,6 +26,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
+//#if MC >= 1.21.10
+//$$ import net.minecraft.entity.ContainerUser;
+//#else
+//#endif
 
 import java.util.Objects;
 
@@ -56,6 +60,17 @@ public class ItemStackInventory extends SimpleInventory {
         itemStack.set(DataComponentTypes.CONTAINER, ContainerComponent.fromStacks(itemStacks));
     }
 
+    //#if MC >= 1.21.10
+    //@Override
+    //$$ public void onClose(ContainerUser user) {
+    //$$     if (itemStack.getCount() > 1) {
+    //$$         int count = itemStack.getCount();
+    //$$         itemStack.setCount(1);
+    //$$         ((PlayerEntity) user).giveItemStack(new ItemStack(itemStack.getItem(), count - 1));
+    //$$     }
+    //$$     markDirty();
+    //$$ }
+    //#else
     @Override
     public void onClose(PlayerEntity playerEntity) {
         if (itemStack.getCount() > 1) {
@@ -65,4 +80,5 @@ public class ItemStackInventory extends SimpleInventory {
         }
         markDirty();
     }
+    //#endif
 }
