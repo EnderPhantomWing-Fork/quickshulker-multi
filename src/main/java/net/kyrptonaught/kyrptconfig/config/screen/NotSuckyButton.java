@@ -55,11 +55,22 @@ public class NotSuckyButton extends ButtonWidget {
 
         if (disableHover) hovered = false;
 
+        //#if MC >= 1.21.2
+        //$$ context.drawGuiTexture(
+        //$$         RenderLayer::getGuiTextured,
+        //$$         TEXTURES.get(this.active, this.isSelected()),
+        //$$         this.getX(),
+        //$$         this.getY(),
+        //$$         this.getWidth(),
+        //$$         this.getHeight(),
+        //$$         ColorHelper.getWhite(this.alpha));
+        //#else
         context.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
         context.drawGuiTexture(TEXTURES.get(this.active, this.isSelected()), this.getX(), this.getY(), this.getWidth(), this.getHeight());
         context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        //#endif
         TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
         int i = this.active ? buttonColor : 0xA0A0A0;
         drawMessage(context, textRenderer, i);

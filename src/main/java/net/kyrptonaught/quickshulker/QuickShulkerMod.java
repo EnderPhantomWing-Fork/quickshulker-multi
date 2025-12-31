@@ -45,7 +45,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.*;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
+//#if MC >= 1.21.2
+//$$ import net.minecraft.util.ActionResult;
+//#else
 import net.minecraft.util.TypedActionResult;
+//#endif
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,11 +76,19 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                             Util.openItem(player, 0, player.getInventory().selectedSlot);
                         else Util.openItem(player, 0, PlayerInventory.OFF_HAND_SLOT);
 
+                        //#if MC >= 1.21.2
+                        //$$ return ActionResult.SUCCESS_SERVER;
+                        //#else
                         return TypedActionResult.success(stack);
+                        //#endif
                     }
                 }
             }
+            //#if MC >= 1.21.2
+            //$$ return ActionResult.PASS;
+            //#else
             return TypedActionResult.pass(stack);
+            //#endif
         });
 
         PayloadTypeRegistry.playS2C().register(OpenInventoryPacket.OPEN_INV_ID, OpenInventoryPacket.CODEC);

@@ -231,7 +231,11 @@ public class ConfigScreen extends Screen {
             int y = MathHelper.lerp(percentage, 57, this.height - 30 - height);
 
             context.fill(x, 57, x + 6, this.height - 30, -16777216);
+            //#if MC >= 1.21.2
+            //$$ context.drawGuiTexture(RenderLayer::getGuiTextured, SCROLLER_TEXTURE, x, y, 6, height);
+            //#else
             context.drawGuiTexture(SCROLLER_TEXTURE, x, y, 6, height);
+            //#endif
         }
 
         section.render2(context, 57, mouseX, mouseY, deltaTicks);
@@ -244,19 +248,34 @@ public class ConfigScreen extends Screen {
     }
 
     private void renderBackgroundTexture(DrawContext context) {
+        //#if MC >= 1.21.2
+        //$$ context.drawTexture(RenderLayer::getGuiTextured, OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0, this.width, this.height, 32, 32);
+        //#else
         context.drawTexture(OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0, this.width, this.height, 32, 32);
+        //#endif
     }
 
     private void drawHeaderAndFooterSeparators(DrawContext context) {
         RenderSystem.enableBlend();
+        //#if MC >= 1.21.2
+        //$$ context.drawTexture(RenderLayer::getGuiTextured, Screen.HEADER_SEPARATOR_TEXTURE, 0, 55, 0.0f, 0.0f, this.width, 2, 32, 2);
+        //$$ context.drawTexture(RenderLayer::getGuiTextured, Screen.FOOTER_SEPARATOR_TEXTURE, 0, this.height -30, 0.0f, 0.0f, this.width, 2, 32, 2);
+        //#else
         context.drawTexture(Screen.HEADER_SEPARATOR_TEXTURE, 0, 55, 0.0f, 0.0f, this.width, 2, 32, 2);
         context.drawTexture(Screen.FOOTER_SEPARATOR_TEXTURE, 0, this.height -30, 0.0f, 0.0f, this.width, 2, 32, 2);
+        //#endif
         RenderSystem.disableBlend();
     }
 
     private void drawDirtTextureBlurred(DrawContext context, int x, int y, int width, int height) {
+        //#if MC >= 1.21.2
+        //$$ int color = ColorHelper.fromFloats(.7f, 0, 0, 0);
+        //$$ context.drawTexture(RenderLayer::getGuiTextured, OPTIONS_BACKGROUND_TEXTURE, x, y, 0, 0, width, height, 64, 64);
+        //$$ context.fillGradient(x, y, x + width, y + height, color, color);
+        //#else
         context.setShaderColor(0.25F, 0.25F, 0.25F, 1.0F);
         context.drawTexture(OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0.0F, 0.0F, this.width, this.height, 32, 32);
         context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        //#endif
     }
 }
