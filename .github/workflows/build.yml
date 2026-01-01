@@ -28,7 +28,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Get latest hash
-        working-directory: ./celeritas
         run: echo "COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
       - name: Build
