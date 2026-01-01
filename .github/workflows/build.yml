@@ -54,5 +54,5 @@ jobs:
       - name: Upload mod jars
         uses: actions/upload-artifact@v4
         with:
-          name: quickshulker-$COMMIT_HASH
+          name: quickshulker-{{ env.COMMIT_HASH }}
           path: mod-jars/*.jar
