@@ -1,21 +1,20 @@
-## fabric-mod-template
+# Quick Shulker Multi
 
-[![License](https://img.shields.io/github/license/Fallen-Breath/fabric-mod-template.svg)](http://www.gnu.org/licenses/lgpl-3.0.html)
-[![workflow](https://github.com/Fallen-Breath/fabric-mod-template/actions/workflows/gradle.yml/badge.svg)](https://github.com/Fallen-Breath/fabric-mod-template/actions/workflows/gradle.yml)
+Use the multi-version build tool preprocessor to build mods for multiple Minecraft versions quickly.
 
-fallen's fabric mod template
+Quickly open a held shulker box with the press of a key!
 
-If you find it helpful, a credit to this template in your project will be greatly appreciated
+This project is one I used to practice building multi-version mods using [Fallen-Breath/preprocessor](https://github.com/Fallen-Breath/preprocessor).
 
-## To use
+This project's upstream [MoRanpcy/quickshulker](https://github.com/MoRanpcy/quickshulker) updates [kyrptonaught](https://github.com/kyrptonaught)'s [QuickShulker](https://github.com/kyrptonaught/quickshulker.git) mod to higher Minecraft versions and fixes something.
 
-1. Clone / Use this template to get a new project
-2. Search `[FEATURE]` in the project, delete or uncomment those addons
-3. Setup the mod
-    - Edit java package name
-    - Edit [gradle.properties](gradle.properties) for mod id / name etc.
-    - Edit mod name in [bug_report.yml](.github/ISSUE_TEMPLATE/bug_report.yml)
-    - Edit [common.gradle](common.gradle) for mod file location constants
-    - Change the Minecraft versions in [settings.json](settings.json), [build.gradle](build.gradle), and files in the [versions](versions) folder
-    - Search `template` in the project to see if there are any missing unedited stuffs
-4. Edit [README](README.md) for the new mod
+## Quick Download
+
+Click on the link below to download.
+
+Please choose the appropriate mod for your Minecraft version.
+
+* [The Latest RELEASE (GitHub Release)](https://github.com/EnderPhantomWing/quickshulker-multi/releases/latest)
+
+
+* [The Newest SNAPSHOT (GitHub Actions)](https://github.com/EnderPhantomWing/quickshulker-multi/actions)
