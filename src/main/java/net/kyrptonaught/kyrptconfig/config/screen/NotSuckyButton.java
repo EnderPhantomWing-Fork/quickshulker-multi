@@ -32,6 +32,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
+import net.minecraft.client.render.RenderLayer;
 //#if MC >= 1.21.8
 //$$ import net.minecraft.client.gl.RenderPipelines;
 //#else
