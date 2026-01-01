@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
-          path: versions/*/build/libs/!(*-@(dev|sources|shadow)).jar
+          path: versions/*/build/libs/!*-sources.jar
 
       - name: Upload artifacts to release[Manually Release Build]
         if: github.event_name == 'workflow_dispatch'
