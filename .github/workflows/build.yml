@@ -27,6 +27,10 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
+      - name: Get latest hash
+        working-directory: ./celeritas
+        run: echo "COMMIT_HASH=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
       - name: Build
         run: |
           chmod +x gradlew
@@ -51,5 +55,5 @@ jobs:
       - name: Upload mod jars
         uses: actions/upload-artifact@v4
         with:
-          name: quickshulker-mod-artifacts
+          name: quickshulker-$COMMIT_HASH
           path: mod-jars/*.jar
