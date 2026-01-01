@@ -145,28 +145,28 @@ public class ConfigScreen extends Screen {
 
     //#if MC >= 1.21.10
     //$$ @Override
-    //$$  public boolean keyPressed(KeyInput input) {
-    //$$      if (sections.get(selectedSection).keyPressed(input)) return true;
-    //$$      return super.keyPressed(input);
-    //$$  }
+    //$$ public boolean keyPressed(KeyInput input) {
+    //$$     if (sections.get(selectedSection).keyPressed(input)) return true;
+    //$$     return super.keyPressed(input);
+    //$$ }
     //
-    //$$  @Override
-    //$$  public boolean charTyped(CharInput input) {
-    //$$      return sections.get(selectedSection).charTyped(input);
-    //$$  }
+    //$$ @Override
+    //$$ public boolean charTyped(CharInput input) {
+    //$$     return sections.get(selectedSection).charTyped(input);
+    //$$ }
     //
-    //$$  @Override
-    //$$  public boolean mouseClicked(Click click, boolean doubled) {
-    //$$      super.mouseClicked(click, doubled);
+    //$$ @Override
+    //$$ public boolean mouseClicked(Click click, boolean doubled) {
+    //$$     super.mouseClicked(click, doubled);
     //
-    //$$      if (scrollLeftBTN.mouseClicked(click, doubled) || scrollRightBTN.mouseClicked(click, doubled))
-    //$$          return true;
+    //$$     if (scrollLeftBTN.mouseClicked(click, doubled) || scrollRightBTN.mouseClicked(click, doubled))
+    //$$         return true;
     //
-    //$$      for (ConfigSection section : sections)
-    //$$          if (section.sectionSelectionBTN.mouseClicked(click, doubled)) return true;
+    //$$     for (ConfigSection section : sections)
+    //$$         if (section.sectionSelectionBTN.mouseClicked(click, doubled)) return true;
     //
-    //$$      return sections.get(selectedSection).mouseClicked(click, doubled);
-    //$$  }
+    //$$     return sections.get(selectedSection).mouseClicked(click, doubled);
+    //$$ }
     //#else
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {

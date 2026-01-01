@@ -44,7 +44,11 @@ public class GameOptionsMixin {
         SpoofedKeysHelper.spoofed_Keys.clear();
         for (KeyBinding keyBinding : this.allKeys) {
             if (keyBinding instanceof DisplayOnlyKeyBind)
+                //#if MC >= 1.21.10
+                //$$ SpoofedKeysHelper.spoofed_Keys.add("key_" + keyBinding.getId());
+                //#else
                 SpoofedKeysHelper.spoofed_Keys.add("key_" + keyBinding.getTranslationKey());
+                //#endif
         }
     }
 }

@@ -68,7 +68,16 @@ public class ConfigSection extends Screen {
         }
     }
 
+    @Override
     //#if MC >= 1.21.10
+    //$$ public boolean keyPressed(KeyInput input) {
+    //$$     for (ConfigItem<?> configItem : configs) {
+    //$$         if (configItem.keyPressed(input))
+    //$$             return true;
+    //$$     }
+    //$$     return false;
+    //$$ }
+    //
     //$$ @Override
     //$$ public boolean charTyped(CharInput input) {
     //$$     for (ConfigItem<?> configItem : configs) {
@@ -104,6 +113,7 @@ public class ConfigSection extends Screen {
         return false;
     }
 
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         for (ConfigItem<?> configItem : configs) {
             configItem.mouseClicked(mouseX, mouseY, button);

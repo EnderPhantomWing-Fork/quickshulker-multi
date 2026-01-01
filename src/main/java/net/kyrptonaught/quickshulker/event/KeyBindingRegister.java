@@ -31,7 +31,7 @@ import net.kyrptonaught.quickshulker.QuickShulkerMod;
 
 public class KeyBindingRegister {
     //#if MC >= 1.21.10
-    //$$  public static final KeyBinding.Category MAIN = KeyBinding.Category.create(Identifier.of(QuickShulkerMod.MOD_ID, "main"));
+    //$$  public static final KeyBinding.Category MAIN = KeyBinding.Category.create(Identifier.of(QuickShulkerMod.MOD_ID));
     //
     //$$  public static void register(){
     //$$      KeyBindingHelper.registerKeyBinding(new DisplayOnlyKeyBind(

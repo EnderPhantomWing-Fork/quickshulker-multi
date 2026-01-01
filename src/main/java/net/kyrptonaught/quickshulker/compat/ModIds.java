@@ -22,10 +22,6 @@ package net.kyrptonaught.quickshulker.compat;
 
 public class ModIds {
 
-    //#if MC >= 1.21.8
-    //$$ public static final String peek = "peek";
-    //#else
-    //#endif
     public static final String reinfshulker = "reinfshulker";
 
 }

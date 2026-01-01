@@ -60,8 +60,8 @@ public class ItemStackInventory extends SimpleInventory {
         itemStack.set(DataComponentTypes.CONTAINER, ContainerComponent.fromStacks(itemStacks));
     }
 
+    @Override
     //#if MC >= 1.21.10
-    //@Override
     //$$ public void onClose(ContainerUser user) {
     //$$     if (itemStack.getCount() > 1) {
     //$$         int count = itemStack.getCount();
@@ -71,7 +71,6 @@ public class ItemStackInventory extends SimpleInventory {
     //$$     markDirty();
     //$$ }
     //#else
-    @Override
     public void onClose(PlayerEntity playerEntity) {
         if (itemStack.getCount() > 1) {
             int count = itemStack.getCount();

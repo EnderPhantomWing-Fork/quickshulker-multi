@@ -22,6 +22,10 @@ package net.kyrptonaught.kyrptconfig.keybinding;
 
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+//#if MC >= 1.21.10
+//$$ import net.minecraft.util.Identifier;
+//#else
+//#endif
 
 import java.util.function.Consumer;
 
@@ -69,16 +73,28 @@ public class DisplayOnlyKeyBind extends KeyBinding {
     //$$ }
     //#else
     @Override
+    //#if MC >= 1.21.10
+    //$$ public KeyBinding.Category getCategory() {
+    //#else
     public String getCategory() {
+    //#endif
         updateSetKey();
         return super.getCategory();
     }
     //#endif
 
     @Override
+    //#if MC >= 1.21.10
+    //$$ public String getId() {
+    //#else
     public String getTranslationKey() {
+    //#endif
         updateSetKey();
+        //#if MC >= 1.21.10
+        //$$ return super.getId();
+        //#else
         return super.getTranslationKey();
+        //#endif
     }
 
     @Override
