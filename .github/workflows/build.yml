@@ -32,9 +32,15 @@ jobs:
           chmod +x gradlew
           ./gradlew build
 
-      - name: Delete sources jar
+      - name: Delete sources.jar artifacts
         run: |
-          find version/*/build/libs/ -name "*sources.jar" -print0 | xargs -0 rm
+          echo "=== 清理前统计 ==="
+          find . -type f -name "*.jar" | grep -c "sources" || true
+          echo "总jar文件数: $(find . -type f -name "*.jar" | wc -l)"
+          echo "=== 开始删除 sources.jar ==="
+          find . -path "*/build/libs/*sources.jar" -type f -delete
+          echo "=== 清理后统计 ==="
+          echo "剩余jar文件数: $(find . -type f -name "*.jar" | wc -l)"
 
       - name: Upload Build Artifacts [CI Build]
         uses: actions/upload-artifact@v4
