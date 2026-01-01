@@ -32,29 +32,24 @@ jobs:
           chmod +x gradlew
           ./gradlew build
 
-      - name: Delete sources.jar artifacts
-        run: |
-          find . -path "versions/*/build/libs/*sources.jar" -type f -delete
+#      - name: Upload artifacts
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: sources-artifacts
+#          path: versions/*/build/libs/
 
-      - name: Upload jar files without directories
+      - name: Collect mod jars
         run: |
-          # 1. 创建目标目录
-          mkdir -p common_jars
-          # 2. 复制所有jar文件到扁平目录（保留sources.jar的排除逻辑）
-          find . -path "versions/*/build/libs/*.jar" ! -name "*sources.jar" -type f -exec cp {} common_jars/ \;
-          ls -la common_jars/
-          echo "已收集 $(ls common_jars/*.jar 2>/dev/null | wc -l) 个jar文件"
+          shopt -s extglob
+          mkdir mod-jars
+          for jar in versions/*/build/libs/!(*-@(dev|sources|shadow)).jar; do
+              cp -p "$jar" mod-jars/
+          done
+          ls -l mod-jars
 
-      - name: Upload Build Artifacts [CI Build]
+      # This is the artifact recommended for users to download
+      - name: Upload mod jars
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts
-          path: common_jars/*.jar
-
-      - name: Upload artifacts to release [Manually Release Build]
-        if: github.event_name == 'workflow_dispatch'
-        uses: softprops/action-gh-release@v2
-        with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
-          files: common_jars/*.jar
-          tag_name: ${{ github.event.inputs.tag_name }}
+          name: quickshulker-mod-artifacts
+          path: mod-jars/*.jar
