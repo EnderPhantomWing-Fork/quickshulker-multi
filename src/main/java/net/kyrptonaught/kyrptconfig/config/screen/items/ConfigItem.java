@@ -198,7 +198,11 @@ public abstract class ConfigItem<T> {
             context.fill(0, y - 1, width, height + 1, ColorHelper.Argb.getArgb(50, 255, 255, 255));
             //#endif
 
+        //#if MC >= 1.21.8
+        //$$ context.drawText(MinecraftClient.getInstance().textRenderer, this.fieldTitle, x, y + 6, -1, true);
+        //#else
         context.drawText(MinecraftClient.getInstance().textRenderer, this.fieldTitle, x, y + 6, 16777215, true);
+        //#endif
 
         if (resetButton != null) {
             this.resetButton.setY(y);

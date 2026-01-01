@@ -1,32 +1,15 @@
-/*
- * This file is part of the Quick Shulker Multi project, licensed under the
- * GNU Lesser General Public License v3.0
- *
- * Copyright (C) 2025  Fallen_Breath and contributors
- *
- * Quick Shulker Multi is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Quick Shulker Multi is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Quick Shulker Multi.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package net.kyrptonaught.kyrptconfig.config.screen;
 
+//#if MC >= 1.21.2
+//#else
 import com.mojang.blaze3d.systems.RenderSystem;
+//#endif
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 //#if MC >= 1.21.10
@@ -295,7 +278,7 @@ public class ConfigScreen extends Screen {
     }
 
     private void drawHeaderAndFooterSeparators(DrawContext context) {
-        //#if MC >= 1.21.5
+        //#if MC >= 1.21.2
         //$$
         //#else
         RenderSystem.enableBlend();
@@ -312,7 +295,7 @@ public class ConfigScreen extends Screen {
         context.drawTexture(Screen.FOOTER_SEPARATOR_TEXTURE, 0, this.height -30, 0.0f, 0.0f, this.width, 2, 32, 2);
         //#endif
 
-        //#if MC >= 1.21.5
+        //#if MC >= 1.21.2
         //$$
         //#else
         RenderSystem.disableBlend();

@@ -20,13 +20,15 @@
 
 package net.kyrptonaught.kyrptconfig.config.screen;
 
+//#if MC >= 1.21.2
+//#else
 import com.mojang.blaze3d.systems.RenderSystem;
+//#endif
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
@@ -67,6 +69,9 @@ public class NotSuckyButton extends ButtonWidget {
         //$$         this.getWidth(),
         //$$         this.getHeight(),
         //$$         ColorHelper.getWhite(this.alpha));
+        //$$ TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+        //$$ int i = ColorHelper.withAlpha(this.alpha, this.active ? buttonColor : -6250336);
+        //$$ drawMessage(context, textRenderer, i);
         //#elseif MC >= 1.21.2
         //$$ context.drawGuiTexture(
         //$$         RenderLayer::getGuiTextured,
@@ -76,15 +81,18 @@ public class NotSuckyButton extends ButtonWidget {
         //$$         this.getWidth(),
         //$$         this.getHeight(),
         //$$         ColorHelper.getWhite(this.alpha));
+        //$$ TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+        //$$ int i = this.active ? buttonColor : 0xA0A0A0;
+        //$$ drawMessage(context, textRenderer, i);
         //#else
         context.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
         context.drawGuiTexture(TEXTURES.get(this.active, this.isSelected()), this.getX(), this.getY(), this.getWidth(), this.getHeight());
         context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        //#endif
         TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
         int i = this.active ? buttonColor : 0xA0A0A0;
         drawMessage(context, textRenderer, i);
+        //#endif
     }
 }
