@@ -41,7 +41,7 @@ jobs:
           # 1. 创建目标目录
           mkdir -p common_jars
           # 2. 复制所有jar文件到扁平目录（保留sources.jar的排除逻辑）
-          find . -path "versions/*/build/libs/*.jar" -name "*.jar" ! -name "*sources.jar" -type f -exec cp {} common_jars/ \;
+          find . -path "versions/*/build/libs/*.jar" ! -name "*sources.jar" -type f -exec cp {} common_jars/ \;
           ls -la common_jars/
           echo "已收集 $(ls common_jars/*.jar 2>/dev/null | wc -l) 个jar文件"
 
