@@ -56,3 +56,10 @@ jobs:
         with:
           name: quickshulker-${{ env.COMMIT_HASH }}
           path: mod-jars/*.jar
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          files: mod-jars/*.jar
+          tag_name: ${{ github.event.inputs.tag_name }}
