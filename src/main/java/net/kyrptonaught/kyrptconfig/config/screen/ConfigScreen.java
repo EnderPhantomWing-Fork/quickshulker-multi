@@ -11,6 +11,8 @@
 package net.kyrptonaught.kyrptconfig.config.screen;
 
 //#if MC >= 1.21.2
+//$$ import net.minecraft.util.math.ColorHelper;
+//$$ import net.minecraft.client.render.RenderLayer;
 //#else
 import com.mojang.blaze3d.systems.RenderSystem;
 //#endif
@@ -20,9 +22,6 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.ColorHelper;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.client.render.RenderLayer;
 //#if MC >= 1.21.10
 //$$ import net.minecraft.client.input.CharInput;
 //$$ import net.minecraft.client.input.KeyInput;

@@ -11,6 +11,8 @@
 package net.kyrptonaught.kyrptconfig.config.screen;
 
 //#if MC >= 1.21.2
+//$$ import net.minecraft.util.math.ColorHelper;
+//$$ import net.minecraft.client.render.RenderLayer;
 //#else
 import com.mojang.blaze3d.systems.RenderSystem;
 //#endif
@@ -18,8 +20,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.ColorHelper;
-import net.minecraft.client.render.RenderLayer;
 //#if MC >= 1.21.11
 //$$ import net.minecraft.text.Style;
 //$$ import net.minecraft.text.Texts;

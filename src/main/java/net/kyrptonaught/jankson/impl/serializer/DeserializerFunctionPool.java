@@ -14,6 +14,7 @@ import net.kyrptonaught.jankson.*;
 import net.kyrptonaught.jankson.api.DeserializationException;
 import net.kyrptonaught.jankson.api.Marshaller;
 
+import java.io.Serial;
 import java.util.HashMap;
 
 /**
@@ -67,6 +68,7 @@ public class DeserializerFunctionPool<B> {
     }
 
     public static class FunctionMatchFailedException extends Exception {
+        @Serial
         private static final long serialVersionUID = -7909332778483440658L;
 
         public FunctionMatchFailedException(String message) {

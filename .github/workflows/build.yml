@@ -2,8 +2,13 @@ name: Gradle Build
 on:
   workflow_dispatch:
     inputs:
+      release:
+        type: boolean
+        required: true
+        default: true
+        description: 'release. true is release and false is SNAPSHOT.'
       release_name:
-        description: 'github release name. such as 3.0.0-SNAPSHOT'
+        description: 'github release name. such as 2.9.3 or 3.0.0-SNAPSHOT'
         required: true
       tag_name:
         description: 'github tag name. usually it is the same as the release_name'
@@ -34,12 +39,15 @@ jobs:
         run: |
           chmod +x gradlew
           ./gradlew build
-
-#      - name: Upload artifacts
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: sources-artifacts
-#          path: versions/*/build/libs/
+        env:
+          BUILD_ID: ${{ github.run_number }}
+          BUILD_RELEASE: ${{ inputs.release }}
+      
+      #      - name: Upload artifacts
+      #        uses: actions/upload-artifact@v4
+      #        with:
+      #          name: sources-artifacts
+      #          path: versions/*/build/libs/
 
       - name: Collect mod jars
         run: |

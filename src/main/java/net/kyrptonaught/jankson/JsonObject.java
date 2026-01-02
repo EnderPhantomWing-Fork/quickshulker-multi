@@ -32,7 +32,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
     private final List<Entry> entries = new ArrayList<>();
 
     /**
-     * If there is an entry at this key, and that entry is a json object, return it. Otherwise returns null.
+     * If there is an entry at this key, and that entry is a JSON object, return it. Otherwise returns null.
      */
     @Nullable
     public JsonObject getObject(@Nonnull String name) {
@@ -92,7 +92,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
     }
 
     /**
-     * May return null if the existing object can't be marshalled to elem's class
+     * May return null if the existing object can't be marshaled to elem's class
      */
     @SuppressWarnings("unchecked")
     @Nullable
@@ -101,7 +101,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
     }
 
     /**
-     * May return null if the existing object can't be marshalled to the target class
+     * May return null if the existing object can't be marshaled to the target class
      */
     @Nullable
     public <T> T putDefault(@Nonnull String key, @Nonnull T elem, Class<? extends T> clazz, @Nullable String comment) {
@@ -130,7 +130,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
      *   <li>If a key is an object, a deep (recursive) comparison occurs. Comments are ignored in this comparison.
      *   <li>All other types, including lists, receive a shallow comparison of its value. The comment is ignored in this comparison.
      *   <li>Whether deep or shallow, if the key is found to be identical in value to its default, it is skipped.
-     *   <li>If the key is found to be different than its default, the key, value, and comment are represented in the
+     *   <li>If the key is found to be different from its default, the key, value, and comment are represented in the
      *       output.
      * </ul>
      */

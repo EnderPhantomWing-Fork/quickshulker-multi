@@ -31,8 +31,8 @@ public final class Escaper {
     }
 
     /**
-     * Escapes a string such that the result is valid as the contents of a java, js, or json string,
-     * and the javascript unescape() function will restore the original string. Additionally, this
+     * Escapes a string such that the result is valid as the contents of a java, js, or JSON string,
+     * and the JavaScript unescape() function will restore the original string. Additionally, this
      * method attempts to do the minimum amount of escaping required to accomplish these goals.
      *
      * @param s         The String to escape special characters in
@@ -80,7 +80,7 @@ public final class Escaper {
                     break;
                 default:
                     if (Character.isBmpCodePoint(ch)) {
-                        //Use unicode notation if it's not especially printable - lies in a special unicode block, is a control character, etc.
+                        //Use Unicode notation if it's not especially printable - lies in a special Unicode block, is a control character, etc.
                         Character.UnicodeBlock block = Character.UnicodeBlock.of(ch);
 
                         if (ch != 65535 && !Character.isISOControl(ch) && block != null && unquotedBlocks.contains(block)) { //Note: 65535 is the value of awt's KeyEvent.CHARACTER_UNDEFINED. Just in case it leaks into a document.

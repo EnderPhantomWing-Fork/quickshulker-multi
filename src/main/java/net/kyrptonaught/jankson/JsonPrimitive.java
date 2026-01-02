@@ -21,11 +21,11 @@ import java.util.Objects;
 
 public class JsonPrimitive extends JsonElement {
     /**
-     * Convenience instance of json "true". Don't use identity comparison (==) on these! Use equals instead.
+     * Convenience instance of JSON "true". Don't use identity comparison (==) on these! Use equals instead.
      */
     public static JsonPrimitive TRUE = new JsonPrimitive(Boolean.TRUE);
     /**
-     * Convenience instance of json "false". Don't use identity comparison (==) on these! Use equals instead.
+     * Convenience instance of JSON "false". Don't use identity comparison (==) on these! Use equals instead.
      */
     public static JsonPrimitive FALSE = new JsonPrimitive(Boolean.FALSE);
 

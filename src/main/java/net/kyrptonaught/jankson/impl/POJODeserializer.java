@@ -144,7 +144,7 @@ public class POJODeserializer {
         try {
             field.setAccessible(true);
         } catch (Throwable t) {
-            return false; //skip this field probably.
+            return false; //skip this field, probably.
         }
 
         if (elem == JsonNull.INSTANCE) {

@@ -268,13 +268,13 @@ public class Jankson {
     }
 
     /**
-     * Converts a String of json into an object of the specified class in fail-fast mode, throwing an exception
+     * Converts a String of JSON into an object of the specified class in fail-fast mode, throwing an exception
      * proactively if problems arise.
      *
      * @param json  A string containing json data to be unpacked
      * @param clazz The class to convert the data into
-     * @return An object representing the data in json
-     * @throws SyntaxError              If the json cannot be parsed
+     * @return An object representing the data in JSON
+     * @throws SyntaxError              If the JSON cannot be parsed
      * @throws DeserializationException If the conversion into an instance of the specified type fails
      */
     public <T> T fromJsonCarefully(String json, Class<T> clazz) throws SyntaxError, DeserializationException {
@@ -288,7 +288,7 @@ public class Jankson {
      *
      * @param obj   A JsonObject holding the data to be unpacked
      * @param clazz The class to convert the data into
-     * @return An object of the specified class, holding the data from json
+     * @return An object of the specified class, holding the data from JSON
      * @throws DeserializationException If the conversion into an instance of the specified type fails
      */
     public <T> T fromJsonCarefully(JsonObject obj, Class<T> clazz) throws DeserializationException {
@@ -395,8 +395,8 @@ public class Jankson {
         }
 
         /**
-         * Registers a marshaller for primitive types. Most built-in json and java types are already supported, but this
-         * allows one to change the deserialization behavior of Json primitives. Please note that these adapters are not
+         * Registers a marshaller for primitive types. Most built-in JSON and java types are already supported, but this
+         * allows one to change the deserialization behavior of JSON primitives. Please note that these adapters are not
          * suitable for generic types, as these types are erased during jvm execution.
          *
          * @param clazz   The class to register a type adapter for
@@ -411,7 +411,7 @@ public class Jankson {
         }
 
         /**
-         * Registers a function to serialize an object into json. This can be useful if a class's serialized form is not
+         * Registers a function to serialize an object into JSON. This can be useful if a class's serialized form is not
          * meant to resemble its live-memory form.
          *
          * @param clazz      The class to register a serializer for

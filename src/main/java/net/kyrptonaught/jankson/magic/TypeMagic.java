@@ -44,7 +44,7 @@ public class TypeMagic {
             Type subtype = ((ParameterizedType) t).getRawType();
 
             /**
-             * Testing for kind of a unicorn case here. Because getRawType returns a Type, there's always the nasty
+             * Testing for kind of unicorn case here. Because getRawType returns a Type, there's always the nasty
              * possibility we get a recursively parameterized type. Now, that's not supposed to happen, but let's not
              * rely on "supposed to".
              */

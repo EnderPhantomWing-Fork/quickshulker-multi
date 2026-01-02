@@ -15,7 +15,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 /**
- * Tagging class for Json objects, arrays, and primitives
+ * Tagging class for JSON objects, arrays, and primitives
  */
 public abstract class JsonElement implements Cloneable {
     public abstract JsonElement clone();
