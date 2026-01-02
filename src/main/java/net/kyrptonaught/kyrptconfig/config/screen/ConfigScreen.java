@@ -1,23 +1,3 @@
-/*
- * This file is part of the Quick Shulker Multi project, licensed under the
- * GNU Lesser General Public License v3.0
- *
- * Copyright (C) 2026  Fallen_Breath and contributors
- *
- * Quick Shulker Multi is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Quick Shulker Multi is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Quick Shulker Multi.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package net.kyrptonaught.kyrptconfig.config.screen;
 
 //#if MC >= 1.21.2
@@ -73,7 +53,11 @@ public class ConfigScreen extends Screen {
             this.client.setScreen(previousScreen);
         }));
         for (ConfigSection section : sections) {
+            //#if MC >= 1.21.11
+            //$$ section.init(width, height - 57 - 30);
+            //#else
             section.init(client, width, height - 57 - 30);
+            //#endif
         }
 
         adjustForHorizontalScroll(this.width);
@@ -230,7 +214,11 @@ public class ConfigScreen extends Screen {
         section.render(context, 57, mouseX, mouseY, deltaTicks);
         context.disableScissor();
 
+        //#if MC >= 1.21.8
+        //$$ context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 13, -1);
+        //#else
         context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 13, 0xffffff);
+        //#endif
         drawHeaderAndFooterSeparators(context);
 
         boolean noHover = scrollLeftBTN.detectHover(mouseX, mouseY) | scrollRightBTN.detectHover(mouseX, mouseY);

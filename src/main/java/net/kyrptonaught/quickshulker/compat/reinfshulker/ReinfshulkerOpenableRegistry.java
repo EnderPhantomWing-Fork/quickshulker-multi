@@ -1,25 +1,8 @@
-/*
- * This file is part of the Quick Shulker Multi project, licensed under the
- * GNU Lesser General Public License v3.0
- *
- * Copyright (C) 2025  Fallen_Breath and contributors
- *
- * Quick Shulker Multi is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Quick Shulker Multi is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Quick Shulker Multi.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package net.kyrptonaught.quickshulker.compat.reinfshulker;
 
+//TODO: 等待Reinforced Shulker Box更新
+//#if MC >= 1.21.11
+//#else
 import atonkish.reinfcore.screen.ReinforcedStorageScreenHandler;
 import atonkish.reinfcore.util.ReinforcingMaterial;
 import atonkish.reinfshulker.block.ReinforcedShulkerBoxBlock;
@@ -35,11 +18,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandlerFactory;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.text.Text;
+//#endif
 
 import java.util.function.BiConsumer;
 
 public class ReinfshulkerOpenableRegistry {
 
+    //#if MC >= 1.21.11
+    //#else
     private static final BiConsumer<PlayerEntity, ItemStack> REINFORCED_SHULKER_BOX_CONSUMER = (PlayerEntity player, ItemStack stack) -> {
         ReinforcedShulkerBoxBlock block = (ReinforcedShulkerBoxBlock) ((BlockItem) stack.getItem()).getBlock();
         ReinforcingMaterial material = block.getMaterial();
@@ -62,4 +48,5 @@ public class ReinfshulkerOpenableRegistry {
                 .setOpenAction(REINFORCED_SHULKER_BOX_CONSUMER)
                 .register();
     }
+    //#endif
 }

@@ -1,23 +1,3 @@
-/*
- * This file is part of the Quick Shulker Multi project, licensed under the
- * GNU Lesser General Public License v3.0
- *
- * Copyright (C) 2025  Fallen_Breath and contributors
- *
- * Quick Shulker Multi is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Quick Shulker Multi is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Quick Shulker Multi.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package net.kyrptonaught.kyrptconfig.config.screen.items;
 
 import net.kyrptonaught.kyrptconfig.config.screen.NotSuckyButton;
@@ -31,6 +11,9 @@ import net.minecraft.util.math.ColorHelper;
 //$$ import net.minecraft.client.gui.Click;
 //$$ import net.minecraft.client.input.CharInput;
 //$$ import net.minecraft.client.input.KeyInput;
+//$$ import net.minecraft.util.Formatting;
+//#elseif MC >= 1.21.8
+//$$ import net.minecraft.util.Formatting;
 //#else
 //#endif
 
@@ -88,10 +71,16 @@ public abstract class ConfigItem<T> {
         return this;
     }
 
+    //#if MC >= 1.21.18
+    //$$ public ConfigItem<?> setNeedMod(String id){
+    //$$     return setToolTip(Text.translatable("key.quickshulker.config.needMod", Text.literal(id).formatted(Formatting.ITALIC)));
+    //$$ }
+    //#else
     public ConfigItem<?> setToolTip(Text toolTip) {
         this.toolTipText = List.of(toolTip);
         return this;
     }
+    //#endif
 
     public ConfigItem<?> setToolTip(Text... toolTips) {
         this.toolTipText = List.of(toolTips);

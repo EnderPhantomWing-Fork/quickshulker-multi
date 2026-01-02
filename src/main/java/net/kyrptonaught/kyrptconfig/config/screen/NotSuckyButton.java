@@ -1,53 +1,50 @@
-/*
- * This file is part of the Quick Shulker Multi project, licensed under the
- * GNU Lesser General Public License v3.0
- *
- * Copyright (C) 2025  Fallen_Breath and contributors
- *
- * Quick Shulker Multi is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Quick Shulker Multi is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with Quick Shulker Multi.  If not, see <https://www.gnu.org/licenses/>.
- */
-
 package net.kyrptonaught.kyrptconfig.config.screen;
 
 //#if MC >= 1.21.2
 //#else
 import com.mojang.blaze3d.systems.RenderSystem;
 //#endif
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ButtonTextures;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.client.render.RenderLayer;
+//#if MC >= 1.21.11
+//$$ import net.minecraft.text.Style;
+//$$ import net.minecraft.text.Texts;
+//#else
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.text.Text;
+//#endif
 //#if MC >= 1.21.8
 //$$ import net.minecraft.client.gl.RenderPipelines;
 //#else
 //#endif
 
 public class NotSuckyButton extends ButtonWidget {
+    //#if MC >= 1.21.8
+    //$$ int buttonColor = -1;
+    //#else
     int buttonColor = 16777215;
+    //#endif
     public boolean disableHover = false;
     private static final ButtonTextures TEXTURES = new ButtonTextures(Identifier.of("widget/button"), Identifier.of("widget/button_disabled"), Identifier.of("widget/button_highlighted"));
 
+    //#if MC >= 1.21.11
+    //$$ public NotSuckyButton(int x, int y, int width, int height, net.minecraft.text.Text message, PressAction onPress) {
+    //#else
     public NotSuckyButton(int x, int y, int width, int height, Text message, PressAction onPress) {
+    //#endif
         super(x, y, width, height, message, onPress, DEFAULT_NARRATION_SUPPLIER);
     }
 
     public void setButtonColor(int color) {
+        //#if MC >= 1.21.11
+        //$$ this.setMessage(Texts.withStyle(this.getMessage(), Style.EMPTY.withColor(color)));
+        //#else
+        //#endif
         this.buttonColor = color;
     }
 
@@ -56,12 +53,19 @@ public class NotSuckyButton extends ButtonWidget {
     }
 
     @Override
+    //#if MC >= 1.21.11
+    //$$ protected void drawIcon(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+    //#else
     public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+    //#endif
         //This can fix text rendering over the wrong btn
         //context.getMatrices().translate(0, 0,  1);
 
         if (disableHover) hovered = false;
-        //#if MC >= 1.21.8
+        //#if MC >= 1.21.11
+        //$$ this.drawButton(context);
+        //$$ this.drawLabel(context.getTextConsumer());
+        //#elseif MC >= 1.21.8
         //$$ context.drawGuiTexture(
         //$$         RenderPipelines.GUI_TEXTURED,
         //$$         TEXTURES.get(this.active, this.isSelected()),
