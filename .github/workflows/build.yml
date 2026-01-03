@@ -6,12 +6,12 @@ on:
         type: boolean
         required: true
         default: true
-        description: 'release. true is release and false is SNAPSHOT.'
+        description: 'whether it is a release. \ntrue is release and false is SNAPSHOT.'
       release_name:
-        description: 'github release name. such as 2.9.3 or 3.0.0-SNAPSHOT'
+        description: 'github release name. \nsuch as 2.9.3 or 3.0.0-SNAPSHOT'
         required: true
       tag_name:
-        description: 'github tag name. usually it is the same as the release_name'
+        description: 'github tag name. \nusually it is the same as the release_name'
         required: true
   push: null
   pull_request: null
