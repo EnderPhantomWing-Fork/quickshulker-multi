@@ -58,7 +58,7 @@ jobs:
         run: |
           shopt -s extglob
           mkdir sources-mod-jars
-          for jar in versions/*/build/libs/(*-@(dev|sources|shadow)).jar; do
+          for jar in versions/*/build/libs/*-@(dev|sources|shadow).jar; do
               cp -p "$jar" sources-mod-jars/
           done
           ls -l sources-mod-jars
