@@ -36,7 +36,7 @@ jobs:
       - name: Build
         run: |
           chmod +x gradlew
-          ./gradlew build --debug
+          ./gradlew build --stacktrace
         env:
           BUILD_ID: ${{ github.run_number }}
           BUILD_RELEASE: ${{ inputs.release }}
@@ -47,7 +47,7 @@ jobs:
           name: build-artifacts
           path: versions/*/build/libs/
 
-      - name: Collect sources jars
+      - name: Collect sources jars(only sources jars)
         run: |
           shopt -s extglob
           mkdir sources-mod-jars
