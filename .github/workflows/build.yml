@@ -1,4 +1,4 @@
-name: Gradle Build
+name: Build
 on:
   workflow_call:
     inputs:
@@ -36,7 +36,7 @@ jobs:
       - name: Build
         run: |
           chmod +x gradlew
-          ./gradlew build
+          ./gradlew build --debug
         env:
           BUILD_ID: ${{ github.run_number }}
           BUILD_RELEASE: ${{ inputs.release }}
@@ -62,7 +62,7 @@ jobs:
           name: quickshulker-sources-${{ env.COMMIT_HASH }}
           path: sources-mod-jars/*.jar
 
-      - name: Collect mod jars
+      - name: Collect mod jars(only common jars)
         run: |
           shopt -s extglob
           mkdir mod-jars
@@ -77,27 +77,3 @@ jobs:
         with:
           name: quickshulker-${{ env.COMMIT_HASH }}
           path: mod-jars/*.jar
-
-      - name: Publish with gradle
-        if: inputs.release || github.ref == 'refs/heads/dev'
-        run: |
-          if [ -z "${{ inputs.target_subproject }}" ]; then
-              echo "Publishing all subprojects"
-              ./gradlew publish
-          else
-              args=$(echo "${{ inputs.target_subproject }}" | tr ',' '\n' | sed 's/$/:publish/' | paste -sd ' ')
-              echo "Publishing with arguments=$args"
-              ./gradlew $args
-          fi
-        env:
-          BUILD_ID: ${{ github.run_number }}
-          BUILD_RELEASE: ${{ inputs.release }}
-          FALLENS_MAVEN_TOKEN: ${{ secrets.ENDERPHANTOMWINGS_MAVEN_TOKEN }}
-
-      - name: Release
-        if: github.event_name == 'workflow_dispatch'
-        uses: softprops/action-gh-release@v2
-        with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
-          files: mod-jars/*.jar
-          tag_name: ${{ github.event.inputs.tag_name }}
