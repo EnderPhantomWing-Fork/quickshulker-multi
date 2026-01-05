@@ -4,9 +4,14 @@ on:
     inputs:
       release:
         type: boolean
-        required: true
-        default: true
-        description: 'whether it is a release (true is release and false is SNAPSHOT).'
+        required: false
+        default: false
+        description: 'release'
+      target_subproject:
+        description: leave it empty to build all
+        type: string
+        required: false
+        default: ''
       release_name:
         description: 'github release name (such as 2.9.3 or 3.0.0-SNAPSHOT).'
         required: true
@@ -42,12 +47,27 @@ jobs:
         env:
           BUILD_ID: ${{ github.run_number }}
           BUILD_RELEASE: ${{ inputs.release }}
-      
-      - name: Upload artifacts (sources)
+
+      - name: Upload artifacts (with a file structure)
         uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: versions/*/build/libs/
+
+      - name: Collect sources jars
+        run: |
+          shopt -s extglob
+          mkdir sources-mod-jars
+          for jar in versions/*/build/libs/(*-@(dev|sources|shadow)).jar; do
+              cp -p "$jar" sources-mod-jars/
+          done
+          ls -l sources-mod-jars
+
+      - name: Upload sources mod jars
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickshulker-sources-${{ env.COMMIT_HASH }}
+          path: sources-mod-jars/*.jar
 
       - name: Collect mod jars
         run: |
@@ -64,6 +84,22 @@ jobs:
         with:
           name: quickshulker-${{ env.COMMIT_HASH }}
           path: mod-jars/*.jar
+
+      - name: Publish with gradle
+        if: inputs.release || github.ref == 'refs/heads/dev'
+        run: |
+          if [ -z "${{ inputs.target_subproject }}" ]; then
+              echo "Publishing all subprojects"
+              ./gradlew publish
+          else
+              args=$(echo "${{ inputs.target_subproject }}" | tr ',' '\n' | sed 's/$/:publish/' | paste -sd ' ')
+              echo "Publishing with arguments=$args"
+              ./gradlew $args
+          fi
+        env:
+          BUILD_ID: ${{ github.run_number }}
+          BUILD_RELEASE: ${{ inputs.release }}
+          FALLENS_MAVEN_TOKEN: ${{ secrets.ENDERPHANTOMWINGS_MAVEN_TOKEN }}
 
       - name: Release
         if: github.event_name == 'workflow_dispatch'

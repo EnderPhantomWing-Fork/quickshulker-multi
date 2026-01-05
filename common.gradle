@@ -302,18 +302,20 @@ publishing {
 
 	// select the repositories you want to publish to
 	repositories {
-		// mavenLocal()
+//		mavenLocal()
 
-//		// [FEATURE] FALLENS_MAVEN
-//		maven {
-//			url = fullArtifactVersion.endsWith("SNAPSHOT") ? "https://maven.fallenbreath.me/snapshots" : "https://maven.fallenbreath.me/releases"
-//			credentials(PasswordCredentials) {
-//				username = 'fallen'
-//				password = System.getenv("FALLENS_MAVEN_TOKEN")
-//			}
-//			authentication {
-//				basic(BasicAuthentication)
-//			}
-//		}
+		// [FEATURE] ENDERPHANTOMWINGS_LOCAL_MAVEN
+		maven {
+			allowInsecureProtocol = true
+			url = fullArtifactVersion.endsWith("SNAPSHOT") ? "http://ender.v6.navy:9875/snapshots" : "http://ender.v6.navy:9875/releases"
+
+			credentials(PasswordCredentials) {
+				username = 'admin'
+				password = System.getenv("ENDERPHANTOMWINGS_MAVEN_TOKEN")
+			}
+			authentication {
+				basic(BasicAuthentication)
+			}
+		}
 	}
 }
