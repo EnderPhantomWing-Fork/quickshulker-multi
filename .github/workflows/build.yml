@@ -77,3 +77,20 @@ jobs:
         with:
           name: quickshulker-${{ env.COMMIT_HASH }}
           path: mod-jars/*.jar
+
+      - name: Publish with gradle
+        if: inputs.release || github.ref == 'refs/heads/dev'
+        run: |
+          if [ -z "${{ inputs.target_subproject }}" ]; then
+              echo "Publishing all subprojects"
+              ./gradlew publish
+          else
+              args=$(echo "${{ inputs.target_subproject }}" | tr ',' '\n' | sed 's/$/:publish/' | paste -sd ' ')
+              echo "Publishing with arguments=$args"
+              ./gradlew $args
+          fi
+        env:
+          BUILD_ID: ${{ github.run_number }}
+          BUILD_RELEASE: ${{ inputs.release }}
+          ENDERPHANTOMWINGS_MAVEN_TOKEN: ${{ secrets.ENDERPHANTOMWINGS_MAVEN_TOKEN }}
+
