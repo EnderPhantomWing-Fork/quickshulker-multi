@@ -1,23 +1,16 @@
 name: Gradle Build
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       release:
         type: boolean
         required: false
         default: false
-        description: 'release'
       target_subproject:
-        description: leave it empty to build all
+        description: see release.yml, leave it empty to build all
         type: string
         required: false
         default: ''
-      release_name:
-        description: 'github release name (such as 2.9.3 or 3.0.0-SNAPSHOT).'
-        required: true
-      tag_name:
-        description: 'github tag name (usually it is the same as the release_name)'
-        required: true
   push: null
   pull_request: null
 
