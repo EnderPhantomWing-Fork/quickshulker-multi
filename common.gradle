@@ -301,21 +301,5 @@ publishing {
 	}
 
 	// select the repositories you want to publish to
-	repositories {
-//		mavenLocal()
-
-		// [FEATURE] ENDERPHANTOMWINGS_LOCAL_MAVEN
-		maven {
-			allowInsecureProtocol = true
-			url = fullArtifactVersion.endsWith("SNAPSHOT") ? "http://ender.v6.navy:9875/snapshots" : "http://ender.v6.navy:9875/releases"
-
-			credentials(PasswordCredentials) {
-				username = 'admin'
-				password = System.getenv("ENDERPHANTOMWINGS_MAVEN_TOKEN")
-			}
-			authentication {
-				basic(BasicAuthentication)
-			}
-		}
-	}
+	repositories {}
 }

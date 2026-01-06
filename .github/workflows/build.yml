@@ -47,22 +47,16 @@ jobs:
           name: build-artifacts
           path: versions/*/build/libs/
 
-      - name: Collect sources jars(only sources jars)
+      - name: Collect jars
         run: |
           shopt -s extglob
-          mkdir sources-mod-jars
-          for jar in versions/*/build/libs/*-@(dev|sources|shadow).jar; do
-              cp -p "$jar" sources-mod-jars/
+          mkdir all-jars
+          for jar in versions/*/build/libs/*.jar; do
+              cp -p "$jar" all-jars/
           done
-          ls -l sources-mod-jars
+          ls -l all-jars
 
-      - name: Upload sources mod jars
-        uses: actions/upload-artifact@v4
-        with:
-          name: quickshulker-sources-${{ env.COMMIT_HASH }}
-          path: sources-mod-jars/*.jar
-
-      - name: Collect mod jars(only common jars)
+      - name: Collect mod jars
         run: |
           shopt -s extglob
           mkdir mod-jars
@@ -71,26 +65,14 @@ jobs:
           done
           ls -l mod-jars
 
-      # This is the artifact recommended for users to download
+      - name: Upload all jars
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickshulker
+          path: all-jars/*.jar
+
       - name: Upload mod jars
         uses: actions/upload-artifact@v4
         with:
           name: quickshulker-${{ env.COMMIT_HASH }}
           path: mod-jars/*.jar
-
-      - name: Publish with gradle
-        if: inputs.release || github.ref == 'refs/heads/dev'
-        run: |
-          if [ -z "${{ inputs.target_subproject }}" ]; then
-              echo "Publishing all subprojects"
-              ./gradlew publish
-          else
-              args=$(echo "${{ inputs.target_subproject }}" | tr ',' '\n' | sed 's/$/:publish/' | paste -sd ' ')
-              echo "Publishing with arguments=$args"
-              ./gradlew $args
-          fi
-        env:
-          BUILD_ID: ${{ github.run_number }}
-          BUILD_RELEASE: ${{ inputs.release }}
-          ENDERPHANTOMWINGS_MAVEN_TOKEN: ${{ secrets.ENDERPHANTOMWINGS_MAVEN_TOKEN }}
-
