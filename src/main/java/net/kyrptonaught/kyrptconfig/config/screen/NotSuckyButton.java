@@ -1,23 +1,24 @@
 package net.kyrptonaught.kyrptconfig.config.screen;
 
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ButtonTextures;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.text.Style;
-import net.minecraft.text.Texts;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.resources.Identifier;
 
-public class NotSuckyButton extends ButtonWidget {
+public class NotSuckyButton extends Button {
     int buttonColor = -1;
     public boolean disableHover = false;
-    private static final ButtonTextures TEXTURES = new ButtonTextures(Identifier.of("widget/button"), Identifier.of("widget/button_disabled"), Identifier.of("widget/button_highlighted"));
+    private static final WidgetSprites TEXTURES = new WidgetSprites(Identifier.parse("widget/button"), Identifier.parse("widget/button_disabled"), Identifier.parse("widget/button_highlighted"));
 
-    public NotSuckyButton(int x, int y, int width, int height, net.minecraft.text.Text message, PressAction onPress) {
-        super(x, y, width, height, message, onPress, DEFAULT_NARRATION_SUPPLIER);
+    public NotSuckyButton(int x, int y, int width, int height, net.minecraft.network.chat.Component message, OnPress onPress) {
+        super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
     }
 
     public void setButtonColor(int color) {
-        this.setMessage(Texts.withStyle(this.getMessage(), Style.EMPTY.withColor(color)));
+        this.setMessage(ComponentUtils.mergeStyles(this.getMessage(), Style.EMPTY.withColor(color)));
         this.buttonColor = color;
     }
 
@@ -26,10 +27,10 @@ public class NotSuckyButton extends ButtonWidget {
     }
 
     @Override
-    protected void drawIcon(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-        if (disableHover) hovered = false;
+    protected void renderContents(GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
+        if (disableHover) isHovered = false;
 
-        this.drawButton(context);
-        this.drawLabel(context.getTextConsumer());
+        this.renderDefaultSprite(context);
+        this.renderDefaultLabel(context.textRenderer());
     }
 }

@@ -7,18 +7,19 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.kyrptonaught.quickshulker.QuickShulkerMod;
 import net.kyrptonaught.quickshulker.api.Util;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type;
+import net.minecraft.resources.Identifier;
 
-public record OpenShulkerPacket(int invSlot) implements CustomPayload {
+public record OpenShulkerPacket(int invSlot) implements CustomPacketPayload {
 
-    public static final Identifier OPEN_SHULKER_PACKET = Identifier.of(QuickShulkerMod.MOD_ID, "open_shulker_packet");
+    public static final Identifier OPEN_SHULKER_PACKET = Identifier.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "open_shulker_packet");
 
-    public static final Id<OpenShulkerPacket> OPEN_SHULKER_PACKET_ID = new Id<>(OPEN_SHULKER_PACKET);
+    public static final Type<OpenShulkerPacket> OPEN_SHULKER_PACKET_ID = new Type<>(OPEN_SHULKER_PACKET);
 
-    public static final PacketCodec<PacketByteBuf, OpenShulkerPacket> CODEC = PacketCodec.of((value, buf) -> buf.writeInt(value.invSlot), buf -> new OpenShulkerPacket(buf.readInt()));
+    public static final StreamCodec<FriendlyByteBuf, OpenShulkerPacket> CODEC = StreamCodec.ofMember((value, buf) -> buf.writeInt(value.invSlot), buf -> new OpenShulkerPacket(buf.readInt()));
 
     public static void registerReceivePacket() {
         PayloadTypeRegistry.playC2S().register(OpenShulkerPacket.OPEN_SHULKER_PACKET_ID, OpenShulkerPacket.CODEC);
@@ -32,7 +33,7 @@ public record OpenShulkerPacket(int invSlot) implements CustomPayload {
     }
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return OPEN_SHULKER_PACKET_ID;
     }
 }
