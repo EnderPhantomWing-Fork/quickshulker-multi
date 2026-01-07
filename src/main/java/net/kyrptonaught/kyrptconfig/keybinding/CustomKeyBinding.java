@@ -14,8 +14,8 @@ import net.kyrptonaught.jankson.JsonElement;
 import net.kyrptonaught.jankson.JsonPrimitive;
 import net.kyrptonaught.kyrptconfig.config.CustomMarshaller;
 import net.kyrptonaught.kyrptconfig.config.CustomSerializable;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.platform.InputConstants;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Optional;
@@ -24,7 +24,7 @@ public class CustomKeyBinding implements CustomSerializable {
     public boolean unknownIsActivated = false;
     public String rawKey = "";
     public String defaultKey = "";
-    public InputUtil.Key parsedKey;
+    public InputConstants.Key parsedKey;
     public boolean doParseKey = true;
     private final String MOD_ID;
 
@@ -74,41 +74,41 @@ public class CustomKeyBinding implements CustomSerializable {
         parseKeycode();
         if (parsedKey == null) // Invalid key
             return false;
-        if (parsedKey == InputUtil.UNKNOWN_KEY)
+        if (parsedKey == InputConstants.UNKNOWN)
             return unknownIsActivated; // Always pressed for empty or explicitly "key.keyboard.unknown"
         boolean pressed;
-        if (parsedKey.getCategory() == InputUtil.Type.MOUSE)
-            pressed = GLFW.glfwGetMouseButton(MinecraftClient.getInstance().getWindow().getHandle(), parsedKey.getCode()) == 1;
+        if (parsedKey.getType() == InputConstants.Type.MOUSE)
+            pressed = GLFW.glfwGetMouseButton(Minecraft.getInstance().getWindow().getWindow(), parsedKey.getValue()) == 1;
         else
-            pressed = GLFW.glfwGetKey(MinecraftClient.getInstance().getWindow().getHandle(), parsedKey.getCode()) == 1;
+            pressed = GLFW.glfwGetKey(Minecraft.getInstance().getWindow().getWindow(), parsedKey.getValue()) == 1;
         return pressed;
     }
 
-    public boolean matches(int keyCode, InputUtil.Type type) {
+    public boolean matches(int keyCode, InputConstants.Type type) {
         parseKeycode();
         if (parsedKey == null) return false;
-        return parsedKey.getCategory() == type && parsedKey.getCode() == keyCode;
+        return parsedKey.getType() == type && parsedKey.getValue() == keyCode;
     }
 
-    public Optional<InputUtil.Key> getKeybinding() {
+    public Optional<InputConstants.Key> getKeybinding() {
         if (rawKey.isEmpty())
-            return Optional.of(InputUtil.UNKNOWN_KEY);
+            return Optional.of(InputConstants.UNKNOWN);
         try {
-            return Optional.of(InputUtil.fromTranslationKey(rawKey));
+            return Optional.of(InputConstants.getKey(rawKey));
         } catch (IllegalArgumentException e) {
             System.out.println(MOD_ID + ": unknown key entered");
             return Optional.empty();
         }
     }
 
-    public InputUtil.Key getDefaultKey() {
+    public InputConstants.Key getDefaultKey() {
         if (defaultKey == null || defaultKey.isEmpty())
-            return InputUtil.UNKNOWN_KEY;
+            return InputConstants.UNKNOWN;
         try {
-            return InputUtil.fromTranslationKey(defaultKey);
+            return InputConstants.getKey(defaultKey);
         } catch (IllegalArgumentException e) {
             System.out.println(MOD_ID + ": unknown default key entered");
-            return InputUtil.UNKNOWN_KEY;
+            return InputConstants.UNKNOWN;
         }
     }
 

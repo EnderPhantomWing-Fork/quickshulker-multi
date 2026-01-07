@@ -10,85 +10,53 @@
 
 package net.kyrptonaught.kyrptconfig.keybinding;
 
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
-//#if MC >= 1.21.10
-//$$ import net.minecraft.util.Identifier;
-//#else
-//#endif
+import net.minecraft.client.KeyMapping;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.util.function.Consumer;
 
-public class DisplayOnlyKeyBind extends KeyBinding {
+public class DisplayOnlyKeyBind extends KeyMapping {
     private CustomKeyBinding customKeyBinding;
-    private final Consumer<InputUtil.Key> keySet;
+    private final Consumer<InputConstants.Key> keySet;
 
-    //#if MC >= 1.21.10
-    //$$ public DisplayOnlyKeyBind(String translationKey, InputUtil.Type type, int code, KeyBinding.Category category) {
-    //#else
-    public DisplayOnlyKeyBind(String translationKey, InputUtil.Type type, int code, String category) {
-    //#endif
+    public DisplayOnlyKeyBind(String translationKey, InputConstants.Type type, int code, String category) {
         super(translationKey, type, code, category);
         keySet = (boundKey) -> {
         };
     }
 
-    //#if MC >= 1.21.10
-    //$$ public DisplayOnlyKeyBind(String translationKey, KeyBinding.Category category, CustomKeyBinding customKeyBinding, Consumer<InputUtil.Key> keySet) {
-    //#else
-    public DisplayOnlyKeyBind(String translationKey, String category, CustomKeyBinding customKeyBinding, Consumer<InputUtil.Key> keySet) {
-    //#endif
-        super(translationKey, customKeyBinding.getDefaultKey().getCategory(), customKeyBinding.getDefaultKey().getCode(), category);
+    public DisplayOnlyKeyBind(String translationKey, String category, CustomKeyBinding customKeyBinding, Consumer<InputConstants.Key> keySet) {
+        super(translationKey, customKeyBinding.getDefaultKey().getType(), customKeyBinding.getDefaultKey().getValue(), category);
         this.customKeyBinding = customKeyBinding;
         this.keySet = keySet;
         updateSetKey();
     }
 
-    public void setBoundKey(InputUtil.Key boundKey) {
-        super.setBoundKey(boundKey);
+    public void setKey(InputConstants.Key boundKey) {
+        super.setKey(boundKey);
         if (customKeyBinding != null)
-            customKeyBinding.setRaw(getBoundKeyTranslationKey());
+            customKeyBinding.setRaw(saveString());
         keySet.accept(boundKey);
     }
 
     public void updateSetKey() {
-        super.setBoundKey(customKeyBinding.getKeybinding().orElse(InputUtil.UNKNOWN_KEY));
+        super.setKey(customKeyBinding.getKeybinding().orElse(InputConstants.UNKNOWN));
     }
 
-    //#if MC >= 1.21.10
-    //$$ @Override
-    //$$ public KeyBinding.Category getCategory() {
-    //$$     updateSetKey();
-    //$$     return super.getCategory();
-    //$$ }
-    //#else
     @Override
-    //#if MC >= 1.21.10
-    //$$ public KeyBinding.Category getCategory() {
-    //#else
     public String getCategory() {
-    //#endif
         updateSetKey();
         return super.getCategory();
     }
-    //#endif
 
     @Override
-    //#if MC >= 1.21.10
-    //$$ public String getId() {
-    //#else
-    public String getTranslationKey() {
-    //#endif
+    public String getName() {
         updateSetKey();
-        //#if MC >= 1.21.10
-        //$$ return super.getId();
-        //#else
-        return super.getTranslationKey();
-        //#endif
+        return super.getName();
     }
 
     @Override
-    public InputUtil.Key getDefaultKey() {
+    public InputConstants.Key getDefaultKey() {
         updateSetKey();
         return super.getDefaultKey();
     }

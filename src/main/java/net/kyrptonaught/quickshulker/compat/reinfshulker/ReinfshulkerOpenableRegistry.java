@@ -10,45 +10,39 @@
 
 package net.kyrptonaught.quickshulker.compat.reinfshulker;
 
-//TODO: 等待Reinforced Shulker Box更新
-//#if MC >= 1.21.11
-//#else
 import atonkish.reinfcore.screen.ReinforcedStorageScreenHandler;
 import atonkish.reinfcore.util.ReinforcingMaterial;
 import atonkish.reinfshulker.block.ReinforcedShulkerBoxBlock;
 import atonkish.reinfshulker.block.entity.ModBlockEntityType;
 import net.kyrptonaught.quickshulker.api.ItemStackInventory;
 import net.kyrptonaught.quickshulker.api.QuickOpenableRegistry;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ScreenHandlerFactory;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
-import net.minecraft.text.Text;
-//#endif
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.inventory.MenuConstructor;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.network.chat.Component;
 
 import java.util.function.BiConsumer;
 
 public class ReinfshulkerOpenableRegistry {
 
-    //#if MC >= 1.21.11
-    //#else
-    private static final BiConsumer<PlayerEntity, ItemStack> REINFORCED_SHULKER_BOX_CONSUMER = (PlayerEntity player, ItemStack stack) -> {
+    private static final BiConsumer<Player, ItemStack> REINFORCED_SHULKER_BOX_CONSUMER = (Player player, ItemStack stack) -> {
         ReinforcedShulkerBoxBlock block = (ReinforcedShulkerBoxBlock) ((BlockItem) stack.getItem()).getBlock();
         ReinforcingMaterial material = block.getMaterial();
         ItemStackInventory inventory = new ItemStackInventory(stack, material.getSize());
-        String namespace = BlockEntityType.getId(ModBlockEntityType.REINFORCED_SHULKER_BOX_MAP.get(material)).getNamespace();
+        String namespace = BlockEntityType.getKey(ModBlockEntityType.REINFORCED_SHULKER_BOX_MAP.get(material)).getNamespace();
 
-        ScreenHandlerFactory screenHandlerFactory = (int syncId, PlayerInventory playerInventory, PlayerEntity playerEntity) ->
+        MenuConstructor screenHandlerFactory = (int syncId, Inventory playerInventory, Player playerEntity) ->
                 ReinforcedStorageScreenHandler.createShulkerBoxScreen(material, syncId, playerInventory, inventory);
-        Text text = stack.getComponents().contains(
-                DataComponentTypes.CUSTOM_NAME) ? stack.getName() : Text.translatable("container." + namespace + "." + material.getName() + "ShulkerBox"
+        Component text = stack.getComponents().has(
+                DataComponents.CUSTOM_NAME) ? stack.getHoverName() : Component.translatable("container." + namespace + "." + material.getName() + "ShulkerBox"
         );
 
-        player.openHandledScreen(new SimpleNamedScreenHandlerFactory(screenHandlerFactory, text));
+        player.openMenu(new SimpleMenuProvider(screenHandlerFactory, text));
     };
 
     public static void registerProviders() {
@@ -58,5 +52,4 @@ public class ReinfshulkerOpenableRegistry {
                 .setOpenAction(REINFORCED_SHULKER_BOX_CONSUMER)
                 .register();
     }
-    //#endif
 }

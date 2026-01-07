@@ -17,87 +17,87 @@ import net.kyrptonaught.quickshulker.api.QuickOpenableRegistry;
 import net.kyrptonaught.quickshulker.api.QuickShulkerData;
 import net.kyrptonaught.quickshulker.api.Util;
 import net.kyrptonaught.shulkerutils.ShulkerUtils;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.ClickType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.ClickAction;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 public class BundleHelper {
-    public static boolean shouldAttemptBundle(PlayerEntity player, ClickType clickType, ItemStack hostStack, ItemStack insertStack, boolean enabledInConfig) {
-        return (enabledInConfig && clickType == ClickType.RIGHT && Util.isOpenableItem(hostStack) && isAcceptedInsertItem(insertStack) && Util.getQuickItemInventory(player, hostStack) != null);
+    public static boolean shouldAttemptBundle(Player player, ClickAction clickType, ItemStack hostStack, ItemStack insertStack, boolean enabledInConfig) {
+        return (enabledInConfig && clickType == ClickAction.SECONDARY && Util.isOpenableItem(hostStack) && isAcceptedInsertItem(insertStack) && Util.getQuickItemInventory(player, hostStack) != null);
     }
 
-    public static boolean shouldAttemptUnBundle(PlayerEntity player, ClickType clickType, ItemStack hostStack, ItemStack insertStack, boolean enabledInConfig) {
-        Inventory stackInv = Util.getQuickItemInventory(player, hostStack);
+    public static boolean shouldAttemptUnBundle(Player player, ClickAction clickType, ItemStack hostStack, ItemStack insertStack, boolean enabledInConfig) {
+        Container stackInv = Util.getQuickItemInventory(player, hostStack);
         if(stackInv != null){
-            return (enabledInConfig && clickType == ClickType.RIGHT && hostStack.getCount() == 1 && !stackInv.isEmpty() && insertStack.isEmpty());
+            return (enabledInConfig && clickType == ClickAction.SECONDARY && hostStack.getCount() == 1 && !stackInv.isEmpty() && insertStack.isEmpty());
         }
         return false;
     }
 
-    public static boolean shouldAttemptTransfer(PlayerEntity player, ClickType clickType, ItemStack hostStack, ItemStack insertStack, boolean enabledInConfig){
-        return enabledInConfig && clickType == ClickType.RIGHT && ShulkerUtils.isShulkerItem(hostStack) && hostStack.getCount() == 1 && Util.getQuickItemInventory(player, hostStack) != null && isAcceptedTransferItem(player, insertStack);
+    public static boolean shouldAttemptTransfer(Player player, ClickAction clickType, ItemStack hostStack, ItemStack insertStack, boolean enabledInConfig){
+        return enabledInConfig && clickType == ClickAction.SECONDARY && ShulkerUtils.isShulkerItem(hostStack) && hostStack.getCount() == 1 && Util.getQuickItemInventory(player, hostStack) != null && isAcceptedTransferItem(player, insertStack);
     }
 
     private static boolean isAcceptedInsertItem(ItemStack insertStack) {
         return !insertStack.isEmpty() && !ShulkerUtils.isShulkerItem(insertStack);
     }
 
-    private static boolean isAcceptedTransferItem(PlayerEntity player, ItemStack insertStack) {
+    private static boolean isAcceptedTransferItem(Player player, ItemStack insertStack) {
         return ShulkerUtils.isShulkerItem(insertStack) && insertStack.getCount() == 1 && Util.getQuickItemInventory(player, insertStack) != null;
     }
 
-    public static void bundleItemIntoStack(PlayerEntity player, ItemStack hostStack, ItemStack insertStack, CallbackInfoReturnable<Boolean> cir) {
+    public static void bundleItemIntoStack(Player player, ItemStack hostStack, ItemStack insertStack, CallbackInfoReturnable<Boolean> cir) {
         if (bundleItem(player, hostStack, insertStack) != null && cir != null)
             cir.setReturnValue(true);
     }
 
-    public static void bundleItemIntoStack(PlayerEntity player, ItemStack hostStack, ItemStack insertStack, Slot slot, CallbackInfoReturnable<Boolean> cir){
+    public static void bundleItemIntoStack(Player player, ItemStack hostStack, ItemStack insertStack, Slot slot, CallbackInfoReturnable<Boolean> cir){
         if(bundleItem(player, hostStack, insertStack, slot) != null && cir != null){
             cir.setReturnValue(true);
         }
     }
 
-    public static void unbundleStackIntoSlot(PlayerEntity player, ItemStack hostStack, Slot unbundleSlot, CallbackInfoReturnable<Boolean> cir) {
+    public static void unbundleStackIntoSlot(Player player, ItemStack hostStack, Slot unbundleSlot, CallbackInfoReturnable<Boolean> cir) {
         ItemStack output = unbundleItem(player, hostStack, unbundleSlot);
         if (output != null) {
-            unbundleSlot.setStack(output);
+            unbundleSlot.setByPlayer(output);
             cir.setReturnValue(true);
         }
     }
 
-    public static void transferItemsToShulker(PlayerEntity player, ItemStack hostStack, ItemStack insertStack, CallbackInfoReturnable<Boolean> cir){
-        SimpleInventory source = (SimpleInventory) Util.getQuickItemInventory(player, insertStack);
-        SimpleInventory target = (SimpleInventory) Util.getQuickItemInventory(player, hostStack);
+    public static void transferItemsToShulker(Player player, ItemStack hostStack, ItemStack insertStack, CallbackInfoReturnable<Boolean> cir){
+        SimpleContainer source = (SimpleContainer) Util.getQuickItemInventory(player, insertStack);
+        SimpleContainer target = (SimpleContainer) Util.getQuickItemInventory(player, hostStack);
         if(source != null && target != null) {
             int temp = 0;
-            for (int i = source.size() - 1; i >= 0; i--) {
-                ItemStack stack = source.getStack(i);
-                if (!stack.isEmpty() && target.canInsert(stack)) {
-                    ItemStack output = target.addStack(stack);
-                    source.setStack(i, output);
+            for (int i = source.getContainerSize() - 1; i >= 0; i--) {
+                ItemStack stack = source.getItem(i);
+                if (!stack.isEmpty() && target.canAddItem(stack)) {
+                    ItemStack output = target.addItem(stack);
+                    source.setItem(i, output);
                     temp++;
                 }
             }
             if(temp > 0 && cir != null){
-                target.onClose(player);
-                source.onClose(player);
+                target.stopOpen(player);
+                source.stopOpen(player);
                 cir.setReturnValue(true);
             }
         }
     }
 
-    public static ItemStack unbundleItem(PlayerEntity player, ItemStack hostStack, Slot unbundleSlot) {
-        Inventory inv = Util.getQuickItemInventory(player, hostStack);
+    public static ItemStack unbundleItem(Player player, ItemStack hostStack, Slot unbundleSlot) {
+        Container inv = Util.getQuickItemInventory(player, hostStack);
         ItemStack output = null;
-        for (int i = inv.size() - 1; i >= 0; i--) {
-            output = inv.getStack(i);
-            if (!output.isEmpty() && unbundleSlot.canInsert(output)) {
-                output = inv.removeStack(i);
-                inv.onClose(player);
+        for (int i = inv.getContainerSize() - 1; i >= 0; i--) {
+            output = inv.getItem(i);
+            if (!output.isEmpty() && unbundleSlot.mayPlace(output)) {
+                output = inv.removeItemNoUpdate(i);
+                inv.stopOpen(player);
                 return output;
             }
         }
@@ -120,35 +120,35 @@ public class BundleHelper {
 //        return null;
 //    }
 
-    private static ItemStack bundleItem(PlayerEntity player, ItemStack hostStack, ItemStack insertStack) {
-        Inventory bundlingInv = Util.getQuickItemInventory(player, hostStack);
+    private static ItemStack bundleItem(Player player, ItemStack hostStack, ItemStack insertStack) {
+        Container bundlingInv = Util.getQuickItemInventory(player, hostStack);
         int amount = insertIntoInv(bundlingInv, player, hostStack, insertStack);
         if(amount != 0){
-            insertStack.decrement(amount);
+            insertStack.shrink(amount);
             return insertStack;
         }
         return null;
     }
 
-    private static ItemStack bundleItem(PlayerEntity player, ItemStack hostStack, ItemStack insertStack, Slot slot) {
-        if(!slot.canTakeItems(player)) return null;
-        Inventory bundlingInv = Util.getQuickItemInventory(player, hostStack);
+    private static ItemStack bundleItem(Player player, ItemStack hostStack, ItemStack insertStack, Slot slot) {
+        if(!slot.mayPickup(player)) return null;
+        Container bundlingInv = Util.getQuickItemInventory(player, hostStack);
         int amount = insertIntoInv(bundlingInv, player, hostStack, insertStack);
         if(amount != 0){
-            insertStack = slot.takeStackRange(amount, insertStack.getCount(), player);
+            insertStack = slot.safeTake(amount, insertStack.getCount(), player);
             return insertStack;
         }
         return null;
     }
 
-    private static int insertIntoInv(Inventory bundlingInv, PlayerEntity player, ItemStack hostStack, ItemStack insertStack) {
+    private static int insertIntoInv(Container bundlingInv, Player player, ItemStack hostStack, ItemStack insertStack) {
         QuickShulkerData qsdata = QuickOpenableRegistry.getQuickie(hostStack.getItem());
         int amount = 0;
         if(bundlingInv != null && qsdata.canBundleInsertItem(player, bundlingInv, hostStack, insertStack)){
             try (Transaction transaction = Transaction.openOuter()) {
                 amount = (int) InventoryStorage.of(bundlingInv, null).insert(ItemVariant.of(insertStack), insertStack.getCount(), transaction);
                 transaction.commit();
-                bundlingInv.onClose(player);
+                bundlingInv.stopOpen(player);
                 return amount;
             }
         }

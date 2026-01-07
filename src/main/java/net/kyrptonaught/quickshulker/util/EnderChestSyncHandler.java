@@ -11,46 +11,46 @@
 package net.kyrptonaught.quickshulker.util;
 
 import net.kyrptonaught.quickshulker.network.EnderChestS2CSyncPacket;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerListener;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
 
 public class EnderChestSyncHandler {
 
-    public static void syncOnContainerOpened(ServerPlayerEntity player, GenericContainerScreenHandler chestMenu){
+    public static void syncOnContainerOpened(ServerPlayer player, ChestMenu chestMenu){
         syncEnderChestContent(player);
-        chestMenu.addListener(new ScreenHandlerListener(){
+        chestMenu.addSlotListener(new ContainerListener(){
             @Override
-            public void onSlotUpdate(ScreenHandler handler, int slotId, ItemStack stack) {
+            public void slotChanged(AbstractContainerMenu handler, int slotId, ItemStack stack) {
                 Slot slot = handler.getSlot(slotId);
-                if(slot.inventory == player.getEnderChestInventory()){
-                    EnderChestS2CSyncPacket.S2CEChestSlotPacket.send(player, slot.getIndex(), stack);
+                if(slot.container == player.getEnderChestInventory()){
+                    EnderChestS2CSyncPacket.S2CEChestSlotPacket.send(player, slot.getContainerSlot(), stack);
                 }
             }
             @Override
-            public void onPropertyUpdate(ScreenHandler handler, int property, int value) {
+            public void dataChanged(AbstractContainerMenu handler, int property, int value) {
 
             }
         });
     }
 
-    public static void syncEnderChestContent(ServerPlayerEntity player) {
-        EnderChestS2CSyncPacket.S2CEChestContentPacket.send(player, player.getEnderChestInventory().getHeldStacks());
+    public static void syncEnderChestContent(ServerPlayer player) {
+        EnderChestS2CSyncPacket.S2CEChestContentPacket.send(player, player.getEnderChestInventory().getItems());
     }
 
-    public static void setEnderChestContent(PlayerEntity player, List<ItemStack> itemStacks){
-        SimpleInventory enderChestInventory = player.getEnderChestInventory();
+    public static void setEnderChestContent(Player player, List<ItemStack> itemStacks){
+        SimpleContainer enderChestInventory = player.getEnderChestInventory();
         // safeguard against mods only changing ender chest size on one side
-        int size = Math.min(itemStacks.size(), enderChestInventory.size());
+        int size = Math.min(itemStacks.size(), enderChestInventory.getContainerSize());
         for(int i = 0; i < size; i++){
-            enderChestInventory.setStack(i, itemStacks.get(i));
+            enderChestInventory.setItem(i, itemStacks.get(i));
         }
     }
 

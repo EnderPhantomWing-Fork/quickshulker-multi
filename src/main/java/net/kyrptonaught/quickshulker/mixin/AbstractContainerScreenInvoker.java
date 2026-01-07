@@ -10,17 +10,21 @@
 
 package net.kyrptonaught.quickshulker.mixin;
 
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.ClickType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(HandledScreen.class)
-public interface HandledScreenInvoker {
-    @Invoker("getSlotAt")
+@Mixin(AbstractContainerScreen.class)
+public interface AbstractContainerScreenInvoker {
+    //#if MC >= 1.21.2
+    //$$ @Invoker("getHoveredSlot")
+    //#else
+    @Invoker("findSlot")
+    //#endif
     Slot QS$getSlotAt(double mouseX, double mouseY);
 
-    @Invoker("onMouseClick")
-    void QS$onMouseClick(Slot slot, int slotId, int button, SlotActionType actionType);
+    @Invoker("slotClicked")
+    void QS$onMouseClick(Slot slot, int slotId, int button, ClickType actionType);
 }

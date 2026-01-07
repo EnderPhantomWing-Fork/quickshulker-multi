@@ -25,20 +25,25 @@ import net.kyrptonaught.quickshulker.network.EnderChestS2CSyncPacket;
 import net.kyrptonaught.quickshulker.network.OpenInventoryPacket;
 import net.kyrptonaught.quickshulker.network.OpenShulkerPacket;
 import net.kyrptonaught.quickshulker.network.QuickBundlePacket;
-import net.minecraft.block.CraftingTableBlock;
-import net.minecraft.block.EnderChestBlock;
-import net.minecraft.block.ShulkerBoxBlock;
-import net.minecraft.block.StonecutterBlock;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.*;
-import net.minecraft.text.Text;
-import net.minecraft.util.Hand;
+import net.minecraft.world.SimpleMenuProvider;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.CraftingMenu;
+import net.minecraft.world.inventory.ShulkerBoxMenu;
+import net.minecraft.world.inventory.StonecutterMenu;
+import net.minecraft.world.level.block.CraftingTableBlock;
+import net.minecraft.world.level.block.EnderChestBlock;
+import net.minecraft.world.level.block.ShulkerBoxBlock;
+import net.minecraft.world.level.block.StonecutterBlock;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 //#if MC >= 1.21.2
-//$$ import net.minecraft.util.ActionResult;
+//$$ import net.minecraft.world.InteractionResult;
 //#else
-import net.minecraft.util.TypedActionResult;
+import net.minecraft.world.InteractionResultHolder;
 //#endif
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,34 +63,30 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
         EventListeners.registerEventListeners();
 
         UseItemCallback.EVENT.register((player, world, hand) -> {
-            ItemStack stack = player.getStackInHand(hand);
-            //#if MC >= 1.21.10
-            //$$ if (!world.isClient()) {
-            //#else
-            if (!world.isClient) {
-            //#endif
+            ItemStack stack = player.getItemInHand(hand);
+            if (!world.isClientSide) {
                 if (QuickShulkerMod.getConfig().rightClickToOpen) {
                     if (Util.isOpenableItem(stack) && Util.canOpenInHand(stack)) {
-                        if (hand == Hand.MAIN_HAND)
+                        if (hand == InteractionHand.MAIN_HAND)
                             //#if MC >= 1.21.5
                             //$$ Util.openItem(player, 0, player.getInventory().getSelectedSlot());
                             //#else
-                            Util.openItem(player, 0, player.getInventory().selectedSlot);
+                            Util.openItem(player, 0, player.getInventory().selected);
                             //#endif
-                        else Util.openItem(player, 0, PlayerInventory.OFF_HAND_SLOT);
+                        else Util.openItem(player, 0, Inventory.SLOT_OFFHAND);
 
                         //#if MC >= 1.21.2
-                        //$$ return ActionResult.SUCCESS_SERVER;
+                        //$$ return InteractionResult.SUCCESS_SERVER;
                         //#else
-                        return TypedActionResult.success(stack);
+                        return InteractionResultHolder.success(stack);
                         //#endif
                     }
                 }
             }
             //#if MC >= 1.21.2
-            //$$ return ActionResult.PASS;
+            //$$ return InteractionResult.PASS;
             //#else
-            return TypedActionResult.pass(stack);
+            return InteractionResultHolder.pass(stack);
             //#endif
         });
 
@@ -106,8 +107,8 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
             new QuickOpenableRegistry.Builder()
                     .setItem(ShulkerBoxBlock.class)
                     .supportsBundleing(true)
-                    .setOpenAction(((player, stack) -> player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) ->
-                            new ShulkerBoxScreenHandler(i, player.getInventory(), new ItemStackInventory(stack, 27)), stack.getComponents().contains(DataComponentTypes.CUSTOM_NAME) ? stack.getName() : Text.translatable("container.shulkerBox")))))
+                    .setOpenAction(((player, stack) -> player.openMenu(new SimpleMenuProvider((i, playerInventory, playerEntity) ->
+                            new ShulkerBoxMenu(i, player.getInventory(), new ItemStackInventory(stack, 27)), stack.getComponents().has(DataComponents.CUSTOM_NAME) ? stack.getHoverName() : Component.translatable("container.shulkerBox")))))
                     .register();
 
         if (getConfig().quickEChest)
@@ -115,44 +116,29 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                     .setItem(EnderChestBlock.class)
                     .supportsBundleing(true)
                     .ignoreSingleStackCheck(true)
-                    .setOpenAction(((player, stack) -> player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) ->
-                            GenericContainerScreenHandler.createGeneric9x3(i, playerInventory, player.getEnderChestInventory()), Text.translatable("container.enderchest")))))
+                    .setOpenAction(((player, stack) -> player.openMenu(new SimpleMenuProvider((i, playerInventory, playerEntity) ->
+                            ChestMenu.threeRows(i, playerInventory, player.getEnderChestInventory()), Component.translatable("container.enderchest")))))
                     .register();
 
         if (getConfig().quickCraftingTables)
             new QuickOpenableRegistry.Builder()
                     .setItem(CraftingTableBlock.class)
                     .ignoreSingleStackCheck(true)
-                    .setOpenAction(((player, stack) -> player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) ->
-                            //#if MC >= 1.21.10
-                            //$$ new CraftingScreenHandler(i, playerInventory, ScreenHandlerContext.create(player.getEntityWorld(), player.getBlockPos())), Text.translatable("container.crafting")))))
-                            //#elseif MC >= 1.21.8
-                            //$$ new CraftingScreenHandler(i, playerInventory, ScreenHandlerContext.create(player.getWorld(), player.getBlockPos())), Text.translatable("container.crafting")))))
-                            //#else
-                            new CraftingScreenHandler(i, playerInventory, ScreenHandlerContext.create(player.getEntityWorld(), player.getBlockPos())), Text.translatable("container.crafting")))))
-                            //#endif
+                    .setOpenAction(((player, stack) -> player.openMenu(new SimpleMenuProvider((i, playerInventory, playerEntity) ->
+                            new CraftingMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.crafting")))))
                     .register();
 
         if (getConfig().quickStonecutter)
             new QuickOpenableRegistry.Builder()
                     .setItem(StonecutterBlock.class)
                     .ignoreSingleStackCheck(true)
-                    .setOpenAction(((player, stack) -> player.openHandledScreen(new SimpleNamedScreenHandlerFactory((i, playerInventory, playerEntity) ->
-                            //#if MC >= 1.21.10
-                            //$$ new StonecutterScreenHandler(i, playerInventory, ScreenHandlerContext.create(player.getEntityWorld(), player.getBlockPos())), Text.translatable("container.stonecutter")))))
-                            //#elseif MC >= 1.21.8
-                            //$$ new StonecutterScreenHandler(i, playerInventory, ScreenHandlerContext.create(player.getWorld(), player.getBlockPos())), Text.translatable("container.stonecutter")))))
-                            //#else
-                            new StonecutterScreenHandler(i, playerInventory, ScreenHandlerContext.create(player.getEntityWorld(), player.getBlockPos())), Text.translatable("container.stonecutter")))))
-                            //#endif
+                    .setOpenAction(((player, stack) -> player.openMenu(new SimpleMenuProvider((i, playerInventory, playerEntity) ->
+                            new StonecutterMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.stonecutter")))))
                     .register();
 
-        //#if MC >= 1.21.11
-        //#else
         if(ModUtils.isModLoad(ModIds.reinfshulker) && QuickShulkerMod.getConfig().quickShulkerBox) {
             ReinfshulkerOpenableRegistry.registerProviders();
         }
-        //#endif
     }
 
 }

@@ -11,50 +11,29 @@
 package net.kyrptonaught.kyrptconfig.config.screen;
 
 //#if MC >= 1.21.2
-//$$ import net.minecraft.util.math.ColorHelper;
-//$$ import net.minecraft.client.render.RenderLayer;
+//$$ import net.minecraft.util.ARGB;
+//$$ import net.minecraft.client.renderer.RenderType;
 //#else
 import com.mojang.blaze3d.systems.RenderSystem;
 //#endif
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.ButtonTextures;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.util.Identifier;
-//#if MC >= 1.21.11
-//$$ import net.minecraft.text.Style;
-//$$ import net.minecraft.text.Texts;
-//#else
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.text.Text;
-//#endif
-//#if MC >= 1.21.8
-//$$ import net.minecraft.client.gl.RenderPipelines;
-//#else
-//#endif
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.WidgetSprites;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
-public class NotSuckyButton extends ButtonWidget {
-    //#if MC >= 1.21.8
-    //$$ int buttonColor = -1;
-    //#else
+public class NotSuckyButton extends Button {
     int buttonColor = 16777215;
-    //#endif
     public boolean disableHover = false;
-    private static final ButtonTextures TEXTURES = new ButtonTextures(Identifier.of("widget/button"), Identifier.of("widget/button_disabled"), Identifier.of("widget/button_highlighted"));
+    private static final WidgetSprites TEXTURES = new WidgetSprites(ResourceLocation.parse("widget/button"), ResourceLocation.parse("widget/button_disabled"), ResourceLocation.parse("widget/button_highlighted"));
 
-    //#if MC >= 1.21.11
-    //$$ public NotSuckyButton(int x, int y, int width, int height, net.minecraft.text.Text message, PressAction onPress) {
-    //#else
-    public NotSuckyButton(int x, int y, int width, int height, Text message, PressAction onPress) {
-    //#endif
-        super(x, y, width, height, message, onPress, DEFAULT_NARRATION_SUPPLIER);
+    public NotSuckyButton(int x, int y, int width, int height, Component message, OnPress onPress) {
+        super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
     }
 
     public void setButtonColor(int color) {
-        //#if MC >= 1.21.11
-        //$$ this.setMessage(Texts.withStyle(this.getMessage(), Style.EMPTY.withColor(color)));
-        //#else
-        //#endif
         this.buttonColor = color;
     }
 
@@ -63,51 +42,34 @@ public class NotSuckyButton extends ButtonWidget {
     }
 
     @Override
-    //#if MC >= 1.21.11
-    //$$ protected void drawIcon(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
-    //#else
-    public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
-    //#endif
+    public void renderWidget(GuiGraphics context, int mouseX, int mouseY, float delta) {
         //This can fix text rendering over the wrong btn
         //context.getMatrices().translate(0, 0,  1);
 
-        if (disableHover) hovered = false;
-        //#if MC >= 1.21.11
-        //$$ this.drawButton(context);
-        //$$ this.drawLabel(context.getTextConsumer());
-        //#elseif MC >= 1.21.8
-        //$$ context.drawGuiTexture(
-        //$$         RenderPipelines.GUI_TEXTURED,
-        //$$         TEXTURES.get(this.active, this.isSelected()),
+        if (disableHover) isHovered = false;
+
+        //#if MC >= 1.21.2
+        //$$ context.blitSprite(
+        //$$         RenderType::guiTextured,
+        //$$         TEXTURES.get(this.active, this.isHoveredOrFocused()),
         //$$         this.getX(),
         //$$         this.getY(),
         //$$         this.getWidth(),
         //$$         this.getHeight(),
-        //$$         ColorHelper.getWhite(this.alpha));
-        //$$ TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-        //$$ int i = ColorHelper.withAlpha(this.alpha, this.active ? buttonColor : -6250336);
-        //$$ drawMessage(context, textRenderer, i);
-        //#elseif MC >= 1.21.2
-        //$$ context.drawGuiTexture(
-        //$$         RenderLayer::getGuiTextured,
-        //$$         TEXTURES.get(this.active, this.isSelected()),
-        //$$         this.getX(),
-        //$$         this.getY(),
-        //$$         this.getWidth(),
-        //$$         this.getHeight(),
-        //$$         ColorHelper.getWhite(this.alpha));
-        //$$ TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+        //$$         ARGB.white(this.alpha));
+        //
+        //$$ Font textRenderer = Minecraft.getInstance().font;
         //$$ int i = this.active ? buttonColor : 0xA0A0A0;
-        //$$ drawMessage(context, textRenderer, i);
+        //$$ renderString(context, textRenderer, i);
         //#else
-        context.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
+        context.setColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
-        context.drawGuiTexture(TEXTURES.get(this.active, this.isSelected()), this.getX(), this.getY(), this.getWidth(), this.getHeight());
-        context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+        context.blitSprite(TEXTURES.get(this.active, this.isHoveredOrFocused()), this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        context.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        Font textRenderer = Minecraft.getInstance().font;
         int i = this.active ? buttonColor : 0xA0A0A0;
-        drawMessage(context, textRenderer, i);
+        renderString(context, textRenderer, i);
         //#endif
     }
 }

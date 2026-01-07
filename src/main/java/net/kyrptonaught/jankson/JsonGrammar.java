@@ -1,18 +1,32 @@
 /*
- * This file is part of the Quick Shulker Multi project, licensed under the MIT License.
+ * MIT License
  *
- * Copyright (C) 2019 kyrptonaught, Hao_cen, Grayer0113, MoRanpcy, EnderPhantomWing and other contributors
+ * Copyright (c) 2018-2020 Falkreon (Isaac Ellingson)
  *
- * {name} is free software: you can redistribute or modify it under the terms of the MIT License.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * Browse the MIT License here. <https://mit-license.org/>
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package net.kyrptonaught.jankson;
 
 /**
- * Represents a style of JSON written out, and a set of quirks to parse going in.
- * Typically, you'll want to use a different grammar in than out.
+ * Represents a style of json written out, and a set of quirks to parse going in.
+ * Typically you'll want to use a different grammar in than out.
  */
 public class JsonGrammar {
     /**
@@ -38,8 +52,8 @@ public class JsonGrammar {
             .build();
 
     /**
-     * A grammar which will print compactified JSON readable by almost all vanilla JSON parsers.
-     * (Note: Jackson may read special Numerics like NaN in as Strings)
+     * A grammar which will print compactified JSON readable by almost all vanilla json parsers.
+     * (Note: Jackson may read special numerics like NaN in as Strings)
      */
     public static final JsonGrammar COMPACT = builder()
             .withComments(false)
@@ -81,7 +95,7 @@ public class JsonGrammar {
         }
 
         /**
-         * Indicates whether additional tabs and newlines should be printed to make JSON more
+         * Indicates whether additional tabs and newlines should be printed to make json more
          * readable for humans. If false, output will be somewhat minified to save space. Defaults
          * to true.
          */
@@ -101,7 +115,7 @@ public class JsonGrammar {
         }
 
         /**
-         * If true, JSON5 trailing commas will be printed in all objects and lists. Has no effect on
+         * If true, JSON5 trailing commas will be printed in all objects and lists. Has no affect on
          * parsing, and has no effect on output if {@link #printCommas(boolean)} is false. Defaults
          * to false.
          */

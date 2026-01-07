@@ -1,14 +1,14 @@
 {
   "required": true,
   "package": "net.kyrptonaught.quickshulker.mixin",
-  "compatibilityLevel": "{{COMPATIBILITY_LEVEL}}",
+  "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ContainerMixin",
     "CraftingScreenHandlerMixin",
     "ItemMixin",
     "ContainerOpenMixin",
-    "HandledScreenInvoker",
-    "HandledScreenMixin"
+    "AbstractContainerScreenInvoker",
+    "AbstractContainerScreenMixin"
   ],
   "client": [
     "ScreenMixin",

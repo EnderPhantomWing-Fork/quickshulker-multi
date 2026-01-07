@@ -1,11 +1,25 @@
 /*
- * This file is part of the Quick Shulker Multi project, licensed under the MIT License.
+ * MIT License
  *
- * Copyright (C) 2019 kyrptonaught, Hao_cen, Grayer0113, MoRanpcy, EnderPhantomWing and other contributors
+ * Copyright (c) 2018-2020 Falkreon (Isaac Ellingson)
  *
- * {name} is free software: you can redistribute or modify it under the terms of the MIT License.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * Browse the MIT License here. <https://mit-license.org/>
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package net.kyrptonaught.jankson.api;
@@ -16,12 +30,12 @@ import java.lang.reflect.Type;
 
 public interface Marshaller {
     /**
-     * Turns a java object into its JSON intermediate representation.
+     * Turns a java object into its json intermediate representation.
      */
     JsonElement serialize(Object obj);
 
     /**
-     * Unpacks the provided JsonElement into a new object of type {@code clazz}, making the best
+     * Unpacks the provided JsonElement into a new object of type {@code clazz}, making a best
      * effort to unpack all the fields it can. Any fields that cannot be unpacked will be left in
      * the state the initializer and no-arg constructor leaves them in.
      *
@@ -29,9 +43,9 @@ public interface Marshaller {
      * and then calling this method as a fallback if an error is encountered.
      *
      * @param clazz The class of the object to create and deserialize
-     * @param elem  JSON intermediate representation of the data to be unpacked.
+     * @param elem  json intermediate representation of the data to be unpacked.
      * @param <E>   The type of the object to create and deserialize
-     * @return A new object of the provided class that represents the data in the JSON provided.
+     * @return A new object of the provided class that represents the data in the json provided.
      */
     <E> E marshall(Class<E> clazz, JsonElement elem);
 
@@ -40,9 +54,9 @@ public interface Marshaller {
      * E.
      *
      * @param type The type to deserialize to
-     * @param elem JSON intermediate representation of the data to be unpacked.
+     * @param elem json intermediate representation of the data to be unpacked.
      * @param <E>  The type to force-cast to at the end
-     * @return A new object of the provided Type that represents the data in the JSON provided.
+     * @return A new object of the provided Type that represents the data in the json provided.
      */
     <E> E marshall(Type type, JsonElement elem);
 
@@ -51,9 +65,9 @@ public interface Marshaller {
      * problem encountered during the unpacking process.
      *
      * @param clazz The class of the object to create and deserialize
-     * @param elem  JSON intermediate representation of the data to be unpacked.
+     * @param elem  json intermediate representation of the data to be unpacked.
      * @param <E>   The type of the object to create and deserialize
-     * @return A new object of the provided class that represents the data in the JSON provided.
+     * @return A new object of the provided class that represents the data in the json provided.
      * @throws DeserializationException if any problems are encountered unpacking the data.
      */
     <E> E marshallCarefully(Class<E> clazz, JsonElement elem) throws DeserializationException;

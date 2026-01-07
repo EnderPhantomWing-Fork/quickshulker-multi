@@ -20,7 +20,7 @@ repositories {
 	maven { url = 'https://maven.fallenbreath.me/releases' }
 	maven { url = 'https://jitpack.io' }
 	maven { url = 'https://raw.githubusercontent.com/Aton-Kish/mcmod/maven' }
-	maven { url = "https://maven.terraformersmc.com/" }
+	maven { url = 'https://maven.terraformersmc.com/' }
 }
 
 dependencies {
@@ -40,16 +40,16 @@ dependencies {
 	if (!unobfuscated) {
 
 //		parchment mappings
-//		mappings loom.layered() {
-//			officialMojangMappings()
-//			if (project.parchment_version.size() > 0) {
-//				parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_version}@zip")
-//			}
-//		}
+		mappings loom.layered() {
+			officialMojangMappings()
+			if (project.parchment_version.size() > 0) {
+				parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_version}@zip")
+			}
+		}
 
-//		使用 yarn 映射
-//		Use yarn mapping
-		mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+//		使用 mojang 映射
+//		Use mojang mappings
+//		mappings loom.officialMojangMappings()
 	}
     autoImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
@@ -97,6 +97,7 @@ dependencies {
 
 	include(autoImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
 	compileOnly group: "com.google.code.findbugs", name: "jsr305", version: "3.0.2"
+
 
 
 // example:

@@ -1,11 +1,25 @@
 /*
- * This file is part of the Quick Shulker Multi project, licensed under the MIT License.
+ * MIT License
  *
- * Copyright (C) 2019 kyrptonaught, Hao_cen, Grayer0113, MoRanpcy, EnderPhantomWing and other contributors
+ * Copyright (c) 2018-2020 Falkreon (Isaac Ellingson)
  *
- * {name} is free software: you can redistribute or modify it under the terms of the MIT License.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * Browse the MIT License here. <https://mit-license.org/>
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package net.kyrptonaught.jankson;
@@ -32,7 +46,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
     private final List<Entry> entries = new ArrayList<>();
 
     /**
-     * If there is an entry at this key, and that entry is a JSON object, return it. Otherwise returns null.
+     * If there is an entry at this key, and that entry is a json object, return it. Otherwise returns null.
      */
     @Nullable
     public JsonObject getObject(@Nonnull String name) {
@@ -92,7 +106,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
     }
 
     /**
-     * May return null if the existing object can't be marshaled to elem's class
+     * May return null if the existing object can't be marshalled to elem's class
      */
     @SuppressWarnings("unchecked")
     @Nullable
@@ -101,7 +115,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
     }
 
     /**
-     * May return null if the existing object can't be marshaled to the target class
+     * May return null if the existing object can't be marshalled to the target class
      */
     @Nullable
     public <T> T putDefault(@Nonnull String key, @Nonnull T elem, Class<? extends T> clazz, @Nullable String comment) {
@@ -130,7 +144,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
      *   <li>If a key is an object, a deep (recursive) comparison occurs. Comments are ignored in this comparison.
      *   <li>All other types, including lists, receive a shallow comparison of its value. The comment is ignored in this comparison.
      *   <li>Whether deep or shallow, if the key is found to be identical in value to its default, it is skipped.
-     *   <li>If the key is found to be different from its default, the key, value, and comment are represented in the
+     *   <li>If the key is found to be different than its default, the key, value, and comment are represented in the
      *       output.
      * </ul>
      */

@@ -14,8 +14,8 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.kyrptonaught.quickshulker.util.EnderChestSyncHandler;
-import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.server.level.ServerPlayer;
 
 public class EventListeners {
 
@@ -39,7 +39,7 @@ public class EventListeners {
     }
 
     // Open inventory
-    public static void containerOpenedListener(ServerPlayerEntity player, GenericContainerScreenHandler chestMenu) {
+    public static void containerOpenedListener(ServerPlayer player, ChestMenu chestMenu) {
         EnderChestSyncHandler.syncOnContainerOpened(player, chestMenu);
     }
 

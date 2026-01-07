@@ -1,11 +1,25 @@
 /*
- * This file is part of the Quick Shulker Multi project, licensed under the MIT License.
+ * MIT License
  *
- * Copyright (C) 2019 kyrptonaught, Hao_cen, Grayer0113, MoRanpcy, EnderPhantomWing and other contributors
+ * Copyright (c) 2018-2020 Falkreon (Isaac Ellingson)
  *
- * {name} is free software: you can redistribute or modify it under the terms of the MIT License.
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * Browse the MIT License here. <https://mit-license.org/>
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package net.kyrptonaught.jankson;
@@ -268,13 +282,13 @@ public class Jankson {
     }
 
     /**
-     * Converts a String of JSON into an object of the specified class in fail-fast mode, throwing an exception
+     * Converts a String of json into an object of the specified class in fail-fast mode, throwing an exception
      * proactively if problems arise.
      *
      * @param json  A string containing json data to be unpacked
      * @param clazz The class to convert the data into
-     * @return An object representing the data in JSON
-     * @throws SyntaxError              If the JSON cannot be parsed
+     * @return An object representing the data in json
+     * @throws SyntaxError              If the json cannot be parsed
      * @throws DeserializationException If the conversion into an instance of the specified type fails
      */
     public <T> T fromJsonCarefully(String json, Class<T> clazz) throws SyntaxError, DeserializationException {
@@ -288,7 +302,7 @@ public class Jankson {
      *
      * @param obj   A JsonObject holding the data to be unpacked
      * @param clazz The class to convert the data into
-     * @return An object of the specified class, holding the data from JSON
+     * @return An object of the specified class, holding the data from json
      * @throws DeserializationException If the conversion into an instance of the specified type fails
      */
     public <T> T fromJsonCarefully(JsonObject obj, Class<T> clazz) throws DeserializationException {
@@ -395,8 +409,8 @@ public class Jankson {
         }
 
         /**
-         * Registers a marshaller for primitive types. Most built-in JSON and java types are already supported, but this
-         * allows one to change the deserialization behavior of JSON primitives. Please note that these adapters are not
+         * Registers a marshaller for primitive types. Most built-in json and java types are already supported, but this
+         * allows one to change the deserialization behavior of Json primitives. Please note that these adapters are not
          * suitable for generic types, as these types are erased during jvm execution.
          *
          * @param clazz   The class to register a type adapter for
@@ -411,7 +425,7 @@ public class Jankson {
         }
 
         /**
-         * Registers a function to serialize an object into JSON. This can be useful if a class's serialized form is not
+         * Registers a function to serialize an object into json. This can be useful if a class's serialized form is not
          * meant to resemble its live-memory form.
          *
          * @param clazz      The class to register a serializer for
