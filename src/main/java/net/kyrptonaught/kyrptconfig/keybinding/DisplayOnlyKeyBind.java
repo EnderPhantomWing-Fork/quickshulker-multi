@@ -1,36 +1,36 @@
 package net.kyrptonaught.kyrptconfig.keybinding;
 
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.util.InputUtil;
+import net.minecraft.client.KeyMapping;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.util.function.Consumer;
 
-public class DisplayOnlyKeyBind extends KeyBinding {
+public class DisplayOnlyKeyBind extends KeyMapping {
     private CustomKeyBinding customKeyBinding;
-    private final Consumer<InputUtil.Key> keySet;
+    private final Consumer<InputConstants.Key> keySet;
 
-    public DisplayOnlyKeyBind(String translationKey, InputUtil.Type type, int code, String category) {
+    public DisplayOnlyKeyBind(String translationKey, InputConstants.Type type, int code, String category) {
         super(translationKey, type, code, category);
         keySet = (boundKey) -> {
         };
     }
 
-    public DisplayOnlyKeyBind(String translationKey, String category, CustomKeyBinding customKeyBinding, Consumer<InputUtil.Key> keySet) {
-        super(translationKey, customKeyBinding.getDefaultKey().getCategory(), customKeyBinding.getDefaultKey().getCode(), category);
+    public DisplayOnlyKeyBind(String translationKey, String category, CustomKeyBinding customKeyBinding, Consumer<InputConstants.Key> keySet) {
+        super(translationKey, customKeyBinding.getDefaultKey().getType(), customKeyBinding.getDefaultKey().getValue(), category);
         this.customKeyBinding = customKeyBinding;
         this.keySet = keySet;
         updateSetKey();
     }
 
-    public void setBoundKey(InputUtil.Key boundKey) {
-        super.setBoundKey(boundKey);
+    public void setKey(InputConstants.Key boundKey) {
+        super.setKey(boundKey);
         if (customKeyBinding != null)
-            customKeyBinding.setRaw(getBoundKeyTranslationKey());
+            customKeyBinding.setRaw(saveString());
         keySet.accept(boundKey);
     }
 
     public void updateSetKey() {
-        super.setBoundKey(customKeyBinding.getKeybinding().orElse(InputUtil.UNKNOWN_KEY));
+        super.setKey(customKeyBinding.getKeybinding().orElse(InputConstants.UNKNOWN));
     }
 
     @Override
@@ -40,13 +40,13 @@ public class DisplayOnlyKeyBind extends KeyBinding {
     }
 
     @Override
-    public String getTranslationKey() {
+    public String getName() {
         updateSetKey();
-        return super.getTranslationKey();
+        return super.getName();
     }
 
     @Override
-    public InputUtil.Key getDefaultKey() {
+    public InputConstants.Key getDefaultKey() {
         updateSetKey();
         return super.getDefaultKey();
     }
