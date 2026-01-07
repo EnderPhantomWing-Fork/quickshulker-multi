@@ -1,5 +1,7 @@
 # Quick Shulker Multi
 
+Quickly open shulker boxes(and more) without placing them down and refactor using preprocessor
+
 Use the multi-version build tool preprocessor to build mods for multiple Minecraft versions quickly.
 
 Quickly open a held shulker box with the press of a key!
