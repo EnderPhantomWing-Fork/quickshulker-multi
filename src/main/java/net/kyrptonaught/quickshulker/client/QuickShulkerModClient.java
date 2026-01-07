@@ -15,8 +15,8 @@ import net.kyrptonaught.quickshulker.event.ModKeyCallback;
 import net.kyrptonaught.quickshulker.network.EnderChestS2CSyncPacket;
 import net.kyrptonaught.quickshulker.network.OpenInventoryPacket;
 import net.kyrptonaught.quickshulker.util.EnderChestSyncHandler;
-import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.inventory.EnderChestInventory;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.world.inventory.PlayerEnderChestContainer;
 
 @Environment(EnvType.CLIENT)
 public class QuickShulkerModClient implements ClientModInitializer {
@@ -41,8 +41,8 @@ public class QuickShulkerModClient implements ClientModInitializer {
         PayloadTypeRegistry.playC2S().register(EnderChestS2CSyncPacket.S2CEChestSlotPacket.S2C_ECHEST_SLOT_PACKET_ID, EnderChestS2CSyncPacket.S2CEChestSlotPacket.CODEC);
         ClientPlayNetworking.registerGlobalReceiver(EnderChestS2CSyncPacket.S2CEChestSlotPacket.S2C_ECHEST_SLOT_PACKET_ID, (payload, context) -> {
             context.client().execute(() -> {
-                EnderChestInventory enderChestInventory = context.player().getEnderChestInventory();
-                enderChestInventory.setStack(payload.slotId(), payload.itemStack());
+                PlayerEnderChestContainer enderChestInventory = context.player().getEnderChestInventory();
+                enderChestInventory.setItem(payload.slotId(), payload.itemStack());
             });
         });
 

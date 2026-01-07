@@ -5,13 +5,13 @@ import net.fabricmc.api.Environment;
 import net.kyrptonaught.quickshulker.QuickShulkerMod;
 import net.kyrptonaught.quickshulker.client.ClientUtil;
 import net.kyrptonaught.quickshulker.client.QuickShulkerModClient;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.slot.Slot;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,22 +22,22 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(HandledScreen.class)
+@Mixin(AbstractContainerScreen.class)
 @Environment(EnvType.CLIENT)
 public abstract class ScreenMixin {
     @Shadow
-    protected Slot focusedSlot;
+    protected Slot hoveredSlot;
 
     @Shadow
     @Final
-    protected ScreenHandler handler;
+    protected AbstractContainerMenu menu;
 
-    @Shadow private boolean cancelNextRelease;
+    @Shadow private boolean skipNextRelease;
 
     @Inject(method = "init", at = @At("TAIL"))
     private void fixMouse(CallbackInfo ci) {
         if (QuickShulkerMod.lastMouseX != 0 && QuickShulkerMod.lastMouseY != 0) {
-            GLFW.glfwSetCursorPos(MinecraftClient.getInstance().getWindow().getHandle(), QuickShulkerMod.lastMouseX, QuickShulkerMod.lastMouseY);
+            GLFW.glfwSetCursorPos(Minecraft.getInstance().getWindow().getWindow(), QuickShulkerMod.lastMouseX, QuickShulkerMod.lastMouseY);
             QuickShulkerMod.lastMouseY = 0;
             QuickShulkerMod.lastMouseX = 0;
         }
@@ -46,7 +46,7 @@ public abstract class ScreenMixin {
     @Inject(method = "keyPressed", at = @At("HEAD"), cancellable = true)
     private void QS$keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (QuickShulkerMod.getConfig().keybingInInv) {
-            if (QuickShulkerModClient.getKeybinding().matches(keyCode, InputUtil.Type.KEYSYM)) {
+            if (QuickShulkerModClient.getKeybinding().matches(keyCode, InputConstants.Type.KEYSYM)) {
                 if (handleTrigger())
                     cir.setReturnValue(true);
             }
@@ -56,18 +56,18 @@ public abstract class ScreenMixin {
     @Inject(method = "mouseClicked", at = @At("HEAD"), cancellable = true)
     private void QS$mousePressed(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
         if (QuickShulkerMod.getConfig().rightClickInv) {
-            if (this.handler.getCursorStack().isEmpty() && button == 1 && this.focusedSlot != null && this.focusedSlot.getStack().getCount() == 1) {
+            if (this.menu.getCarried().isEmpty() && button == 1 && this.hoveredSlot != null && this.hoveredSlot.getItem().getCount() == 1) {
                 if (handleTrigger()) {
-                    this.cancelNextRelease = true;
+                    this.skipNextRelease = true;
                     cir.setReturnValue(true);
                     return;
                 }
             }
         }
         if (QuickShulkerMod.getConfig().keybingInInv) {
-            if (QuickShulkerModClient.getKeybinding().matches(button, InputUtil.Type.MOUSE)) {
+            if (QuickShulkerModClient.getKeybinding().matches(button, InputConstants.Type.MOUSE)) {
                 if (handleTrigger()) {
-                    this.cancelNextRelease = true;
+                    this.skipNextRelease = true;
                     cir.setReturnValue(true);
                     return;
                 }
@@ -77,18 +77,18 @@ public abstract class ScreenMixin {
 
     @Unique
     private boolean handleTrigger() {
-        if (this.focusedSlot != null) {
-            return isValid(this.focusedSlot.getStack(), ClientUtil.getSlotId(handler, this.focusedSlot));
+        if (this.hoveredSlot != null) {
+            return isValid(this.hoveredSlot.getItem(), ClientUtil.getSlotId(menu, this.hoveredSlot));
         }
         return false;
     }
 
     @Unique
     private boolean isValid(ItemStack stack, int id) {
-        if (this.focusedSlot.inventory instanceof PlayerInventory)
+        if (this.hoveredSlot.container instanceof Inventory)
             if (ClientUtil.CheckAndSend(stack, id)) {
-                QuickShulkerMod.lastMouseX = MinecraftClient.getInstance().mouse.getX();
-                QuickShulkerMod.lastMouseY = MinecraftClient.getInstance().mouse.getY();
+                QuickShulkerMod.lastMouseX = Minecraft.getInstance().mouseHandler.xpos();
+                QuickShulkerMod.lastMouseY = Minecraft.getInstance().mouseHandler.ypos();
                 return true;
             }
         return false;
