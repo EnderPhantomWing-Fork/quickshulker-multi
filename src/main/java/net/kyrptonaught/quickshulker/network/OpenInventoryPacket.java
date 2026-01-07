@@ -2,29 +2,30 @@ package net.kyrptonaught.quickshulker.network;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.kyrptonaught.quickshulker.QuickShulkerMod;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.resources.ResourceLocation;
 
-public class OpenInventoryPacket implements CustomPayload {
+public class OpenInventoryPacket implements CustomPacketPayload {
 
-    public static final Identifier OPEN_INV = Identifier.of(QuickShulkerMod.MOD_ID, "open_inv");
+    public static final ResourceLocation OPEN_INV = ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "open_inv");
 
-    public static final Id<OpenInventoryPacket> OPEN_INV_ID = new CustomPayload.Id<>(OPEN_INV);
+    public static final Type<OpenInventoryPacket> OPEN_INV_ID = new CustomPacketPayload.Type<>(OPEN_INV);
 
-    public static final PacketCodec<PacketByteBuf, OpenInventoryPacket> CODEC = PacketCodec.of(OpenInventoryPacket::write, buf -> new OpenInventoryPacket());
+    public static final StreamCodec<FriendlyByteBuf, OpenInventoryPacket> CODEC = StreamCodec.ofMember(OpenInventoryPacket::write, buf -> new OpenInventoryPacket());
 
-    private void write(PacketByteBuf buf) {
+    private void write(FriendlyByteBuf buf) {
     }
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return OPEN_INV_ID;
     }
 
-    public static void send(ServerPlayerEntity player) {
+    public static void send(ServerPlayer player) {
         ServerPlayNetworking.send(player, new OpenInventoryPacket());
     }
 
