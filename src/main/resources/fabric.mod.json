@@ -5,7 +5,9 @@
   "name": "Quick Shulker",
   "description": "Quickly open Shulker boxes and more",
   "authors": [
-    "kyrptonaught",
+    "kyrptonaught"
+  ],
+  "contributors": [
     "Hao_cen",
     "Grayer0113",
     "MoRanpcy",
