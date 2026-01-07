@@ -1,11 +1,11 @@
 package net.kyrptonaught.kyrptconfig.config.screen.items;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.Click;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.input.CharInput;
-import net.minecraft.client.input.KeyInput;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.network.chat.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,12 +15,12 @@ public class SubItem<E> extends ConfigItem<E> {
     protected int subStart = 0;
     protected List<ConfigItem<?>> configs = new ArrayList<>();
 
-    public SubItem(Text name, boolean isExpanded) {
+    public SubItem(Component name, boolean isExpanded) {
         super(name, null, null);
         this.expanded = isExpanded;
     }
 
-    public SubItem(Text name) {
+    public SubItem(Component name) {
         this(name, false);
     }
 
@@ -54,7 +54,7 @@ public class SubItem<E> extends ConfigItem<E> {
     }
 
     @Override
-    public void mouseClicked(Click click, boolean doubled) {
+    public void mouseClicked(MouseButtonEvent click, boolean doubled) {
         super.mouseClicked(click, doubled);
         if (!isHidden() && click.y() > subStart && click.y() < subStart + 20)
             expanded = !expanded;
@@ -68,7 +68,7 @@ public class SubItem<E> extends ConfigItem<E> {
     }
 
     @Override
-    public boolean charTyped(CharInput input) {
+    public boolean charTyped(CharacterEvent input) {
         if (expanded && !isHidden()) {
             for (ConfigItem<?> item : configs) {
                 if (item.isHidden()) continue;
@@ -80,7 +80,7 @@ public class SubItem<E> extends ConfigItem<E> {
     }
 
     @Override
-    public boolean keyPressed(KeyInput input) {
+    public boolean keyPressed(KeyEvent input) {
         if (expanded && !isHidden()) {
             for (ConfigItem<?> item : configs) {
                 if (item.isHidden()) continue;
@@ -113,10 +113,10 @@ public class SubItem<E> extends ConfigItem<E> {
     }
 
     @Override
-    public void render(DrawContext context, int x, int y, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int x, int y, int mouseX, int mouseY, float delta) {
         super.render(context, x, y, mouseX, mouseY, delta);
         if (isHidden()) return;
-        context.drawText(MinecraftClient.getInstance().textRenderer, expanded ? "-" : "+", x - 10, y + 5, -1, false);
+        context.drawString(Minecraft.getInstance().font, expanded ? "-" : "+", x - 10, y + 5, -1, false);
         subStart = y;
         if (expanded) {
             int runningY = subStart + 23;
@@ -129,7 +129,7 @@ public class SubItem<E> extends ConfigItem<E> {
     }
 
     @Override
-    public void render2(DrawContext context, int x, int y, int mouseX, int mouseY, float delta) {
+    public void render2(GuiGraphics context, int x, int y, int mouseX, int mouseY, float delta) {
         super.render2(context, x, y, mouseX, mouseY, delta);
         if (isHidden()) return;
 
