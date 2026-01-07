@@ -2,8 +2,8 @@ package net.kyrptonaught.kyrptconfig.mixin.displaykeybind;
 
 import net.kyrptonaught.kyrptconfig.keybinding.DisplayOnlyKeyBind;
 import net.kyrptonaught.kyrptconfig.keybinding.SpoofedKeysHelper;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.Options;
+import net.minecraft.client.KeyMapping;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,20 +11,23 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(GameOptions.class)
-public class GameOptionsMixin {
+// TODO(Ravel): can not resolve target class GameOptions
+@Mixin(Options.class)
+public class OptionsMixin {
 
+    // TODO(Ravel): Could not determine a single target
     @Shadow
     @Final
-    public KeyBinding[] allKeys;
+    public KeyMapping[] keyMappings;
 
 
-    @Inject(method = "accept", at = @At(value = "HEAD"))
-    public void genSpoofedKeyBindList(GameOptions.Visitor visitor, CallbackInfo ci) {
+    // TODO(Ravel): no target class
+    @Inject(method = "processOptions", at = @At(value = "HEAD"))
+    public void genSpoofedKeyBindList(Options.FieldAccess visitor, CallbackInfo ci) {
         SpoofedKeysHelper.spoofed_Keys.clear();
-        for (KeyBinding keyBinding : this.allKeys) {
+        for (KeyMapping keyBinding : this.keyMappings) {
             if (keyBinding instanceof DisplayOnlyKeyBind)
-                SpoofedKeysHelper.spoofed_Keys.add("key_" + keyBinding.getTranslationKey());
+                SpoofedKeysHelper.spoofed_Keys.add("key_" + keyBinding.getName());
         }
     }
 }

@@ -1,13 +1,13 @@
 package net.kyrptonaught.kyrptconfig.config.screen;
 
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.ColorHelper;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.Mth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,26 +20,26 @@ public class ConfigScreen extends Screen {
     Screen previousScreen;
     private NotSuckyButton scrollLeftBTN, scrollRightBTN;
     int horizontalScrollOffset = -1;
-    private static final Identifier SCROLLER_TEXTURE = Identifier.of("widget/scroller");
-    private static final Identifier OPTIONS_BACKGROUND_TEXTURE = Identifier.of("textures/block/dirt.png");
+    private static final ResourceLocation SCROLLER_TEXTURE = ResourceLocation.parse("widget/scroller");
+    private static final ResourceLocation OPTIONS_BACKGROUND_TEXTURE = ResourceLocation.parse("textures/block/dirt.png");
 
-    public ConfigScreen(Screen previousScreen, Text title) {
+    public ConfigScreen(Screen previousScreen, Component title) {
         super(title);
         this.previousScreen = previousScreen;
     }
 
     protected void init() {
         int center = this.width / 2;
-        this.addDrawableChild(new NotSuckyButton(center - 153, height - 25, 150, 20, Text.translatable("key.kyrptconfig.config.exit"), widget -> {
-            this.client.setScreen(previousScreen);
+        this.addRenderableWidget(new NotSuckyButton(center - 153, height - 25, 150, 20, Component.translatable("key.kyrptconfig.config.exit"), widget -> {
+            this.minecraft.setScreen(previousScreen);
         }));
 
-        this.addDrawableChild(new NotSuckyButton(center + 3, height - 25, 150, 20, Text.translatable("key.kyrptconfig.config.saveExit"), widget -> {
+        this.addRenderableWidget(new NotSuckyButton(center + 3, height - 25, 150, 20, Component.translatable("key.kyrptconfig.config.saveExit"), widget -> {
             save();
-            this.client.setScreen(previousScreen);
+            this.minecraft.setScreen(previousScreen);
         }));
         for (ConfigSection section : sections) {
-            section.init(client, width, height - 57 - 30);
+            section.init(minecraft, width, height - 57 - 30);
         }
 
         adjustForHorizontalScroll(this.width);
@@ -63,7 +63,7 @@ public class ConfigScreen extends Screen {
             item.sectionSelectionBTN.setX(10);
         else
             item.sectionSelectionBTN.setX(sections.get(sections.size() - 1).sectionSelectionBTN.getX() + sections.get(sections.size() - 1).sectionSelectionBTN.getWidth() + 3);
-        item.sectionSelectionBTN.setWidth(MinecraftClient.getInstance().textRenderer.getWidth(item.title) + 10);
+        item.sectionSelectionBTN.setWidth(Minecraft.getInstance().font.width(item.title) + 10);
 
         this.sections.add(item);
     }
@@ -71,7 +71,7 @@ public class ConfigScreen extends Screen {
     public boolean adjustForHorizontalScroll(int maxWidth) {
         NotSuckyButton lastBTN = sections.get(sections.size() - 1).sectionSelectionBTN;
 
-        this.scrollLeftBTN = new NotSuckyButton(10, 32, 10, 20, Text.literal("<"), widget -> {
+        this.scrollLeftBTN = new NotSuckyButton(10, 32, 10, 20, Component.literal("<"), widget -> {
             NotSuckyButton nextBtn = sections.get(0).sectionSelectionBTN;
             for (int i = sections.size() - 1; i >= 0; i--) {
                 if (sections.get(i).sectionSelectionBTN.getX() < scrollLeftBTN.getX() + scrollLeftBTN.getWidth() + 3) {
@@ -85,7 +85,7 @@ public class ConfigScreen extends Screen {
             horizontalScrollOffset += (nextBtn.getX()) - (scrollLeftBTN.getX() + scrollLeftBTN.getWidth() + 3);
         });
 
-        this.scrollRightBTN = new NotSuckyButton(this.width - 20, 32, 10, 20, Text.literal(">"), widget -> {
+        this.scrollRightBTN = new NotSuckyButton(this.width - 20, 32, 10, 20, Component.literal(">"), widget -> {
             NotSuckyButton nextBtn = lastBTN;
             for (int i = 0; i < sections.size(); i++) {
                 if (sections.get(i).sectionSelectionBTN.getX() + sections.get(i).sectionSelectionBTN.getWidth() + 3 > maxWidth) {
@@ -160,7 +160,7 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         super.renderBackground(context, mouseX, mouseY, delta);
 
         ConfigSection section = sections.get(selectedSection);
@@ -170,7 +170,7 @@ public class ConfigScreen extends Screen {
         section.render(context, 57, mouseX, mouseY, delta);
         context.disableScissor();
 
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 13, 0xffffff);
+        context.drawCenteredString(this.font, this.title, this.width / 2, 13, 0xffffff);
         drawHeaderAndFooterSeparators(context);
 
         boolean noHover = scrollLeftBTN.detectHover(mouseX, mouseY) | scrollRightBTN.detectHover(mouseX, mouseY);
@@ -203,14 +203,14 @@ public class ConfigScreen extends Screen {
             int x = this.width - 6;
 
             float overflow = ((float) section.calculateSectionHeight() / this.height);
-            int height = section.height - MathHelper.lerp(overflow, 0, section.height);
-            height = MathHelper.clamp(height, 20, section.height - 8);
+            int height = section.height - Mth.lerpInt(overflow, 0, section.height);
+            height = Mth.clamp(height, 20, section.height - 8);
 
             float percentage = (float) -section.scrollOffset / section.calculateSectionHeight();
-            int y = MathHelper.lerp(percentage, 57, this.height - 30 - height);
+            int y = Mth.lerpInt(percentage, 57, this.height - 30 - height);
 
             context.fill(x, 57, x + 6, this.height - 30, -16777216);
-            context.drawGuiTexture(RenderLayer::getGuiTextured, SCROLLER_TEXTURE, x, y, 6, height);
+            context.blitSprite(RenderType::guiTextured, SCROLLER_TEXTURE, x, y, 6, height);
         }
 
         section.render2(context, 57, mouseX, mouseY, delta);
@@ -219,21 +219,21 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderBackground(GuiGraphics context, int mouseX, int mouseY, float delta) {
     }
 
-    private void renderBackgroundTexture(DrawContext context) {
-        context.drawTexture(RenderLayer::getGuiTextured, OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0, this.width, this.height, 32, 32);
+    private void renderBackgroundTexture(GuiGraphics context) {
+        context.blit(RenderType::guiTextured, OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0, this.width, this.height, 32, 32);
     }
 
-    private void drawHeaderAndFooterSeparators(DrawContext context) {
-        context.drawTexture(RenderLayer::getGuiTextured, Screen.HEADER_SEPARATOR_TEXTURE, 0, 55, 0.0f, 0.0f, this.width, 2, 32, 2);
-        context.drawTexture(RenderLayer::getGuiTextured, Screen.FOOTER_SEPARATOR_TEXTURE, 0, this.height -30, 0.0f, 0.0f, this.width, 2, 32, 2);
+    private void drawHeaderAndFooterSeparators(GuiGraphics context) {
+        context.blit(RenderType::guiTextured, Screen.HEADER_SEPARATOR, 0, 55, 0.0f, 0.0f, this.width, 2, 32, 2);
+        context.blit(RenderType::guiTextured, Screen.FOOTER_SEPARATOR, 0, this.height -30, 0.0f, 0.0f, this.width, 2, 32, 2);
     }
 
-    private void drawDirtTextureBlurred(DrawContext context, int x, int y, int width, int height) {
-        int color = ColorHelper.fromFloats(.7f, 0, 0, 0);
-        context.drawTexture(RenderLayer::getGuiTextured, OPTIONS_BACKGROUND_TEXTURE, x, y, 0, 0, width, height, 64, 64);
+    private void drawDirtTextureBlurred(GuiGraphics context, int x, int y, int width, int height) {
+        int color = ARGB.colorFromFloat(.7f, 0, 0, 0);
+        context.blit(RenderType::guiTextured, OPTIONS_BACKGROUND_TEXTURE, x, y, 0, 0, width, height, 64, 64);
         context.fillGradient(x, y, x + width, y + height, color, color);
     }
 }

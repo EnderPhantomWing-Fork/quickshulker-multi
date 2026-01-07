@@ -5,28 +5,30 @@ import net.kyrptonaught.quickshulker.QuickShulkerMod;
 import net.kyrptonaught.quickshulker.client.ClientUtil;
 import net.kyrptonaught.quickshulker.network.QuickBundlePacket;
 import net.kyrptonaught.shulkerutils.ShulkerUtils;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.StackReference;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.ClickType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.ClickAction;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// TODO(Ravel): can not resolve target class Item
 @Mixin(Item.class)
 public abstract class ItemMixin {
 
-    @Inject(method = "onClicked", at = @At("HEAD"), cancellable = true)
-    public void QS$onClicked(ItemStack hostStack, ItemStack insertStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference, CallbackInfoReturnable<Boolean> cir) {
+    // TODO(Ravel): no target class
+    @Inject(method = "overrideOtherStackedOnMe", at = @At("HEAD"), cancellable = true)
+    public void QS$onClicked(ItemStack hostStack, ItemStack insertStack, Slot slot, ClickAction clickType, Player player, SlotAccess cursorStackReference, CallbackInfoReturnable<Boolean> cir) {
         if (BundleHelper.shouldAttemptBundle(player, clickType, hostStack, insertStack, QuickShulkerMod.getConfig().supportsBundlingInsert)) {
-            if (ShulkerUtils.isShulkerItem(hostStack) || !player.getWorld().isClient) {
+            if (ShulkerUtils.isShulkerItem(hostStack) || !player.level().isClientSide) {
                 BundleHelper.bundleItemIntoStack(player, hostStack, insertStack, cir);
-            } else if (slot.inventory instanceof PlayerInventory && ClientUtil.isCreativeScreen(player)) {//stupid creative menu shiz
-                QuickBundlePacket.sendPacket(ClientUtil.getPlayerInvSlot(player.currentScreenHandler, slot), insertStack);
+            } else if (slot.container instanceof Inventory && ClientUtil.isCreativeScreen(player)) {//stupid creative menu shiz
+                QuickBundlePacket.sendPacket(ClientUtil.getPlayerInvSlot(player.containerMenu, slot), insertStack);
                 BundleHelper.bundleItemIntoStack(player, hostStack, insertStack, cir);
             }
         } else if (BundleHelper.shouldAttemptTransfer(player, clickType, hostStack, insertStack, QuickShulkerMod.getConfig().supportsBundlingTransfer)) {
@@ -34,22 +36,23 @@ public abstract class ItemMixin {
         }
     }
 
-    @Inject(method = "onStackClicked", at = @At("HEAD"), cancellable = true)
-    public void QS$onStackClicked(ItemStack hostStack, Slot slot, ClickType clickType, PlayerEntity player, CallbackInfoReturnable<Boolean> cir) {
-        ItemStack insertStack = slot.getStack();
+    // TODO(Ravel): no target class
+    @Inject(method = "overrideStackedOnOther", at = @At("HEAD"), cancellable = true)
+    public void QS$onStackClicked(ItemStack hostStack, Slot slot, ClickAction clickType, Player player, CallbackInfoReturnable<Boolean> cir) {
+        ItemStack insertStack = slot.getItem();
         if (BundleHelper.shouldAttemptBundle(player, clickType, hostStack, insertStack, QuickShulkerMod.getConfig().supportsBundlingPickup)) {//bundle stack into held item
-            if (ShulkerUtils.isShulkerItem(hostStack) || !player.getWorld().isClient) {
+            if (ShulkerUtils.isShulkerItem(hostStack) || !player.level().isClientSide) {
                 BundleHelper.bundleItemIntoStack(player, hostStack, insertStack, slot, cir);
-            } else if (slot.inventory instanceof PlayerInventory && ClientUtil.isCreativeScreen(player)) { //stupid creative menu shiz
-                QuickBundlePacket.BundleIntoHeld.sendPacket(insertStack, hostStack, ClientUtil.getPlayerInvSlot(player.currentScreenHandler, slot));
+            } else if (slot.container instanceof Inventory && ClientUtil.isCreativeScreen(player)) { //stupid creative menu shiz
+                QuickBundlePacket.BundleIntoHeld.sendPacket(insertStack, hostStack, ClientUtil.getPlayerInvSlot(player.containerMenu, slot));
                 BundleHelper.bundleItemIntoStack(player, hostStack, insertStack, slot, cir);
                 //QuickBundlePacket.sendCreativeSlotUpdate(insertStack, slot); // It doesn't seem to be doing anything
             }
         } else if (BundleHelper.shouldAttemptUnBundle(player, clickType, hostStack, insertStack, QuickShulkerMod.getConfig().supportsBundlingExtract)) {//unbundle held stack into slot
-            if (ShulkerUtils.isShulkerItem(hostStack) || !player.getWorld().isClient) {
+            if (ShulkerUtils.isShulkerItem(hostStack) || !player.level().isClientSide) {
                 BundleHelper.unbundleStackIntoSlot(player, hostStack, slot, cir);
-            } else if (slot.inventory instanceof PlayerInventory && ClientUtil.isCreativeScreen(player)) { //stupid creative menu shiz
-                QuickBundlePacket.UnbundlePacket.sendPacket(ClientUtil.getPlayerInvSlot(player.currentScreenHandler, slot), hostStack);
+            } else if (slot.container instanceof Inventory && ClientUtil.isCreativeScreen(player)) { //stupid creative menu shiz
+                QuickBundlePacket.UnbundlePacket.sendPacket(ClientUtil.getPlayerInvSlot(player.containerMenu, slot), hostStack);
                 BundleHelper.unbundleStackIntoSlot(player, hostStack, slot, cir);
             }
         }
