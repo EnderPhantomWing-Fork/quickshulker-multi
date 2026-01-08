@@ -13,6 +13,9 @@ package net.kyrptonaught.kyrptconfig.config;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyrptonaught.jankson.Jankson;
 import net.minecraft.resources.ResourceLocation;
+//#if MC >= 1.21.11
+//$$ import net.minecraft.resources.Identifier;
+//#endif
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,8 +38,13 @@ public class ConfigManager {
         JANKSON = new JanksonJsonLoader();
         Jankson.Builder builder = CustomJankson.customJanksonBuilder();
         setJANKSON(builder
+                //#if MC >= 1.21.11
+                //$$ .registerSerializer(Identifier.class, (identifier, marshaller) -> marshaller.serialize(identifier.toString()))
+                //$$ .registerDeserializer(String.class, Identifier.class, (s, m) -> Identifier.parse(s))
+                //#else
                 .registerSerializer(ResourceLocation.class, (identifier, marshaller) -> marshaller.serialize(identifier.toString()))
                 .registerDeserializer(String.class, ResourceLocation.class, (s, m) -> ResourceLocation.parse(s))
+                //#endif
                 .build());
     }
 

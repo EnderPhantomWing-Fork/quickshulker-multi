@@ -10,7 +10,12 @@
 
 package net.kyrptonaught.kyrptconfig.config.screen;
 
-//#if MC >= 1.21.6
+//#if MC >= 1.21.11
+//$$ import net.minecraft.client.gui.components.Button.OnPress;
+//$$ import net.minecraft.network.chat.Style;
+//$$ import net.minecraft.network.chat.ComponentUtils;
+//$$ import net.minecraft.resources.Identifier;
+//#elseif MC >= 1.21.6
 //$$ import net.minecraft.util.ARGB;
 //$$ import net.minecraft.client.renderer.RenderPipelines;
 //#elseif MC >= 1.21.2
@@ -30,13 +35,22 @@ import net.minecraft.resources.ResourceLocation;
 public class NotSuckyButton extends Button {
     int buttonColor = -1;
     public boolean disableHover = false;
+    //#if MC >= 1.21.11
+    //$$ private static final WidgetSprites TEXTURES = new WidgetSprites(Identifier.parse("widget/button"), Identifier.parse("widget/button_disabled"), Identifier.parse("widget/button_highlighted"));
+    //
+    //$$ public NotSuckyButton(int x, int y, int width, int height, net.minecraft.network.chat.Component message, OnPress onPress) {
+    //#else
     private static final WidgetSprites TEXTURES = new WidgetSprites(ResourceLocation.parse("widget/button"), ResourceLocation.parse("widget/button_disabled"), ResourceLocation.parse("widget/button_highlighted"));
 
     public NotSuckyButton(int x, int y, int width, int height, Component message, OnPress onPress) {
+    //#endif
         super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
     }
 
     public void setButtonColor(int color) {
+        //#if MC >= 1.21.11
+        //$$ this.setMessage(ComponentUtils.mergeStyles(this.getMessage(), Style.EMPTY.withColor(color)));
+        //#endif
         this.buttonColor = color;
     }
 
@@ -45,13 +59,20 @@ public class NotSuckyButton extends Button {
     }
 
     @Override
+    //#if MC >= 1.21.11
+    //$$ protected void renderContents(GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
+    //#else
     public void renderWidget(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    //#endif
         //This can fix text rendering over the wrong btn
         //context.getMatrices().translate(0, 0,  1);
 
         if (disableHover) isHovered = false;
 
-        //#if MC >= 1.21.6
+        //#if MC >= 1.21.11
+        //$$ this.renderDefaultSprite(context);
+        //$$ this.renderDefaultLabel(context.textRenderer());
+        //#elseif MC >= 1.21.6
         //$$ context.blitSprite(
         //$$         RenderPipelines.GUI_TEXTURED,
         //$$         TEXTURES.get(this.active, this.isHoveredOrFocused()),

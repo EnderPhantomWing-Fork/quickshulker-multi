@@ -16,6 +16,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.locale.Language;
+//#if MC >= 1.21.10
+//$$ import net.minecraft.client.input.CharacterEvent;
+//$$ import net.minecraft.client.input.KeyEvent;
+//$$ import net.minecraft.client.input.MouseButtonEvent;
+//#else
+//#endif
 import net.minecraft.ChatFormatting;
 //#if MC >= 1.21.2
 //$$ import net.minecraft.util.ARGB;
@@ -145,6 +151,21 @@ public abstract class ConfigItem<T> {
     public void tick() {
     }
 
+    //#if MC >= 1.21.10
+    //$$ public void mouseClicked(MouseButtonEvent click, boolean doubled) {
+    //$$     if (isHidden) return;
+    //$$     if (resetButton != null)
+    //$$         resetButton.mouseClicked(click, doubled);
+    //$$ }
+    //
+    //$$ public boolean charTyped(CharacterEvent input) {
+    //$$     return false;
+    //$$ }
+    //
+    //$$ public boolean keyPressed(KeyEvent input) {
+    //$$     return false;
+    //$$ }
+    //#else
     public void mouseClicked(double mouseX, double mouseY, int button) {
         if (isHidden) return;
         if (resetButton != null)
@@ -158,6 +179,7 @@ public abstract class ConfigItem<T> {
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         return false;
     }
+    //#endif
 
     public void render(GuiGraphics context, int x, int y, int mouseX, int mouseY, float delta) {
         if (isHidden) return;

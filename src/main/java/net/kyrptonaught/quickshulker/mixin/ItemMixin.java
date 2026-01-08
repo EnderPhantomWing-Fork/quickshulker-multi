@@ -33,7 +33,7 @@ public abstract class ItemMixin {
     @Inject(method = "overrideOtherStackedOnMe", at = @At("HEAD"), cancellable = true)
     public void QS$onClicked(ItemStack hostStack, ItemStack insertStack, Slot slot, ClickAction clickType, Player player, SlotAccess cursorStackReference, CallbackInfoReturnable<Boolean> cir) {
         if (BundleHelper.shouldAttemptBundle(player, clickType, hostStack, insertStack, QuickShulkerMod.getConfig().supportsBundlingInsert)) {
-            if (ShulkerUtils.isShulkerItem(hostStack) || !player.level().isClientSide) {
+            if (ShulkerUtils.isShulkerItem(hostStack) || !player.level().isClientSide()) {
                 BundleHelper.bundleItemIntoStack(player, hostStack, insertStack, cir);
             } else if (slot.container instanceof Inventory && ClientUtil.isCreativeScreen(player)) {//stupid creative menu shiz
                 QuickBundlePacket.sendPacket(ClientUtil.getPlayerInvSlot(player.containerMenu, slot), insertStack);
@@ -48,7 +48,7 @@ public abstract class ItemMixin {
     public void QS$onStackClicked(ItemStack hostStack, Slot slot, ClickAction clickType, Player player, CallbackInfoReturnable<Boolean> cir) {
         ItemStack insertStack = slot.getItem();
         if (BundleHelper.shouldAttemptBundle(player, clickType, hostStack, insertStack, QuickShulkerMod.getConfig().supportsBundlingPickup)) {//bundle stack into held item
-            if (ShulkerUtils.isShulkerItem(hostStack) || !player.level().isClientSide) {
+            if (ShulkerUtils.isShulkerItem(hostStack) || !player.level().isClientSide()) {
                 BundleHelper.bundleItemIntoStack(player, hostStack, insertStack, slot, cir);
             } else if (slot.container instanceof Inventory && ClientUtil.isCreativeScreen(player)) { //stupid creative menu shiz
                 QuickBundlePacket.BundleIntoHeld.sendPacket(insertStack, hostStack, ClientUtil.getPlayerInvSlot(player.containerMenu, slot));
@@ -56,7 +56,7 @@ public abstract class ItemMixin {
                 //QuickBundlePacket.sendCreativeSlotUpdate(insertStack, slot); // It doesn't seem to be doing anything
             }
         } else if (BundleHelper.shouldAttemptUnBundle(player, clickType, hostStack, insertStack, QuickShulkerMod.getConfig().supportsBundlingExtract)) {//unbundle held stack into slot
-            if (ShulkerUtils.isShulkerItem(hostStack) || !player.level().isClientSide) {
+            if (ShulkerUtils.isShulkerItem(hostStack) || !player.level().isClientSide()) {
                 BundleHelper.unbundleStackIntoSlot(player, hostStack, slot, cir);
             } else if (slot.container instanceof Inventory && ClientUtil.isCreativeScreen(player)) { //stupid creative menu shiz
                 QuickBundlePacket.UnbundlePacket.sendPacket(ClientUtil.getPlayerInvSlot(player.containerMenu, slot), hostStack);

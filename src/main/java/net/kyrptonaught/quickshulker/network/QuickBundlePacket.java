@@ -27,12 +27,19 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.resources.ResourceLocation;
+//#if MC >= 1.21.11
+//$$ import net.minecraft.resources.Identifier;
+//#endif
 
 import java.util.List;
 
 public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements CustomPacketPayload {
 
+    //#if MC >= 1.21.10
+    //$$ private static final Identifier QUICK_BUNDLE_PACKET = Identifier.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "quick_bundle_packet");
+    //#else
     private static final ResourceLocation QUICK_BUNDLE_PACKET = ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "quick_bundle_packet");
+    //#endif
     private static final Type<QuickBundlePacket> QUICK_BUNDLE_PACKET_ID = new Type<>(QUICK_BUNDLE_PACKET);
     private static final StreamCodec<RegistryFriendlyByteBuf, QuickBundlePacket> CODEC = StreamCodec.ofMember(
             (value, buf) -> {
@@ -72,7 +79,11 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
 
     public record BundleIntoHeld(List<ItemStack> stackList, int slotId) implements CustomPacketPayload {
 
+        //#if MC >= 1.21.10
+        //$$ private static final Identifier QUICK_BUNDLEHELD_PACKET = Identifier.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "quick_bundleheld_packet");
+        //#else
         private static final ResourceLocation QUICK_BUNDLEHELD_PACKET = ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "quick_bundleheld_packet");
+        //#endif
         private static final Type<BundleIntoHeld> QUICK_BUNDLEHELD_PACKET_ID = new Type<>(QUICK_BUNDLEHELD_PACKET);
         private static final StreamCodec<RegistryFriendlyByteBuf, BundleIntoHeld> CODEC = StreamCodec.composite(ItemStack.OPTIONAL_LIST_STREAM_CODEC, BundleIntoHeld::stackList, ByteBufCodecs.INT, BundleIntoHeld::slotId, BundleIntoHeld::new);
 
@@ -102,7 +113,11 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
 
     public record UnbundlePacket(int slotId, ItemStack unbundleStack) implements CustomPacketPayload {
 
+        //#if MC >= 1.21.11
+        //$$ private static final Identifier QUICK_UNBUNDLE_PACKET = Identifier.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "quick_unbundle_packet");
+        //#else
         private static final ResourceLocation QUICK_UNBUNDLE_PACKET = ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "quick_unbundle_packet");
+        //#endif
         private static final Type<UnbundlePacket> QUICK_UNBUNDLE_PACKET_ID = new Type<>(QUICK_UNBUNDLE_PACKET);
         private static final StreamCodec<RegistryFriendlyByteBuf, UnbundlePacket> CODEC = StreamCodec.ofMember(
                 (value, buf) -> {

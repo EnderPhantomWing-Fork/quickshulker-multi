@@ -16,6 +16,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
+//#if MC >= 1.21.10
+//$$ import net.minecraft.world.entity.ContainerUser;
+//#else
+//#endif
 
 import java.util.Objects;
 
@@ -47,11 +51,19 @@ public class ItemStackInventory extends SimpleContainer {
     }
 
     @Override
+    //#if MC >= 1.21.10
+    //$$ public void stopOpen(ContainerUser user) {
+    //#else
     public void stopOpen(Player playerEntity) {
+    //#endif
         if (itemStack.getCount() > 1) {
             int count = itemStack.getCount();
             itemStack.setCount(1);
+            //#if MC >= 1.21.10
+            //$$ ((Player) user).addItem(new ItemStack(itemStack.getItem(), count - 1));
+            //#else
             playerEntity.addItem(new ItemStack(itemStack.getItem(), count - 1));
+            //#endif
         }
         setChanged();
     }

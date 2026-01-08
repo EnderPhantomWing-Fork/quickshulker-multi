@@ -18,10 +18,17 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
+//#if MC >= 1.21.11
+//$$ import net.minecraft.resources.Identifier;
+//#endif
 
 public class OpenInventoryPacket implements CustomPacketPayload {
 
+    //#if MC >= 1.21.11
+    //$$ public static final Identifier OPEN_INV = Identifier.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "open_inv");
+    //#else
     public static final ResourceLocation OPEN_INV = ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "open_inv");
+    //#endif
 
     public static final Type<OpenInventoryPacket> OPEN_INV_ID = new CustomPacketPayload.Type<>(OPEN_INV);
 

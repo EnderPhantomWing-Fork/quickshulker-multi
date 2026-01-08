@@ -25,6 +25,14 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+//#if MC >= 1.21.10
+//$$ import net.minecraft.client.input.CharacterEvent;
+//$$ import net.minecraft.client.input.KeyEvent;
+//$$ import net.minecraft.client.input.MouseButtonEvent;
+//#endif
+//#if MC >= 1.21.11
+//$$ import net.minecraft.resources.Identifier;
+//#endif
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +45,13 @@ public class ConfigScreen extends Screen {
     Screen previousScreen;
     private NotSuckyButton scrollLeftBTN, scrollRightBTN;
     int horizontalScrollOffset = -1;
+    //#if MC >= 1.21.11
+    //$$ private static final Identifier SCROLLER_TEXTURE = Identifier.parse("widget/scroller");
+    //$$ private static final Identifier OPTIONS_BACKGROUND_TEXTURE = Identifier.parse("textures/block/dirt.png");
+    //#else
     private static final ResourceLocation SCROLLER_TEXTURE = ResourceLocation.parse("widget/scroller");
     private static final ResourceLocation OPTIONS_BACKGROUND_TEXTURE = ResourceLocation.parse("textures/block/dirt.png");
+    //#endif
 
     public ConfigScreen(Screen previousScreen, Component title) {
         super(title);
@@ -56,7 +69,11 @@ public class ConfigScreen extends Screen {
             this.minecraft.setScreen(previousScreen);
         }));
         for (ConfigSection section : sections) {
+            //#if MC >= 1.21.11
+            //$$ section.init(width, height - 57 - 30);
+            //#else
             section.init(minecraft, width, height - 57 - 30);
+            //#endif
         }
 
         adjustForHorizontalScroll(this.width);
@@ -148,6 +165,30 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
+    //#if MC >= 1.21.10
+    //$$ public boolean keyPressed(KeyEvent input) {
+    //$$     if (sections.get(selectedSection).keyPressed(input)) return true;
+    //$$     return super.keyPressed(input);
+    //$$ }
+    //
+    //$$ @Override
+    //$$ public boolean charTyped(CharacterEvent input) {
+    //$$     return sections.get(selectedSection).charTyped(input);
+    //$$ }
+    //
+    //$$ @Override
+    //$$ public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
+    //$$     super.mouseClicked(click, doubled);
+    //
+    //$$     if (scrollLeftBTN.mouseClicked(click, doubled) || scrollRightBTN.mouseClicked(click, doubled))
+    //$$         return true;
+    //
+    //$$     for (ConfigSection section : sections)
+    //$$         if (section.sectionSelectionBTN.mouseClicked(click, doubled)) return true;
+    //
+    //$$     return sections.get(selectedSection).mouseClicked(click, doubled);
+    //$$ }
+    //#else
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (sections.get(selectedSection).keyPressed(keyCode, scanCode, modifiers)) return true;
         return super.keyPressed(keyCode, scanCode, modifiers);
@@ -170,6 +211,7 @@ public class ConfigScreen extends Screen {
 
         return sections.get(selectedSection).mouseClicked(mouseX, mouseY, button);
     }
+    //#endif
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {

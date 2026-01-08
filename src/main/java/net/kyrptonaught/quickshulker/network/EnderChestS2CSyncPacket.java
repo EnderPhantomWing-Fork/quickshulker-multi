@@ -20,6 +20,9 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
+//#if MC >= 1.21.11
+//$$ import net.minecraft.resources.Identifier;
+//#endif
 
 import java.util.List;
 
@@ -27,7 +30,11 @@ public class EnderChestS2CSyncPacket {
 
     public record S2CEChestContentPacket(List<ItemStack> itemStacks) implements CustomPacketPayload {
 
+        //#if MC >= 1.21.11
+        //$$ public static final Type<S2CEChestContentPacket> S2C_ECHEST_CONTENT_PACKET_ID = new Type<>(Identifier.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "s2c_echest_content_packet"));
+        //#else
         public static final Type<S2CEChestContentPacket> S2C_ECHEST_CONTENT_PACKET_ID = new Type<>(ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "s2c_echest_content_packet"));
+        //#endif
         public static final StreamCodec<RegistryFriendlyByteBuf, S2CEChestContentPacket> CODEC = StreamCodec.composite(ItemStack.OPTIONAL_LIST_STREAM_CODEC, S2CEChestContentPacket::itemStacks, S2CEChestContentPacket::new);
 
         public static void send(ServerPlayer player, List<ItemStack> itemStacks) {

@@ -13,6 +13,12 @@ package net.kyrptonaught.kyrptconfig.config.screen.items;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+//#if MC >= 1.21.10
+//$$ import net.minecraft.client.input.CharacterEvent;
+//$$ import net.minecraft.client.input.KeyEvent;
+//$$ import net.minecraft.client.input.MouseButtonEvent;
+//#else
+//#endif
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +66,45 @@ public class SubItem<E> extends ConfigItem<E> {
         }
     }
 
+    @Override
+    //#if MC >= 1.21.10
+    //$$ public void mouseClicked(MouseButtonEvent click, boolean doubled) {
+    //$$     super.mouseClicked(click, doubled);
+    //$$     if (!isHidden() && click.y() > subStart && click.y() < subStart + 20)
+    //$$         expanded = !expanded;
+    //
+    //$$     if (expanded && !isHidden()) {
+    //$$         for (ConfigItem<?> item : configs) {
+    //$$             if (item.isHidden()) continue;
+    //$$             item.mouseClicked(click, doubled);
+    //$$         }
+    //$$     }
+    //$$ }
+    //
+    //$$ @Override
+    //$$ public boolean charTyped(CharacterEvent input) {
+    //$$     if (expanded && !isHidden()) {
+    //$$         for (ConfigItem<?> item : configs) {
+    //$$             if (item.isHidden()) continue;
+    //$$             if (item.charTyped(input))
+    //$$                 return true;
+    //$$         }
+    //$$     }
+    //$$     return false;
+    //$$ }
+    //
+    //$$ @Override
+    //$$ public boolean keyPressed(KeyEvent input) {
+    //$$     if (expanded && !isHidden()) {
+    //$$         for (ConfigItem<?> item : configs) {
+    //$$             if (item.isHidden()) continue;
+    //$$             if (item.keyPressed(input))
+    //$$                 return true;
+    //$$         }
+    //$$     }
+    //$$     return false;
+    //$$ }
+    //#else
     public void mouseClicked(double mouseX, double mouseY, int button) {
         super.mouseClicked(mouseX, mouseY, button);
         if (!isHidden() && mouseY > subStart && mouseY < subStart + 20)
@@ -73,6 +118,7 @@ public class SubItem<E> extends ConfigItem<E> {
         }
     }
 
+    @Override
     public boolean charTyped(char chr, int modifiers) {
         if (expanded && !isHidden()) {
             for (ConfigItem<?> item : configs) {
@@ -84,6 +130,7 @@ public class SubItem<E> extends ConfigItem<E> {
         return false;
     }
 
+    @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (expanded && !isHidden()) {
             for (ConfigItem<?> item : configs) {
@@ -94,6 +141,7 @@ public class SubItem<E> extends ConfigItem<E> {
         }
         return false;
     }
+    //#endif
 
     public int getContentSize() {
         if (expanded && !isHidden()) {

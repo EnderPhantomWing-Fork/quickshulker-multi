@@ -64,7 +64,7 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
 
         UseItemCallback.EVENT.register((player, world, hand) -> {
             ItemStack stack = player.getItemInHand(hand);
-            if (!world.isClientSide) {
+            if (!world.isClientSide()) {
                 if (QuickShulkerMod.getConfig().rightClickToOpen) {
                     if (Util.isOpenableItem(stack) && Util.canOpenInHand(stack)) {
                         if (hand == InteractionHand.MAIN_HAND)
@@ -144,9 +144,12 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                             //#endif
                     .register();
 
+        //#if MC >= 1.21.11
+        //#else
         if(ModUtils.isModLoad(ModIds.reinfshulker) && QuickShulkerMod.getConfig().quickShulkerBox) {
             ReinfshulkerOpenableRegistry.registerProviders();
         }
+        //#endif
     }
 
 }

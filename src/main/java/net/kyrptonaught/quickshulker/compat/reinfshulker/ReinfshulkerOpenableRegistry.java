@@ -10,6 +10,9 @@
 
 package net.kyrptonaught.quickshulker.compat.reinfshulker;
 
+//TODO: 等待Reinforced Shulker Box更新
+//#if MC >= 1.21.11
+//#else
 import atonkish.reinfcore.screen.ReinforcedStorageScreenHandler;
 import atonkish.reinfcore.util.ReinforcingMaterial;
 import atonkish.reinfshulker.block.ReinforcedShulkerBoxBlock;
@@ -25,11 +28,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.inventory.MenuConstructor;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.network.chat.Component;
+//#endif
 
 import java.util.function.BiConsumer;
 
 public class ReinfshulkerOpenableRegistry {
 
+    //#if MC >= 1.21.11
+    //#else
     private static final BiConsumer<Player, ItemStack> REINFORCED_SHULKER_BOX_CONSUMER = (Player player, ItemStack stack) -> {
         ReinforcedShulkerBoxBlock block = (ReinforcedShulkerBoxBlock) ((BlockItem) stack.getItem()).getBlock();
         ReinforcingMaterial material = block.getMaterial();
@@ -52,4 +58,5 @@ public class ReinfshulkerOpenableRegistry {
                 .setOpenAction(REINFORCED_SHULKER_BOX_CONSUMER)
                 .register();
     }
+    //#endif
 }

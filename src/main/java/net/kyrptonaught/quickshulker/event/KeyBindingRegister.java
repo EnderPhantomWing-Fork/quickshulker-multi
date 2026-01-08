@@ -13,9 +13,22 @@ package net.kyrptonaught.quickshulker.event;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.kyrptonaught.kyrptconfig.keybinding.DisplayOnlyKeyBind;
 import net.kyrptonaught.quickshulker.QuickShulkerMod;
+//#if MC >= 1.21.11
+//$$ import net.minecraft.resources.Identifier;
+//#endif
+//#if MC >= 1.21.10
+//$$ import net.minecraft.client.KeyMapping;
+//$$ import net.minecraft.resources.ResourceLocation;
+//#endif
 
 public class KeyBindingRegister {
+    //#if MC >= 1.21.11
+    //$$ public static final KeyMapping.Category MAIN = KeyMapping.Category.register(Identifier.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "main"));
+    //#elseif MC >= 1.21.10
+    //$$ public static final KeyMapping.Category MAIN = KeyMapping.Category.register(ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "main"));
+    //#else
     public static final String MAIN = "key.categories.quickshulker";
+    //#endif
 
     public static void register(){
         KeyBindingHelper.registerKeyBinding(new DisplayOnlyKeyBind(
