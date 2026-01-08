@@ -10,7 +10,10 @@
 
 package net.kyrptonaught.kyrptconfig.config.screen;
 
-//#if MC >= 1.21.2
+//#if MC >= 1.21.6
+//$$ import net.minecraft.util.ARGB;
+//$$ import net.minecraft.client.renderer.RenderPipelines;
+//#elseif MC >= 1.21.2
 //$$ import net.minecraft.util.ARGB;
 //$$ import net.minecraft.client.renderer.RenderType;
 //#else
@@ -184,7 +187,7 @@ public class ConfigScreen extends Screen {
         section.render(context, 57, mouseX, mouseY, deltaTicks);
         context.disableScissor();
 
-        context.drawCenteredString(this.font, this.title, this.width / 2, 13, 0xffffff);
+        context.drawCenteredString(this.font, this.title, this.width / 2, 13, -1);
         drawHeaderAndFooterSeparators(context);
 
         boolean noHover = scrollLeftBTN.detectHover(mouseX, mouseY) | scrollRightBTN.detectHover(mouseX, mouseY);
@@ -224,7 +227,9 @@ public class ConfigScreen extends Screen {
             int y = Mth.lerpInt(percentage, 57, this.height - 30 - height);
 
             context.fill(x, 57, x + 6, this.height - 30, -16777216);
-            //#if MC >= 1.21.2
+            //#if MC >= 1.21.8
+            //$$ context.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLER_TEXTURE, x, y, 6, height);
+            //#elseif MC >= 1.21.2
             //$$ context.blitSprite(RenderType::guiTextured, SCROLLER_TEXTURE, x, y, 6, height);
             //#else
             context.blitSprite(SCROLLER_TEXTURE, x, y, 6, height);
@@ -237,7 +242,22 @@ public class ConfigScreen extends Screen {
 
     @Override
     public void renderBackground(GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {}
-    //#if MC >= 1.21.2
+    //#if MC >= 1.21.6
+    //$$ private void renderBackgroundTexture(GuiGraphics context) {
+    //$$     context.blit(RenderPipelines.GUI_TEXTURED, OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0, this.width, this.height, 32, 32);
+    //$$ }
+    //
+    //$$ private void drawHeaderAndFooterSeparators(GuiGraphics context) {
+    //$$     context.blit(RenderPipelines.GUI_TEXTURED, Screen.HEADER_SEPARATOR, 0, 55, 0.0f, 0.0f, this.width, 2, 32, 2);
+    //$$     context.blit(RenderPipelines.GUI_TEXTURED, Screen.FOOTER_SEPARATOR, 0, this.height -30, 0.0f, 0.0f, this.width, 2, 32, 2);
+    //$$ }
+    //
+    //$$ private void drawDirtTextureBlurred(GuiGraphics context, int x, int y, int width, int height) {
+    //$$     int color = ARGB.colorFromFloat(.7f, 0, 0, 0);
+    //$$     context.blit(RenderPipelines.GUI_TEXTURED, OPTIONS_BACKGROUND_TEXTURE, x, y, 0, 0, width, height, 64, 64);
+    //$$     context.fillGradient(x, y, x + width, y + height, color, color);
+    //$$ }
+    //#elseif MC >= 1.21.2
     //$$ private void renderBackgroundTexture(GuiGraphics context) {
     //$$     context.blit(RenderType::guiTextured, OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0, this.width, this.height, 32, 32);
     //$$ }

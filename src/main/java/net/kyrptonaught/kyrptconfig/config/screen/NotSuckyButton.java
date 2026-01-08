@@ -10,7 +10,10 @@
 
 package net.kyrptonaught.kyrptconfig.config.screen;
 
-//#if MC >= 1.21.2
+//#if MC >= 1.21.6
+//$$ import net.minecraft.util.ARGB;
+//$$ import net.minecraft.client.renderer.RenderPipelines;
+//#elseif MC >= 1.21.2
 //$$ import net.minecraft.util.ARGB;
 //$$ import net.minecraft.client.renderer.RenderType;
 //#else
@@ -25,7 +28,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 public class NotSuckyButton extends Button {
-    int buttonColor = 16777215;
+    int buttonColor = -1;
     public boolean disableHover = false;
     private static final WidgetSprites TEXTURES = new WidgetSprites(ResourceLocation.parse("widget/button"), ResourceLocation.parse("widget/button_disabled"), ResourceLocation.parse("widget/button_highlighted"));
 
@@ -48,7 +51,20 @@ public class NotSuckyButton extends Button {
 
         if (disableHover) isHovered = false;
 
-        //#if MC >= 1.21.2
+        //#if MC >= 1.21.6
+        //$$ context.blitSprite(
+        //$$         RenderPipelines.GUI_TEXTURED,
+        //$$         TEXTURES.get(this.active, this.isHoveredOrFocused()),
+        //$$         this.getX(),
+        //$$         this.getY(),
+        //$$         this.getWidth(),
+        //$$         this.getHeight(),
+        //$$         ARGB.white(this.alpha));
+        //
+        //$$ Font textRenderer = Minecraft.getInstance().font;
+        //$$ int i = ARGB.color(this.alpha, this.active ? buttonColor : -6250336);
+        //$$ renderString(context, textRenderer, i);
+        //#elseif MC >= 1.21.2
         //$$ context.blitSprite(
         //$$         RenderType::guiTextured,
         //$$         TEXTURES.get(this.active, this.isHoveredOrFocused()),

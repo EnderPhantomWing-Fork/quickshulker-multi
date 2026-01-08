@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 @Restriction(require = @Condition(ModIds.reinfshulker))
 @Mixin(ReinforcedShulkerBoxBlock.class)
-public abstract class RenifShulkerMixin implements UpgradableShulker {
+public abstract class ReinforcedShulkerBoxBlockMixin implements UpgradableShulker {
 
     @Shadow(remap = false)
     public abstract ReinforcingMaterial getMaterial();

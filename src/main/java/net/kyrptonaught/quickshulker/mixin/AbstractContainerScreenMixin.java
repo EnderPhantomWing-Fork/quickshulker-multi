@@ -62,7 +62,11 @@ public abstract class AbstractContainerScreenMixin {
     }
 
     @Inject(
+            //#if MC >= 1.21.6
+            //$$ method = "renderContents(Lnet/minecraft/client/gui/GuiGraphics;IIF)V",
+            //#else
             method = "render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V",
+            //#endif
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderLabels(Lnet/minecraft/client/gui/GuiGraphics;II)V",

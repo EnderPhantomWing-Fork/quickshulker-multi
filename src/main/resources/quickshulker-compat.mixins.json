@@ -5,7 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "reinfshulker.ReinforcingMaterialSettingsMixin",
-    "reinfshulker.RenifShulkerMixin"
+    "reinfshulker.ReinforcedShulkerBoxBlockMixin"
   ],
   "client": [],
   "injectors": {

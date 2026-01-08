@@ -120,7 +120,7 @@ public class SubItem<E> extends ConfigItem<E> {
     public void render(GuiGraphics context, int x, int y, int mouseX, int mouseY, float delta) {
         super.render(context, x, y, mouseX, mouseY, delta);
         if (isHidden()) return;
-        context.drawString(Minecraft.getInstance().font, expanded ? "-" : "+", x - 10, y + 5, 16777215, false);
+        context.drawString(Minecraft.getInstance().font, expanded ? "-" : "+", x - 10, y + 5, -1, false);
         subStart = y;
         if (expanded) {
             int runningY = subStart + 23;

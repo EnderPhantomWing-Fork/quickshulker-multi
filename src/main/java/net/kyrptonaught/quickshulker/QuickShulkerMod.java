@@ -125,7 +125,11 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                     .setItem(CraftingTableBlock.class)
                     .ignoreSingleStackCheck(true)
                     .setOpenAction(((player, stack) -> player.openMenu(new SimpleMenuProvider((i, playerInventory, playerEntity) ->
+                            //#if MC >= 1.21.6
+                            //$$ new CraftingMenu(i, playerInventory, ContainerLevelAccess.create(player.level(), player.blockPosition())), Component.translatable("container.crafting")))))
+                            //#else
                             new CraftingMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.crafting")))))
+                            //#endif
                     .register();
 
         if (getConfig().quickStonecutter)
@@ -133,7 +137,11 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                     .setItem(StonecutterBlock.class)
                     .ignoreSingleStackCheck(true)
                     .setOpenAction(((player, stack) -> player.openMenu(new SimpleMenuProvider((i, playerInventory, playerEntity) ->
+                            //#if MC >= 1.21.6
+                            //$$ new StonecutterMenu(i, playerInventory, ContainerLevelAccess.create(player.level(), player.blockPosition())), Component.translatable("container.stonecutter")))))
+                            //#else
                             new StonecutterMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.stonecutter")))))
+                            //#endif
                     .register();
 
         if(ModUtils.isModLoad(ModIds.reinfshulker) && QuickShulkerMod.getConfig().quickShulkerBox) {
