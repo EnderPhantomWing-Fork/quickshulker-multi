@@ -11,8 +11,14 @@ on:
         type: string
         required: false
         default: ''
-  push: null
-  pull_request: null
+  push:
+    paths:
+      - "*.gradle"
+      - "gradle.properties"
+      - "src/**"
+      - "versions/**"
+      - ".github/**"
+    pull_request:
 
 jobs:
   build:
