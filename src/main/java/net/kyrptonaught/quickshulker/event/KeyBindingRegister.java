@@ -10,7 +10,11 @@
 
 package net.kyrptonaught.quickshulker.event;
 
+//#if MC >= 26.1
+//$$ import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+//#else
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+//#endif
 import net.kyrptonaught.kyrptconfig.keybinding.DisplayOnlyKeyBind;
 import net.kyrptonaught.quickshulker.QuickShulkerMod;
 //#if MC >= 1.21.11
@@ -31,13 +35,21 @@ public class KeyBindingRegister {
     //#endif
 
     public static void register(){
+        //#if MC >= 26.1
+        //$$ KeyMappingHelper.registerKeyMapping(new DisplayOnlyKeyBind(
+        //#else
         KeyBindingHelper.registerKeyBinding(new DisplayOnlyKeyBind(
+        //#endif
                 "key.quickshulker.config.openSettingGui",
                 MAIN,
                 QuickShulkerMod.getConfig().openSettingGui,
                 setKey -> QuickShulkerMod.config.save()
         ));
+        //#if MC >= 26.1
+        //$$ KeyMappingHelper.registerKeyMapping(new DisplayOnlyKeyBind(
+        //#else
         KeyBindingHelper.registerKeyBinding(new DisplayOnlyKeyBind(
+        //#endif
                 "key.quickshulker.config.keybinding",
                 MAIN,
                 QuickShulkerMod.getConfig().keybinding,

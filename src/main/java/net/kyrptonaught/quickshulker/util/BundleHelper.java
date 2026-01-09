@@ -10,7 +10,11 @@
 
 package net.kyrptonaught.quickshulker.util;
 
+//#if MC >= 26.1
+//$$ import net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage;
+//#else
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+//#endif
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.kyrptonaught.quickshulker.api.QuickOpenableRegistry;
@@ -146,7 +150,11 @@ public class BundleHelper {
         int amount = 0;
         if(bundlingInv != null && qsdata.canBundleInsertItem(player, bundlingInv, hostStack, insertStack)){
             try (Transaction transaction = Transaction.openOuter()) {
+                //#if MC >= 26.1
+                //$$ amount = (int) ContainerStorage.of(bundlingInv, null).insert(ItemVariant.of(insertStack), insertStack.getCount(), transaction);
+                //#else
                 amount = (int) InventoryStorage.of(bundlingInv, null).insert(ItemVariant.of(insertStack), insertStack.getCount(), transaction);
+                //#endif
                 transaction.commit();
                 bundlingInv.stopOpen(player);
                 return amount;

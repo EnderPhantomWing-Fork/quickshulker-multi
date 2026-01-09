@@ -12,7 +12,11 @@ package net.kyrptonaught.quickshulker.mixin;
 
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.inventory.Slot;
+//#if MC >= 26.1
+//$$ import net.minecraft.world.inventory.ContainerInput;
+//#else
 import net.minecraft.world.inventory.ClickType;
+//#endif
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
@@ -26,5 +30,9 @@ public interface AbstractContainerScreenInvoker {
     Slot QS$getSlotAt(double mouseX, double mouseY);
 
     @Invoker("slotClicked")
+    //#if MC >= 26.1
+    //$$ void QS$onMouseClick(Slot slot, int slotId, int button, ContainerInput actionType);
+    //#else
     void QS$onMouseClick(Slot slot, int slotId, int button, ClickType actionType);
+    //#endif
 }

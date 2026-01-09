@@ -48,8 +48,13 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
             buf -> new QuickBundlePacket(buf.readInt(), PacketUtils.readItemStack(buf)));
 
     public static void registerReceivePacket() {
+        //#if MC >= 26.1
+        //$$ PayloadTypeRegistry.serverboundPlay().register(QuickBundlePacket.QUICK_BUNDLE_PACKET_ID, QuickBundlePacket.CODEC);
+        //$$ PayloadTypeRegistry.clientboundPlay().register(QuickBundlePacket.QUICK_BUNDLE_PACKET_ID, QuickBundlePacket.CODEC);
+        //#else
         PayloadTypeRegistry.playS2C().register(QuickBundlePacket.QUICK_BUNDLE_PACKET_ID, QuickBundlePacket.CODEC);
         PayloadTypeRegistry.playC2S().register(QuickBundlePacket.QUICK_BUNDLE_PACKET_ID, QuickBundlePacket.CODEC);
+        //#endif
         ServerPlayNetworking.registerGlobalReceiver(QuickBundlePacket.QUICK_BUNDLE_PACKET_ID, (payload, context) -> {
             if (context.player().isCreative()) {
                 //#if MC >= 1.21.4
@@ -88,8 +93,13 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
         private static final StreamCodec<RegistryFriendlyByteBuf, BundleIntoHeld> CODEC = StreamCodec.composite(ItemStack.OPTIONAL_LIST_STREAM_CODEC, BundleIntoHeld::stackList, ByteBufCodecs.INT, BundleIntoHeld::slotId, BundleIntoHeld::new);
 
         public static void registerReceivePacket() {
+            //#if MC >= 26.1
+            //$$ PayloadTypeRegistry.serverboundPlay().register(BundleIntoHeld.QUICK_BUNDLEHELD_PACKET_ID, BundleIntoHeld.CODEC);
+            //$$ PayloadTypeRegistry.clientboundPlay().register(BundleIntoHeld.QUICK_BUNDLEHELD_PACKET_ID, BundleIntoHeld.CODEC);
+            //#else
             PayloadTypeRegistry.playS2C().register(BundleIntoHeld.QUICK_BUNDLEHELD_PACKET_ID, BundleIntoHeld.CODEC);
             PayloadTypeRegistry.playC2S().register(BundleIntoHeld.QUICK_BUNDLEHELD_PACKET_ID, BundleIntoHeld.CODEC);
+            //#endif
             ServerPlayNetworking.registerGlobalReceiver(BundleIntoHeld.QUICK_BUNDLEHELD_PACKET_ID, (payload, context) -> {
                 if (context.player().isCreative()) {
                     context.server().execute(() -> {
@@ -125,8 +135,13 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
                 buf -> new UnbundlePacket(buf.readInt(), PacketUtils.readItemStack(buf)));
 
         public static void registerReceivePacket() {
+            //#if MC >= 26.1
+            //$$ PayloadTypeRegistry.serverboundPlay().register(UnbundlePacket.QUICK_UNBUNDLE_PACKET_ID, UnbundlePacket.CODEC);
+            //$$ PayloadTypeRegistry.clientboundPlay().register(UnbundlePacket.QUICK_UNBUNDLE_PACKET_ID, UnbundlePacket.CODEC);
+            //#else
             PayloadTypeRegistry.playS2C().register(UnbundlePacket.QUICK_UNBUNDLE_PACKET_ID, UnbundlePacket.CODEC);
             PayloadTypeRegistry.playC2S().register(UnbundlePacket.QUICK_UNBUNDLE_PACKET_ID, UnbundlePacket.CODEC);
+            //#endif
             ServerPlayNetworking.registerGlobalReceiver(UnbundlePacket.QUICK_UNBUNDLE_PACKET_ID, (payload, context) -> {
                 if (context.player().isCreative()) {
                     int playerInvSlotID = payload.slotId;

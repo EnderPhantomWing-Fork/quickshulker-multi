@@ -10,7 +10,11 @@
 
 package net.kyrptonaught.quickshulker.event;
 
+//#if MC >= 26.1
+//$$ import net.fabricmc.fabric.api.entity.event.v1.ServerEntityLevelChangeEvents;
+//#else
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
+//#endif
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.kyrptonaught.quickshulker.util.EnderChestSyncHandler;
@@ -32,7 +36,11 @@ public class EventListeners {
         });
 
         // Change dimension
+        //#if MC >= 26.1
+        //$$ ServerEntityLevelChangeEvents.AFTER_PLAYER_CHANGE_LEVEL.register((player, origin, destination) -> {
+        //#else
         ServerEntityWorldChangeEvents.AFTER_PLAYER_CHANGE_WORLD.register((player, origin, destination) -> {
+        //#endif
             EnderChestSyncHandler.syncEnderChestContent(player);
         });
 

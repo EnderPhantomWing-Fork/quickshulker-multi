@@ -63,7 +63,7 @@
   },
   "depends": {
     "fabricloader": ">=0.12.5",
-    "fabric": "*",
+    "fabric-api": "*",
     "java": ">=21"
   },
   "accessWidener": "quickshulker.accesswidener"
