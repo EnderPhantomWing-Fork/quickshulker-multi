@@ -50,7 +50,7 @@ public class QuickShulkerModClient implements ClientModInitializer {
         });
 
         //#if MC >= 26.1
-        //$$ PayloadTypeRegistry.clientboundPlay().register(EnderChestS2CSyncPacket.S2CEChestSlotPacket.S2C_ECHEST_SLOT_PACKET_ID, EnderChestS2CSyncPacket.S2CEChestSlotPacket.CODEC);
+        //$$ PayloadTypeRegistry.clientboundPlay().register(EnderChestS2CSyncPacket.S2CEChestContentPacket.S2C_ECHEST_CONTENT_PACKET_ID, EnderChestS2CSyncPacket.S2CEChestContentPacket.CODEC);
         //#else
         PayloadTypeRegistry.playC2S().register(EnderChestS2CSyncPacket.S2CEChestContentPacket.S2C_ECHEST_CONTENT_PACKET_ID, EnderChestS2CSyncPacket.S2CEChestContentPacket.CODEC);
         //#endif
