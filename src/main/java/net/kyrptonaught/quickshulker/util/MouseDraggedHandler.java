@@ -15,7 +15,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 
 import java.util.Set;
 
@@ -77,13 +77,13 @@ public class MouseDraggedHandler {
                 if(dragMode == DragMode.BUNDLE){
                     if(slot.hasItem() && canInsertIntoContainer(client.player, itemStack, slot.getItem()) && !ShulkerUtils.isShulkerItem(slot.getItem()) && !DRAGGED_SLOTS.contains(slot)){
                         DRAGGED_SLOTS.add(slot);
-                        ((AbstractContainerScreenInvoker) screen).QS$onMouseClick(slot, slot.index, click.button(), ClickType.PICKUP);
+                        ((AbstractContainerScreenInvoker) screen).QS$onMouseClick(slot, slot.index, click.button(), ContainerInput.PICKUP);
                         result = true;
                     }
                 }else{
                     if(!slot.hasItem() && !isContainerEmpty(client.player, itemStack) && !DRAGGED_SLOTS.contains(slot)){
                         DRAGGED_SLOTS.add(slot);
-                        ((AbstractContainerScreenInvoker) screen).QS$onMouseClick(slot, slot.index, click.button(), ClickType.PICKUP);
+                        ((AbstractContainerScreenInvoker) screen).QS$onMouseClick(slot, slot.index, click.button(), ContainerInput.PICKUP);
                         result = true;
                     }
                 }
