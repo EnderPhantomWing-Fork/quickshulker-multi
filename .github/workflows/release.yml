@@ -88,6 +88,7 @@ jobs:
     needs:
       - matrix_prep
       - build
+      - changelog
     runs-on: ubuntu-latest
 
     # allow the mod publish step to add asserts to release
