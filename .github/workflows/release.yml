@@ -53,6 +53,28 @@ jobs:
         with:
           tag: ${{ github.event.inputs.target_release_tag }}
 
+  changelog:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Checkout all
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install git-cliff
+        uses: taiki-e/install-action@git-cliff
+
+      - name: Generate changelog
+        run: git-cliff --latest
+
+      - name: Upload changelog to release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.target_release_tag }}
+          body_path: CHANGELOG.md
+          token: '${{ secrets.GITHUB_TOKEN }}'
+
   build:
     uses: ./.github/workflows/build.yml
     secrets: inherit
@@ -156,11 +178,11 @@ jobs:
         env:
           CHANGELOG: |-
             ${{ steps.get_release.outputs.body }}
-            
+
             -------
-            
+
             Build Information
-            
+
             - File name: `${{ steps.file_info.outputs.name }}`
             - SHA-256: `${{ steps.file_info.outputs.hash }}`
             - Built from: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
