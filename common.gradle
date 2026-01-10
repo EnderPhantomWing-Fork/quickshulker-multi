@@ -22,6 +22,7 @@ repositories {
 	maven { url = 'https://jitpack.io' }
 	maven { url = 'https://raw.githubusercontent.com/Aton-Kish/mcmod/maven' }
 	maven { url = 'https://maven.terraformersmc.com/' }
+	maven { url = 'https://api.modrinth.com/maven' }
 }
 
 dependencies {
@@ -102,11 +103,11 @@ dependencies {
 	include(autoImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
 	compileOnly group: "com.google.code.findbugs", name: "jsr305", version: "3.0.2"
 
-	if (!unobfuscated) {
-		// not included in fabric loader 0.15.0+, so we need to shadow it
-		// unused in unobfuscated versions, so don't add it in those
-		shadow(implementation("net.fabricmc:tiny-mappings-parser:0.3.0+build.17"))
-	}
+//	if (!unobfuscated) {
+//		// not included in fabric loader 0.15.0+, so we need to shadow it
+//		// unused in unobfuscated versions, so don't add it in those
+//		shadow(implementation("net.fabricmc:tiny-mappings-parser:0.3.0+build.17"))
+//	}
 
 // example:
 //	if (mcVersion < 11904) {
@@ -149,32 +150,34 @@ loom {
 		runDir '../../run'
 		vmArgs commonVmArgs
 	}
-	mixin {
-		// suppress "Cannot remap xxx because it does not exists in any of the targets" warning. It does not respect `remap = false` :(
-		useLegacyMixinAp = !unobfuscated
-	}
 }
 
-shadowJar {
-	configurations = [project.configurations.shadow]
-	exclude("META-INF")
-	archiveClassifier.set('shadow')
-}
-
-if (unobfuscated) {
-	jar {
-		dependsOn(shadowJar)
-		mustRunAfter(shadowJar)
-		from zipTree(shadowJar.archiveFile)
-		duplicatesStrategy = DuplicatesStrategy.INCLUDE
-	}
-} else {
-	remapJar {
-		dependsOn(shadowJar)
-		mustRunAfter(shadowJar)
-		inputFile = shadowJar.archiveFile
-	}
-}
+//shadowJar {
+//	configurations = [project.configurations.shadow]
+//	exclude("META-INF")
+//	archiveClassifier.set('shadow')
+//}
+//
+//import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+//tasks.withType(ShadowJar).configureEach {
+//	enableRelocation = true
+//	relocationPrefix = 'carpettisaddition.libs'
+//}
+//
+//if (unobfuscated) {
+//	jar {
+//		dependsOn(shadowJar)
+//		mustRunAfter(shadowJar)
+//		from zipTree(shadowJar.archiveFile)
+//		duplicatesStrategy = DuplicatesStrategy.INCLUDE
+//	}
+//} else {
+//	remapJar {
+//		dependsOn(shadowJar)
+//		mustRunAfter(shadowJar)
+//		inputFile = shadowJar.archiveFile
+//	}
+//}
 
 // mod and artifact version configuration
 String modVersionSuffix = ''
@@ -236,7 +239,7 @@ processResources {
 		expand modProperties
 	}
 
-// Mixin JAVA_VERSION  TODO: 等待26.x版本更新启用 / Wait for the 26.x update to take effect
+// Mixin JAVA_VERSION
 //	filesMatching(MIXIN_CONFIG_PATH) {
 //		filter { s -> s.replace('{{COMPATIBILITY_LEVEL}}', "JAVA_${MIXIN_COMPATIBILITY_LEVEL.ordinal() + 1}") }
 //	}
@@ -283,7 +286,15 @@ java {
 	withSourcesJar()
 }
 
-[jar, shadowJar].each { Jar task ->
+//[jar, shadowJar].each { Jar task ->
+//	task.configure {
+//		inputs.property "archives_base_name", project.archives_base_name
+//		from(rootProject.file('LICENSE')) {
+//			rename { "${it}_${project.archives_base_name}" }
+//		}
+//	}
+//}
+[jar].each { Jar task ->
 	task.configure {
 		inputs.property "archives_base_name", project.archives_base_name
 		from(rootProject.file('LICENSE')) {
