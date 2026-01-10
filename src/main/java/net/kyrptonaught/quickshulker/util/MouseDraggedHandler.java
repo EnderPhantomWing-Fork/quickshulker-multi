@@ -118,6 +118,8 @@ public class MouseDraggedHandler {
                         DRAGGED_SLOTS.add(slot);
                         //#if MC >= 26.1
                         //$$ ((AbstractContainerScreenInvoker) screen).QS$onMouseClick(slot, slot.index, click.button(), ContainerInput.PICKUP);
+                        //#elseif MC >= 1.21.10
+                        //$$ ((AbstractContainerScreenInvoker) screen).QS$onMouseClick(slot, slot.index, click.button(), ClickType.PICKUP);
                         //#else
                         ((AbstractContainerScreenInvoker) screen).QS$onMouseClick(slot, slot.index, button, ClickType.PICKUP);
                         //#endif
@@ -128,6 +130,8 @@ public class MouseDraggedHandler {
                         DRAGGED_SLOTS.add(slot);
                         //#if MC >= 26.1
                         //$$ ((AbstractContainerScreenInvoker) screen).QS$onMouseClick(slot, slot.index, click.button(), ContainerInput.PICKUP);
+                        //#elseif MC >= 1.21.10
+                        //$$ ((AbstractContainerScreenInvoker) screen).QS$onMouseClick(slot, slot.index, click.button(), ClickType.PICKUP);
                         //#else
                         ((AbstractContainerScreenInvoker) screen).QS$onMouseClick(slot, slot.index, button, ClickType.PICKUP);
                         //#endif
