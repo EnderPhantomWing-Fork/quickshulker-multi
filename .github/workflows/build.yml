@@ -74,13 +74,13 @@ jobs:
       - name: Upload all jars
         uses: actions/upload-artifact@v4
         with:
-          name: quickshulker
+          name: quickshulker-all-${{ env.COMMIT_HASH }}
           path: all-jars/*.jar
 
       - name: Upload mod jars
         uses: actions/upload-artifact@v4
         with:
-          name: quickshulker-${{ env.COMMIT_HASH }}
+          name: quickshulker-mod-${{ env.COMMIT_HASH }}
           path: mod-jars/*.jar
 
   summary:
