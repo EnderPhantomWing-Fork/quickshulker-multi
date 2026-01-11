@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "quickshulker",
   "version": "${version}",
-  "name": "Quick Shulker",
+  "name": "Quick Shulker Multi",
   "description": "Quickly open Shulker boxes and more",
   "authors": [
     "kyrptonaught"
@@ -21,8 +21,10 @@
   "custom": {
     "modmenu": {
       "links": {
-        "modmenu.homepage": "https://www.curseforge.com/minecraft/mc-mods/quick-shulker",
-        "modmenu.sources": "https://github.com/kyrptonaught/quickshulker"
+        "modmenu.a": "https://modrinth.com/mod/quickshulker",
+        "modmenu.b": "https://github.com/kyrptonaught/quickshulker",
+        "modmenu.c": "https://github.com/Haocen2004/quickshulker",
+        "modmenu.d": "https://github.com/MoRanpcy/quickshulker"
       }
     }
   },

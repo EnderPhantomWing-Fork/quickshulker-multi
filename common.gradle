@@ -95,7 +95,7 @@ dependencies {
 	} else if (mcVersion == 260100) {
 		// modImplementation is not available in 26.1 and requires the use of autoImplementation
 		autoImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//		autoImplementation ("com.terraformersmc:modmenu:18.0.0-alpha.3") { exclude group: "net.fabricmc.fabric-api" }
+		try { autoImplementation ("com.terraformersmc:modmenu:18.0.0-alpha.4") { exclude group: "net.fabricmc.fabric-api" } } catch(GradleScriptException) { autoImplementation "maven.modrinth:modmenu:18.0.0-alpha.4" }
 	}
 
 	include(autoImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
@@ -329,7 +329,7 @@ license {
 	}
 	ext {
 		name = project.mod_name
-		author = 'Fallen_Breath'
+		author = 'kyrptonaught'
 		year = Calendar.getInstance().get(Calendar.YEAR).toString()
 	}
 }

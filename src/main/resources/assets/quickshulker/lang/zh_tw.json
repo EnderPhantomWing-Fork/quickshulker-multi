@@ -8,7 +8,7 @@
   "key.quickshulker.config.rightClick": "鼠標右擊打開手持的物品",
   "key.quickshulker.config.keybindInInv": "使用快捷鍵打開揹包內的物品",
   "key.quickshulker.config.rightClickInInv": "鼠標右擊打開揹包內的物品",
-  "key.quickshulker.config.category.title": "Quick Shulker 配置",
+  "key.quickshulker.config.category.title": "Quick Shulker Multi 配置",
   "key.quickshulker.config.category.options": "選項",
   "key.quickshulker.config.rightClickClose": "使用特定按鍵關閉已經打開的物品",
   "key.quickshulker.config.category.bundleing": "物品存取",
@@ -30,6 +30,8 @@
   "key.kyrptconfig.config.true": "啟用",
   "key.kyrptconfig.config.false": "禁用",
   "key.kyrptconfig.config.reset": "重置",
-  "modmenu.homepage": "原作者主頁",
-  "modmenu.sources": "原作者源碼"
+  "modmenu.a": "原作者主頁",
+  "modmenu.b": "原作者源碼",
+  "modmenu.c": "Haocen2004分支源碼",
+  "modmenu.d": "MoRanpcy分支源碼"
 }

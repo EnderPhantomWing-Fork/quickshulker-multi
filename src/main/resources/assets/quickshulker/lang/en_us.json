@@ -1,7 +1,7 @@
 {
   "key.categories.quickshulker": "Quick Shulker",
   "key.quickshulker.quickshulker": "Open held Shulker Box",
-  "key.quickshulker.config.category.title": "Quick Shulker Config",
+  "key.quickshulker.config.category.title": "Quick Shulker Multi Config",
   "key.quickshulker.config.category.activation": "Activation Methods",
   "key.quickshulker.config.keybinding": "Keybind for open item",
   "key.quickshulker.config.keybind": "Keybinding while holding item",
@@ -30,6 +30,8 @@
   "key.kyrptconfig.config.true": "True",
   "key.kyrptconfig.config.false": "False",
   "key.kyrptconfig.config.reset": "Reset",
-  "modmenu.homepage": "Original author's homepage",
-  "modmenu.sources": "Original author's sources"
+  "modmenu.a": "Original author's homepage",
+  "modmenu.b": "Original author's sources",
+  "modmenu.c": "Haocen2004's fork sources",
+  "modmenu.d": "MoRanpcy's fork sources"
 }

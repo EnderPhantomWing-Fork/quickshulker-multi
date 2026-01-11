@@ -8,6 +8,8 @@ Quickly open a held shulker box with the press of a key!
 
 This project is one I used to practice building multi-version mods using [Fallen-Breath/preprocessor](https://github.com/Fallen-Breath/preprocessor).
 
+Welcome to add localization to this project!
+
 This project's upstream [MoRanpcy/quickshulker](https://github.com/MoRanpcy/quickshulker) updates [kyrptonaught](https://github.com/kyrptonaught)'s [QuickShulker](https://github.com/kyrptonaught/quickshulker.git) mod to higher Minecraft versions and fixes something.
 
 ## Quick Download
