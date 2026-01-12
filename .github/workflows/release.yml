@@ -105,6 +105,7 @@ jobs:
     needs:
       - validate_release
       - build
+      - matrix_prep
     runs-on: ubuntu-latest
 
     # allow the mod publish step to add asserts to release
