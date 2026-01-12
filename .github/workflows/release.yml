@@ -42,17 +42,6 @@ jobs:
     with:
       target_subproject: ${{ github.event.inputs.target_subproject }}
 
-  # ensure the input release tag is valid
-  validate_release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get github release information
-        uses: cardinalby/git-get-release-action@1.2.5
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          tag: ${{ github.event.inputs.target_release_tag }}
-
   changelog:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -92,6 +81,18 @@ jobs:
           body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ensure the input release tag is valid
+  validate_release:
+    runs-on: ubuntu-latest
+    needs: changelog
+    steps:
+      - name: Get github release information
+        uses: cardinalby/git-get-release-action@1.2.5
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag: ${{ github.event.inputs.target_release_tag }}
 
   build:
     uses: ./.github/workflows/build.yml
