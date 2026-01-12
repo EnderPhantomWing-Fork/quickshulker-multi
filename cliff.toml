@@ -1,16 +1,16 @@
 # git-cliff ~ configuration file
 # https://git-cliff.org/docs/configuration
 
-#{% if version %}\
-### Quick Shulker 更新一览({{ timestamp | date(format="%Y-%m-%d") }})
-#{% else %}\
-### [unreleased]
-#{% endif %}\
 
 [changelog]
 # A Tera template to be rendered for each release in the changelog.
 # See https://keats.github.io/tera/docs/#introduction
 body = """
+{% if version %}\
+    ## {{ version | trim_start_matches(pat="v") }}
+{% else %}\
+    ## [unreleased]
+{% endif %}\
 {% for group, commits in commits | group_by(attribute="group") %}
     ### {{ group | striptags | trim | upper_first }}
     {% for commit in commits %}
@@ -63,21 +63,8 @@ protect_breaking_commits = false
 commit_parsers = [
     { message = "^feat", group = "<!-- 0 -->News" },
     { message = "^fix", group = "<!-- 1 -->Fixes" },
-    { message = "^chore\\(patch\\)", group = "<!-- 2 -->Patches" },
-    { message = "^chore|^ci|^revert|^refactor", group = "<!-- 3 -->Changes" },
-    { message = "^docs|^style|^perf", group = "<!-- 4 -->Others" }
-#    { message = "^feat", group = "<!-- 0 -->🚀 新功能" },
-#    { message = "^fix", group = "<!-- 1 -->🐛 问题修复" },
-#    { message = "^doc|^docs", group = "<!-- 3 -->📚 文档修改" },
-#    { message = "^perf", group = "<!-- 4 -->⚡ 性能优化" },
-#    { message = "^refactor", group = "<!-- 2 -->🚜 重构" },
-#    { message = "^style", group = "<!-- 5 -->🎨 代码格式调整" },
-#    { message = "^chore\\(release\\): prepare for", skip = true },
-#    { message = "^chore\\(deps.*\\)", skip = true },
-#    { message = "^chore\\(pr\\)", skip = true },
-#    { message = "^chore\\(pull\\)", skip = true },
-#    { message = "^chore|^ci", group = "<!-- 7 -->⚙️ 其他小改动" },
-#    { message = "^revert", group = "<!-- 9 -->◀️ 回退改动" },
+    { message = "^chore|^ci|^revert|^refactor", group = "<!-- 2 -->Changes"},
+    { message = "docs|^style|^perf", group = "<!-- 3 -->Others"}
 ]
 # Exclude commits that are not matched by any commit parser.
 filter_commits = true

@@ -70,7 +70,7 @@ jobs:
         uses: taiki-e/install-action@git-cliff
 
       - name: Generate changelog
-        run: git-cliff --latest -o CHANGELOG.md
+        run: git-cliff --latest
 
       - name: Upload changelog to release
         uses: softprops/action-gh-release@v2
@@ -103,7 +103,6 @@ jobs:
 
   release:
     needs:
-      - validate_release
       - build
       - matrix_prep
     runs-on: ubuntu-latest
