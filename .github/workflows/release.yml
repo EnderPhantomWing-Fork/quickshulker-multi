@@ -45,8 +45,6 @@ jobs:
   changelog:
     runs-on: ubuntu-latest
     continue-on-error: true
-    needs:
-      - matrix_prep
     steps:
       - name: Checkout all
         uses: actions/checkout@v4
@@ -105,7 +103,7 @@ jobs:
 
   release:
     needs:
-      - changelog
+      - validate_release
       - build
     runs-on: ubuntu-latest
 
