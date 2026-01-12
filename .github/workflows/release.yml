@@ -70,7 +70,7 @@ jobs:
         uses: taiki-e/install-action@git-cliff
 
       - name: Generate changelog
-        run: git-cliff --latest
+        run: git-cliff --latest -o CHANGELOG.md
 
       - name: Upload changelog to release
         uses: softprops/action-gh-release@v2
