@@ -38,6 +38,7 @@ jobs:
           EOF
 
   matrix_prep:
+    needs: show_action_parameters
     uses: ./.github/workflows/matrix_prep.yml
     with:
       target_subproject: ${{ github.event.inputs.target_subproject }}
