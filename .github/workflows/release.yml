@@ -37,6 +37,11 @@ jobs:
           - target_release_tag: \`${{ github.event.inputs.target_release_tag }}\`
           EOF
 
+  matrix_prep:
+    uses: ./.github/workflows/matrix_prep.yml
+    with:
+      target_subproject: ${{ github.event.inputs.target_subproject }}
+
   changelog:
     runs-on: ubuntu-latest
     continue-on-error: true
@@ -96,15 +101,10 @@ jobs:
       target_subproject: ${{ github.event.inputs.target_subproject }}
       release: true
 
-  matrix_prep:
-    uses: ./.github/workflows/matrix_prep.yml
-    with:
-      target_subproject: ${{ github.event.inputs.target_subproject }}
-
   release:
     needs:
-      - build
       - matrix_prep
+      - build
     runs-on: ubuntu-latest
 
     # allow the mod publish step to add asserts to release
