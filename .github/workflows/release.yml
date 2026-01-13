@@ -75,11 +75,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  matrix_prep:
-    uses: ./.github/workflows/matrix_prep.yml
-    with:
-      target_subproject: ${{ github.event.inputs.target_subproject }}
-
   # ensure the input release tag is valid
   validate_release:
     runs-on: ubuntu-latest
@@ -100,6 +95,11 @@ jobs:
     with:
       target_subproject: ${{ github.event.inputs.target_subproject }}
       release: true
+
+  matrix_prep:
+    uses: ./.github/workflows/matrix_prep.yml
+    with:
+      target_subproject: ${{ github.event.inputs.target_subproject }}
 
   release:
     needs:
