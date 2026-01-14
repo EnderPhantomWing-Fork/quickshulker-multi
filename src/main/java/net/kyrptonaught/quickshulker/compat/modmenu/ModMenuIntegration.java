@@ -10,6 +10,9 @@
 
 package net.kyrptonaught.quickshulker.compat.modmenu;
 
+//#if MC >= 26.1
+//$$ public class ModMenuIntegration {}
+//#else
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import net.fabricmc.api.EnvType;
@@ -23,3 +26,4 @@ public class ModMenuIntegration implements ModMenuApi {
         return ModConfigMenu::getModConfigMenu;
     }
 }
+//#endif

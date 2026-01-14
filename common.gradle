@@ -56,7 +56,8 @@ dependencies {
     autoImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 // runtime mods
-	autoImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	// Wait for modmenu update 26.1-snapshot-3
+//	autoImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 	if (mcVersion == 12101) {
 		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 //		modImplementation("com.terraformersmc:modmenu:11.0.3" { exclude group: "net.fabricmc.fabric-api" }
@@ -119,7 +120,7 @@ dependencies {
 
 }
 
-// Mixin config paths  TODO: 等待26.x版本更新启用 / Wait for the 26.x update to take effect
+// Mixin config paths
 //String MIXIN_CONFIG_PATH = 'quickshulker.mixins.json'
 String QUICK_SHULKER_MIXIN_CONFIG_PATH = 'quickshulker.mixins.json'
 String QUICK_SHULKER_COMPAT_MIXIN_CONFIG_PATH = 'quickshulker-compat.mixins.json'
