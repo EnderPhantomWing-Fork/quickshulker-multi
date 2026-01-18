@@ -1,9 +1,8 @@
 plugins {
 	id 'maven-publish'
 	id 'com.github.hierynomus.license' version '0.16.1' apply false
-	id 'com.gradleup.shadow' version '8.3.9' apply false
-	id 'net.fabricmc.fabric-loom' version '1.15.0-alpha.29' apply false
-	id 'net.fabricmc.fabric-loom-remap' version '1.15.0-alpha.29' apply false
+	id 'net.fabricmc.fabric-loom' version '1.15-SNAPSHOT' apply false
+	id 'net.fabricmc.fabric-loom-remap' version '1.15-SNAPSHOT' apply false
 
 	// https://github.com/ReplayMod/preprocessor
 	// https://github.com/Fallen-Breath/preprocessor
@@ -16,13 +15,13 @@ plugins {
 preprocess {
 	strictExtraMappings = false
 
-	def mc12101 = createNode('1.21.1', 1_21_01, 'parchment')
-	def mc12103 = createNode('1.21.3', 1_21_03, 'parchment')
-	def mc12104 = createNode('1.21.4', 1_21_04, 'parchment')
-	def mc12105 = createNode('1.21.5', 1_21_05, 'parchment')
-	def mc12108 = createNode('1.21.8', 1_21_08, 'parchment')
-	def mc12110 = createNode('1.21.10', 1_21_10, 'parchment')
-	def mc12111 = createNode('1.21.11', 1_21_11, 'parchment')
+	def mc12101 = createNode('1.21.1', 1_21_01, 'official')
+	def mc12103 = createNode('1.21.3', 1_21_03, 'official')
+	def mc12104 = createNode('1.21.4', 1_21_04, 'official')
+	def mc12105 = createNode('1.21.5', 1_21_05, 'official')
+	def mc12108 = createNode('1.21.8', 1_21_08, 'official')
+	def mc12110 = createNode('1.21.10', 1_21_10, 'official')
+	def mc12111 = createNode('1.21.11', 1_21_11, 'official')
 	def mc260100 = createNode('26.1', 26_01_00, 'official')
 
 	mc12101.link(mc12103, null)

@@ -3,7 +3,6 @@ final boolean unobfuscated = mcVersion >= 26_00_00
 
 apply plugin: 'maven-publish'
 apply plugin: 'com.github.hierynomus.license'
-apply plugin: 'com.gradleup.shadow'
 apply plugin: unobfuscated ? 'net.fabricmc.fabric-loom' : 'net.fabricmc.fabric-loom-remap'
 apply plugin: 'com.replaymod.preprocess'
 apply plugin: 'me.fallenbreath.yamlang'
@@ -40,74 +39,43 @@ dependencies {
 	// loom
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	if (!unobfuscated) {
-
-//		parchment mappings
-		mappings loom.layered() {
-			officialMojangMappings()
-			if (project.parchment_version.size() > 0) {
-				parchment("org.parchmentmc.data:parchment-${project.minecraft_version}:${project.parchment_version}@zip")
-			}
-		}
-
-//		使用 mojang 映射
-//		Use mojang mappings
-//		mappings loom.officialMojangMappings()
+		//使用 mojang 映射 | Use mojang mappings
+		mappings loom.officialMojangMappings()
 	}
     autoImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 // runtime mods
 	// Wait for modmenu update 26.1-snapshot-3
-//	autoImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	autoImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	autoImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	if (mcVersion == 12101) {
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//		modImplementation("com.terraformersmc:modmenu:11.0.3" { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6038336") { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation "atonkish.reinfcore:reinforced-core:4.0.2+1.21.1"
 	} else if (mcVersion == 12103) {
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//		modImplementation("com.terraformersmc:modmenu:12.0.0 { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6047615") { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation "atonkish.reinfcore:reinforced-core:4.0.3+1.21.3"
 	} else if (mcVersion == 12104) {
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//		modImplementation("com.terraformersmc:modmenu:13.0.0 { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6125897") { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation "atonkish.reinfcore:reinforced-core:4.0.4+1.21.4"
 	} else if (mcVersion == 12105) {
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//		modImplementation("com.terraformersmc:modmenu:14.0.0-rc.2 { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6429113") { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation "atonkish.reinfcore:reinforced-core:4.0.6+1.21.5"
 	} else if (mcVersion == 12108) {
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//		modImplementation("com.terraformersmc:modmenu:15.0.0 { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6813003") { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation "atonkish.reinfcore:reinforced-core:4.0.7+1.21.8"
 	} else if (mcVersion == 12110) {
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//		modImplementation ("com.terraformersmc:modmenu:16.0.0-rc.1") { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:7225066") { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation "atonkish.reinfcore:reinforced-core:4.0.8+1.21.10"
 	} else if (mcVersion == 12111) {
-		modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//		modImplementation ("com.terraformersmc:modmenu:17.0.0-alpha.1") { exclude group: "net.fabricmc.fabric-api" }
 		// 1.21.11 Forced loading will cause a black screen
 //		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:7225066") { exclude group: "net.fabricmc.fabric-api" }
 //		modImplementation "atonkish.reinfcore:reinforced-core:4.0.8+1.21.10"
 	} else if (mcVersion == 260100) {
 		// modImplementation is not available in 26.1 and requires the use of autoImplementation
-		autoImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-//		autoImplementation ("com.terraformersmc:modmenu:18.0.0-alpha.4") { exclude group: "net.fabricmc.fabric-api" }
 	}
 
 	include(autoImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
 	compileOnly group: "com.google.code.findbugs", name: "jsr305", version: "3.0.2"
-
-//	if (!unobfuscated) {
-//		// not included in fabric loader 0.15.0+, so we need to shadow it
-//		// unused in unobfuscated versions, so don't add it in those
-//		shadow(implementation("net.fabricmc:tiny-mappings-parser:0.3.0+build.17"))
-//	}
 
 // example:
 //	if (mcVersion < 11904) {
@@ -121,7 +89,6 @@ dependencies {
 }
 
 // Mixin config paths
-//String MIXIN_CONFIG_PATH = 'quickshulker.mixins.json'
 String QUICK_SHULKER_MIXIN_CONFIG_PATH = 'quickshulker.mixins.json'
 String QUICK_SHULKER_COMPAT_MIXIN_CONFIG_PATH = 'quickshulker-compat.mixins.json'
 String SHULKER_UTILS_MIXIN_CONFIG_PATH = 'shulkerutils.mixins.json'
@@ -144,46 +111,26 @@ JavaVersion MIXIN_COMPATIBILITY_LEVEL = JAVA_COMPATIBILITY
 loom {
 	accessWidenerPath = file("quickshulker.accesswidener")
 	def commonVmArgs = ['-Dmixin.debug.export=true', '-Dmixin.debug.countInjections=true']
-	runConfigs.configureEach {
-		// to make sure it generates all "Minecraft Client (:subproject_name)" applications
-		ideConfigGenerated = true
-		runDir '../../run'
-		vmArgs commonVmArgs
+	def commonProgramArgs = ['--width', '1366', '--height', '768', '--username', 'ShulkerDev']
+	runs {
+		named("client") {
+			ideConfigGenerated(true)
+			vmArgs commonVmArgs
+			programArgs commonProgramArgs
+			runDir = "../../run/client"
+		}
+
+		named("server") {
+			runDir = "../../run/server"
+		}
 	}
 }
 
-//shadowJar {
-//	configurations = [project.configurations.shadow]
-//	exclude("META-INF")
-//	archiveClassifier.set('shadow')
-//}
-//
-//import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-//tasks.withType(ShadowJar).configureEach {
-//	enableRelocation = true
-//	relocationPrefix = 'carpettisaddition.libs'
-//}
-//
-//if (unobfuscated) {
-//	jar {
-//		dependsOn(shadowJar)
-//		mustRunAfter(shadowJar)
-//		from zipTree(shadowJar.archiveFile)
-//		duplicatesStrategy = DuplicatesStrategy.INCLUDE
-//	}
-//} else {
-//	remapJar {
-//		dependsOn(shadowJar)
-//		mustRunAfter(shadowJar)
-//		inputFile = shadowJar.archiveFile
-//	}
-//}
-
-// mod and artifact version configuration
+// 模组和构建版本配置 | mod and artifact version configuration
 String modVersionSuffix = ''
 String artifactVersionSuffix = ''
 String artifactVersion = project.mod_version
-// detect github action environment variables
+// 检测GitHub Actions环境变量 | detect github action environment variables
 // https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
 if (System.getenv("BUILD_RELEASE") != "true") {
 	// 正式版没有build后缀，action构建有后缀
@@ -240,10 +187,6 @@ processResources {
 	}
 
 // Mixin JAVA_VERSION
-//	filesMatching(MIXIN_CONFIG_PATH) {
-//		filter { s -> s.replace('{{COMPATIBILITY_LEVEL}}', "JAVA_${MIXIN_COMPATIBILITY_LEVEL.ordinal() + 1}") }
-//	}
-//
 	filesMatching(QUICK_SHULKER_MIXIN_CONFIG_PATH) {
 		filter { s -> s.replace('{{COMPATIBILITY_LEVEL}}', "JAVA_${MIXIN_COMPATIBILITY_LEVEL.ordinal() + 1}") }
 	}
@@ -282,19 +225,10 @@ tasks.withType(JavaCompile).configureEach {
 java {
 	sourceCompatibility = JAVA_COMPATIBILITY
 	targetCompatibility = JAVA_COMPATIBILITY
-
 	withSourcesJar()
 }
 
-//[jar, shadowJar].each { Jar task ->
-//	task.configure {
-//		inputs.property "archives_base_name", project.archives_base_name
-//		from(rootProject.file('LICENSE')) {
-//			rename { "${it}_${project.archives_base_name}" }
-//		}
-//	}
-//}
-[jar].each { Jar task ->
+jar.each { Jar task ->
 	task.configure {
 		inputs.property "archives_base_name", project.archives_base_name
 		from(rootProject.file('LICENSE')) {
@@ -349,5 +283,10 @@ publishing {
 	}
 
 	// select the repositories you want to publish to
-	repositories {}
+	repositories {
+		mavenLocal()
+		maven {
+			url = "$rootDir/publish"
+		}
+	}
 }
