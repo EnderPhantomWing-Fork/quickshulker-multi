@@ -45,7 +45,10 @@ public class ConfigScreen extends Screen {
     Screen previousScreen;
     private NotSuckyButton scrollLeftBTN, scrollRightBTN;
     int horizontalScrollOffset = -1;
-    //#if MC >= 1.21.11
+    //#if MC <= 1.20.6
+    //$$ private static final ResourceLocation SCROLLER_TEXTURE = ResourceLocation.tryParse("widget/scroller");
+    //$$ private static final ResourceLocation OPTIONS_BACKGROUND_TEXTURE = ResourceLocation.tryParse("textures/block/dirt.png");
+    //#elseif MC >= 1.21.11
     //$$ private static final Identifier SCROLLER_TEXTURE = Identifier.parse("widget/scroller");
     //$$ private static final Identifier OPTIONS_BACKGROUND_TEXTURE = Identifier.parse("textures/block/dirt.png");
     //#else

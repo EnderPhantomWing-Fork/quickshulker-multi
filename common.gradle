@@ -48,7 +48,10 @@ dependencies {
 	// Wait for modmenu update 26.1-snapshot-3
 	autoImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 	autoImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	if (mcVersion == 12101) {
+	if (mcVersion == 12006){
+		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6038315") { exclude group: "net.fabricmc.fabric-api" }
+		modImplementation "atonkish.reinfcore:reinforced-core:4.0.0+1.20"
+	} else if (mcVersion == 12101) {
 		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6038336") { exclude group: "net.fabricmc.fabric-api" }
 		modImplementation "atonkish.reinfcore:reinforced-core:4.0.2+1.21.1"
 	} else if (mcVersion == 12103) {

@@ -38,7 +38,10 @@ public class ConfigManager {
         JANKSON = new JanksonJsonLoader();
         Jankson.Builder builder = CustomJankson.customJanksonBuilder();
         setJANKSON(builder
-                //#if MC >= 1.21.11
+                //#if MC <=1.20.6
+                //$$ .registerSerializer(ResourceLocation.class, (identifier, marshaller) -> marshaller.serialize(identifier.toString()))
+                //$$ .registerDeserializer(String.class, ResourceLocation.class, (s, m) -> ResourceLocation.tryParse(s))
+                //#elseif MC >= 1.21.11
                 //$$ .registerSerializer(Identifier.class, (identifier, marshaller) -> marshaller.serialize(identifier.toString()))
                 //$$ .registerDeserializer(String.class, Identifier.class, (s, m) -> Identifier.parse(s))
                 //#else

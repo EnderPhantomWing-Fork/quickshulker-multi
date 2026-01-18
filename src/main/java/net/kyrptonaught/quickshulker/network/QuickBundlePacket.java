@@ -35,7 +35,9 @@ import java.util.List;
 
 public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements CustomPacketPayload {
 
-    //#if MC >= 1.21.11
+    //#if MC <= 1.20.6
+    //$$ private static final ResourceLocation QUICK_BUNDLE_PACKET = ResourceLocation.tryBuild(QuickShulkerMod.MOD_ID, "quick_bundle_packet");
+    //#elseif MC >= 1.21.11
     //$$ private static final Identifier QUICK_BUNDLE_PACKET = Identifier.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "quick_bundle_packet");
     //#else
     private static final ResourceLocation QUICK_BUNDLE_PACKET = ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "quick_bundle_packet");
@@ -84,7 +86,9 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
 
     public record BundleIntoHeld(List<ItemStack> stackList, int slotId) implements CustomPacketPayload {
 
-        //#if MC >= 1.21.11
+        //#if MC <= 1.20.6
+        //$$ private static final ResourceLocation QUICK_BUNDLEHELD_PACKET = ResourceLocation.tryBuild(QuickShulkerMod.MOD_ID, "quick_bundleheld_packet");
+        //#elseif MC >= 1.21.11
         //$$ private static final Identifier QUICK_BUNDLEHELD_PACKET = Identifier.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "quick_bundleheld_packet");
         //#else
         private static final ResourceLocation QUICK_BUNDLEHELD_PACKET = ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "quick_bundleheld_packet");
@@ -123,7 +127,9 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
 
     public record UnbundlePacket(int slotId, ItemStack unbundleStack) implements CustomPacketPayload {
 
-        //#if MC >= 1.21.11
+        //#if MC <= 1.20.6
+        //$$ private static final ResourceLocation QUICK_UNBUNDLE_PACKET = ResourceLocation.tryBuild(QuickShulkerMod.MOD_ID, "quick_unbundle_packet");
+        //#elseif MC >= 1.21.11
         //$$ private static final Identifier QUICK_UNBUNDLE_PACKET = Identifier.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "quick_unbundle_packet");
         //#else
         private static final ResourceLocation QUICK_UNBUNDLE_PACKET = ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "quick_unbundle_packet");

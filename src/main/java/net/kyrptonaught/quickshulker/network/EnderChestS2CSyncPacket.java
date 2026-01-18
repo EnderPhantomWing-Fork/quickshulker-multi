@@ -30,7 +30,9 @@ public class EnderChestS2CSyncPacket {
 
     public record S2CEChestContentPacket(List<ItemStack> itemStacks) implements CustomPacketPayload {
 
-        //#if MC >= 1.21.11
+        //#if MC <= 1.20.6
+        //$$ public static final Type<S2CEChestContentPacket> S2C_ECHEST_CONTENT_PACKET_ID = new Type<>(ResourceLocation.tryBuild(QuickShulkerMod.MOD_ID, "s2c_echest_content_packet"));
+        //#elseif MC >= 1.21.11
         //$$ public static final Type<S2CEChestContentPacket> S2C_ECHEST_CONTENT_PACKET_ID = new Type<>(Identifier.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "s2c_echest_content_packet"));
         //#else
         public static final Type<S2CEChestContentPacket> S2C_ECHEST_CONTENT_PACKET_ID = new Type<>(ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "s2c_echest_content_packet"));
@@ -48,8 +50,11 @@ public class EnderChestS2CSyncPacket {
     }
 
     public record S2CEChestSlotPacket(int slotId, ItemStack itemStack) implements CustomPacketPayload {
-
+        //#if MC <= 1.20.6
+        //$$ public static final Type<S2CEChestSlotPacket> S2C_ECHEST_SLOT_PACKET_ID = new Type<>(ResourceLocation.tryBuild(QuickShulkerMod.MOD_ID, "s2c_echest_slot_packet"));
+        //#else
         public static final Type<S2CEChestSlotPacket> S2C_ECHEST_SLOT_PACKET_ID = new Type<>(ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "s2c_echest_slot_packet"));
+        //#endif
         public static final StreamCodec<RegistryFriendlyByteBuf, S2CEChestSlotPacket> CODEC = StreamCodec.ofMember(
                 (value, buf) -> {
                     buf.writeInt(value.slotId);

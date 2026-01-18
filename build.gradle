@@ -15,6 +15,7 @@ plugins {
 preprocess {
 	strictExtraMappings = false
 
+	def mc12006 = createNode('1.20.6', 1_20_06, 'official')
 	def mc12101 = createNode('1.21.1', 1_21_01, 'official')
 	def mc12103 = createNode('1.21.3', 1_21_03, 'official')
 	def mc12104 = createNode('1.21.4', 1_21_04, 'official')
@@ -24,6 +25,9 @@ preprocess {
 	def mc12111 = createNode('1.21.11', 1_21_11, 'official')
 	def mc260100 = createNode('26.1', 26_01_00, 'official')
 
+	//1.20.6~before
+	mc12101.link(mc12006, null)
+	//1.21.1~latest
 	mc12101.link(mc12103, null)
 	mc12103.link(mc12104, null)
 	mc12104.link(mc12105, null)

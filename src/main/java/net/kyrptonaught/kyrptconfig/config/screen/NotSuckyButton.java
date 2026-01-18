@@ -35,13 +35,14 @@ import net.minecraft.resources.ResourceLocation;
 public class NotSuckyButton extends Button {
     int buttonColor = -1;
     public boolean disableHover = false;
-    //#if MC >= 1.21.11
+    //#if MC <= 1.20.6
+    //$$ private static final WidgetSprites TEXTURES = new WidgetSprites(ResourceLocation.tryParse("widget/button"), ResourceLocation.tryParse("widget/button_disabled"), ResourceLocation.tryParse("widget/button_highlighted"));
+    //$$ public NotSuckyButton(int x, int y, int width, int height, Component message, OnPress onPress) {
+    //#elseif MC >= 1.21.11
     //$$ private static final WidgetSprites TEXTURES = new WidgetSprites(Identifier.parse("widget/button"), Identifier.parse("widget/button_disabled"), Identifier.parse("widget/button_highlighted"));
-    //
     //$$ public NotSuckyButton(int x, int y, int width, int height, net.minecraft.network.chat.Component message, OnPress onPress) {
     //#else
     private static final WidgetSprites TEXTURES = new WidgetSprites(ResourceLocation.parse("widget/button"), ResourceLocation.parse("widget/button_disabled"), ResourceLocation.parse("widget/button_highlighted"));
-
     public NotSuckyButton(int x, int y, int width, int height, Component message, OnPress onPress) {
     //#endif
         super(x, y, width, height, message, onPress, DEFAULT_NARRATION);

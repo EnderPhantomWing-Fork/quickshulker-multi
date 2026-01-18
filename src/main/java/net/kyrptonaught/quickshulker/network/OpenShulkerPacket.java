@@ -28,7 +28,9 @@ import net.minecraft.resources.ResourceLocation;
 
 public record OpenShulkerPacket(int invSlot) implements CustomPacketPayload {
 
-    //#if MC >= 1.21.11
+    //#if MC <= 1.20.6
+    //$$ public static final ResourceLocation OPEN_SHULKER_PACKET = ResourceLocation.tryBuild(QuickShulkerMod.MOD_ID, "open_shulker_packet");
+    //#elseif MC >= 1.21.11
     //$$ public static final Identifier OPEN_SHULKER_PACKET = Identifier.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "open_shulker_packet");
     //#else
     public static final ResourceLocation OPEN_SHULKER_PACKET = ResourceLocation.fromNamespaceAndPath(QuickShulkerMod.MOD_ID, "open_shulker_packet");
