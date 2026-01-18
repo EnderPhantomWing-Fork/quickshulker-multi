@@ -3,15 +3,15 @@ package net.kyrptonaught.kyrptconfig.config.screen.items;
 import net.kyrptonaught.kyrptconfig.api.ConflictHandler;
 import net.kyrptonaught.kyrptconfig.config.screen.NotSuckyButton;
 import net.kyrptonaught.quickshulker.event.KeyBindingRegister;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.tooltip.Tooltip;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.resource.language.I18n;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.resources.language.I18n;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.ChatFormatting;
 import org.lwjgl.glfw.GLFW;
 
 public class KeybindItem extends ConfigItem<String> {
@@ -19,7 +19,7 @@ public class KeybindItem extends ConfigItem<String> {
     private Boolean isListening = false;
     private boolean duplicate = false;
 
-    public KeybindItem(Text name, String key, String defaultKey) {
+    public KeybindItem(Component name, String key, String defaultKey) {
         super(name, key, defaultKey);
         this.keyButton = new NotSuckyButton(0, 0, 100, 20, getCleanName(key), widget -> {
             this.isListening = !this.isListening;
@@ -35,28 +35,28 @@ public class KeybindItem extends ConfigItem<String> {
         ConflictHandler.updateCustomConflicts();
     }
 
-    public MutableText getCleanName(String str) {
-        if (I18n.hasTranslation(value))
-            return Text.translatable(str);
+    public MutableComponent getCleanName(String str) {
+        if (I18n.exists(value))
+            return Component.translatable(str);
         if (str == null || str.isBlank() || str.isEmpty())
-            return Text.translatable("key.keyboard.unknown");
-        return Text.literal(str.substring(str.length() - 1).toUpperCase());
+            return Component.translatable("key.keyboard.unknown");
+        return Component.literal(str.substring(str.length() - 1).toUpperCase());
     }
 
     public void updateMessage(){
         if(!isListening){
             duplicate = false;
-            MutableText mutableText = Text.empty();
+            MutableComponent mutableText = Component.empty();
             if(isInvalidKeyValue()) {
-                for (KeyBinding keyBinding : MinecraftClient.getInstance().options.allKeys) {
+                for (KeyMapping keyBinding : Minecraft.getInstance().options.keyMappings) {
                     if(KeyBindingRegister.MAIN.equals(keyBinding.getCategory())){
                         continue;
                     }
-                    Text t1 = Text.translatable(keyBinding.getTranslationKey());
-                    Text t2 = this.getTitleText();
-                    if (!t1.equals(t2) && keyBinding.getBoundKeyTranslationKey().equals(this.value)) {
+                    Component t1 = Component.translatable(keyBinding.getName());
+                    Component t2 = this.getTitleText();
+                    if (!t1.equals(t2) && keyBinding.saveString().equals(this.value)) {
                         duplicate = true;
-                        mutableText.append("\n  - ").append(Text.translatable(keyBinding.getTranslationKey()));
+                        mutableText.append("\n  - ").append(Component.translatable(keyBinding.getName()));
                     }
                 }
                 for (KeybindItem item : ConflictHandler.CUSTOM_KEYBIND_ITEMS) {
@@ -67,14 +67,14 @@ public class KeybindItem extends ConfigItem<String> {
                 }
             }
             if(duplicate){
-                keyButton.setMessage(Text.literal("[ ").append(getCleanName(this.value).formatted(Formatting.WHITE)).append(Text.literal(" ]")).formatted(Formatting.RED));
-                keyButton.setTooltip(Tooltip.of(Text.translatable("key.quickshulker.config.savedValue", Text.literal(this.value)).append(Text.translatable("key.quickshulker.config.keybindinsConflict", mutableText))));
+                keyButton.setMessage(Component.literal("[ ").append(getCleanName(this.value).withStyle(ChatFormatting.WHITE)).append(Component.literal(" ]")).withStyle(ChatFormatting.RED));
+                keyButton.setTooltip(Tooltip.create(Component.translatable("key.quickshulker.config.savedValue", Component.literal(this.value)).append(Component.translatable("key.quickshulker.config.keybindinsConflict", mutableText))));
             }else{
                 keyButton.setMessage(this.getCleanName(this.value));
-                keyButton.setTooltip(Tooltip.of(Text.translatable("key.quickshulker.config.savedValue", Text.literal(this.value))));
+                keyButton.setTooltip(Tooltip.create(Component.translatable("key.quickshulker.config.savedValue", Component.literal(this.value))));
             }
         }else{
-            keyButton.setMessage(Text.literal("> ").append(getCleanName(this.value)).append(Text.literal(" <")));
+            keyButton.setMessage(Component.literal("> ").append(getCleanName(this.value)).append(Component.literal(" <")));
         }
     }
 
@@ -89,7 +89,7 @@ public class KeybindItem extends ConfigItem<String> {
                 setValue("");
                 return true;
             }
-            setValue(InputUtil.fromKeyCode(keyCode, scanCode).getTranslationKey());
+            setValue(InputConstants.getKey(keyCode, scanCode).getName());
             return true;
         }
         return false;
@@ -101,12 +101,12 @@ public class KeybindItem extends ConfigItem<String> {
         boolean handled;
         handled = (keyButton.mouseClicked(mouseX, mouseY, button) || resetButton.mouseClicked(mouseX, mouseY, button));
         if (isListening && !handled) {
-            setValue(InputUtil.Type.MOUSE.createFromCode(button).getTranslationKey());
+            setValue(InputConstants.Type.MOUSE.getOrCreate(button).getName());
         }
     }
 
     @Override
-    public void render(DrawContext context, int x, int y, int mouseX, int mouseY, float delta) {
+    public void render(GuiGraphics context, int x, int y, int mouseX, int mouseY, float delta) {
         super.render(context, x, y, mouseX, mouseY, delta);
         this.keyButton.setY(y);
 

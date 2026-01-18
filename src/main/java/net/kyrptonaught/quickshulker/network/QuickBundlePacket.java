@@ -8,22 +8,23 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.kyrptonaught.quickshulker.util.BundleHelper;
 import net.kyrptonaught.quickshulker.QuickShulkerMod;
 import net.kyrptonaught.quickshulker.util.PacketUtils;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.codec.PacketCodecs;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.util.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
-public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements CustomPayload {
+public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements CustomPacketPayload {
 
-    private static final Identifier QUICK_BUNDLE_PACKET = Identifier.of(QuickShulkerMod.MOD_ID, "quick_bundle_packet");
-    private static final Id<QuickBundlePacket> QUICK_BUNDLE_PACKET_ID = new Id<>(QUICK_BUNDLE_PACKET);
-    private static final PacketCodec<RegistryByteBuf, QuickBundlePacket> CODEC = PacketCodec.of(
+    private static final ResourceLocation QUICK_BUNDLE_PACKET = ResourceLocation.tryBuild(QuickShulkerMod.MOD_ID, "quick_bundle_packet");
+    private static final Type<QuickBundlePacket> QUICK_BUNDLE_PACKET_ID = new Type<>(QUICK_BUNDLE_PACKET);
+    private static final StreamCodec<RegistryFriendlyByteBuf, QuickBundlePacket> CODEC = StreamCodec.ofMember(
             (value, buf) -> {
                 buf.writeInt(value.slotId);
                 PacketUtils.writeItemStack(buf, value.stackToBundle);},
@@ -34,7 +35,7 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
         PayloadTypeRegistry.playC2S().register(QuickBundlePacket.QUICK_BUNDLE_PACKET_ID, QuickBundlePacket.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(QuickBundlePacket.QUICK_BUNDLE_PACKET_ID, (payload, context) -> {
             if (context.player().isCreative()) {
-                context.server().execute(() -> BundleHelper.bundleItemIntoStack(context.player(), context.player().getInventory().getStack(payload.slotId), payload.stackToBundle, null));
+                context.server().execute(() -> BundleHelper.bundleItemIntoStack(context.player(), context.player().getInventory().getItem(payload.slotId), payload.stackToBundle, null));
             }
         });
         UnbundlePacket.registerReceivePacket();
@@ -47,19 +48,19 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
     }
 
     public static void sendCreativeSlotUpdate(ItemStack output, Slot slot) {
-        MinecraftClient.getInstance().interactionManager.clickCreativeStack(output, slot.id);
+        Minecraft.getInstance().gameMode.handleCreativeModeItemAdd(output, slot.index);
     }
 
     @Override
-    public Id<? extends CustomPayload> getId() {
+    public Type<? extends CustomPacketPayload> type() {
         return QUICK_BUNDLE_PACKET_ID;
     }
 
-    public record BundleIntoHeld(List<ItemStack> stackList, int slotId) implements CustomPayload{
+    public record BundleIntoHeld(List<ItemStack> stackList, int slotId) implements CustomPacketPayload {
 
-        private static final Identifier QUICK_BUNDLEHELD_PACKET = Identifier.of(QuickShulkerMod.MOD_ID, "quick_bundleheld_packet");
-        private static final Id<BundleIntoHeld> QUICK_BUNDLEHELD_PACKET_ID = new Id<>(QUICK_BUNDLEHELD_PACKET);
-        private static final PacketCodec<RegistryByteBuf, BundleIntoHeld> CODEC = PacketCodec.tuple(ItemStack.OPTIONAL_LIST_PACKET_CODEC, BundleIntoHeld::stackList, PacketCodecs.INTEGER, BundleIntoHeld::slotId, BundleIntoHeld::new);
+        private static final ResourceLocation QUICK_BUNDLEHELD_PACKET = ResourceLocation.tryBuild(QuickShulkerMod.MOD_ID, "quick_bundleheld_packet");
+        private static final Type<BundleIntoHeld> QUICK_BUNDLEHELD_PACKET_ID = new Type<>(QUICK_BUNDLEHELD_PACKET);
+        private static final StreamCodec<RegistryFriendlyByteBuf, BundleIntoHeld> CODEC = StreamCodec.composite(ItemStack.OPTIONAL_LIST_STREAM_CODEC, BundleIntoHeld::stackList, ByteBufCodecs.INT, BundleIntoHeld::slotId, BundleIntoHeld::new);
 
         public static void registerReceivePacket() {
             PayloadTypeRegistry.playS2C().register(BundleIntoHeld.QUICK_BUNDLEHELD_PACKET_ID, BundleIntoHeld.CODEC);
@@ -67,7 +68,7 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
             ServerPlayNetworking.registerGlobalReceiver(BundleIntoHeld.QUICK_BUNDLEHELD_PACKET_ID, (payload, context) -> {
                 if (context.player().isCreative()) {
                     context.server().execute(() -> {
-                        Slot slot = context.player().currentScreenHandler.getSlot(payload.slotId);
+                        Slot slot = context.player().containerMenu.getSlot(payload.slotId);
                         BundleHelper.bundleItemIntoStack(context.player(), payload.stackList.get(1), payload.stackList.get(0), slot, null);
                     });
                 }
@@ -80,16 +81,16 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
         }
 
         @Override
-        public Id<? extends CustomPayload> getId() {
+        public Type<? extends CustomPacketPayload> type() {
             return QUICK_BUNDLEHELD_PACKET_ID;
         }
     }
 
-    public record UnbundlePacket(int slotId, ItemStack unbundleStack) implements CustomPayload{
+    public record UnbundlePacket(int slotId, ItemStack unbundleStack) implements CustomPacketPayload {
 
-        private static final Identifier QUICK_UNBUNDLE_PACKET = Identifier.of(QuickShulkerMod.MOD_ID, "quick_unbundle_packet");
-        private static final Id<UnbundlePacket> QUICK_UNBUNDLE_PACKET_ID = new Id<>(QUICK_UNBUNDLE_PACKET);
-        private static final PacketCodec<RegistryByteBuf, UnbundlePacket> CODEC = PacketCodec.of(
+        private static final ResourceLocation QUICK_UNBUNDLE_PACKET = ResourceLocation.tryBuild(QuickShulkerMod.MOD_ID, "quick_unbundle_packet");
+        private static final Type<UnbundlePacket> QUICK_UNBUNDLE_PACKET_ID = new Type<>(QUICK_UNBUNDLE_PACKET);
+        private static final StreamCodec<RegistryFriendlyByteBuf, UnbundlePacket> CODEC = StreamCodec.ofMember(
                 (value, buf) -> {
                     buf.writeInt(value.slotId); PacketUtils.writeItemStack(buf, value.unbundleStack);},
                 buf -> new UnbundlePacket(buf.readInt(), PacketUtils.readItemStack(buf)));
@@ -102,11 +103,11 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
                     int playerInvSlotID = payload.slotId;
                     ItemStack unBundleStack = payload.unbundleStack;
                     context.server().execute(() -> {
-                        Slot unbundleSlot = context.player().currentScreenHandler.getSlot(payload.slotId);
+                        Slot unbundleSlot = context.player().containerMenu.getSlot(payload.slotId);
                         ItemStack output = BundleHelper.unbundleItem(context.player(), unBundleStack, unbundleSlot);
                         if (output != null)
 //                            context.player().getInventory().setStack(playerInvSlotID, output);
-                            unbundleSlot.setStack(output);
+                            unbundleSlot.setByPlayer(output);
                     });
                 }
             });
@@ -118,7 +119,7 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
         }
 
         @Override
-        public Id<? extends CustomPayload> getId() {
+        public Type<? extends CustomPacketPayload> type() {
             return QUICK_UNBUNDLE_PACKET_ID;
         }
     }
