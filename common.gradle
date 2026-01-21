@@ -113,7 +113,7 @@ JavaVersion MIXIN_COMPATIBILITY_LEVEL = JAVA_COMPATIBILITY
 
 loom {
 	accessWidenerPath = file("quickshulker.accesswidener")
-	def commonVmArgs = ['-Dmixin.debug.export=true', '-Dmixin.debug.countInjections=true']
+	def commonVmArgs = ['-Dmixin.debug.export=true', '-Dmixin.debug.verbose=true', '-Dmixin.env.remapRefMap=true']
 	def commonProgramArgs = ['--width', '1366', '--height', '768', '--username', 'ShulkerDev']
 	runs {
 		named("client") {
