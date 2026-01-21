@@ -46,7 +46,7 @@ dependencies {
 
 // runtime mods
 	// Wait for modmenu update 26.1-snapshot-3
-	autoImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
+	autoRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
 	autoImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	if (mcVersion == 12006){
 		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6038315") { exclude group: "net.fabricmc.fabric-api" }
