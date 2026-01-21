@@ -1,4 +1,4 @@
-name: Prepare Matrix
+name: _step.martix
 
 on:
   workflow_call:
