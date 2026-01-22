@@ -10,6 +10,7 @@ apply plugin: 'me.fallenbreath.yamlang'
 repositories {
 	// 统一格式
 	// Unified format
+	mavenCentral()
 	maven { url = 'https://maven.parchmentmc.org' }
 	maven { url = 'https://jitpack.io' }
 	maven { url = 'https://maven.fallenbreath.me/releases' }
@@ -21,7 +22,6 @@ repositories {
 	maven { url = 'https://jitpack.io' }
 	maven { url = 'https://raw.githubusercontent.com/Aton-Kish/mcmod/maven' }
 	maven { url = 'https://maven.terraformersmc.com/' }
-	maven { url = 'https://api.modrinth.com/maven' }
 }
 
 dependencies {
@@ -45,8 +45,7 @@ dependencies {
     autoImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 // runtime mods
-	// Wait for modmenu update 26.1-snapshot-3
-	autoRuntimeOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+	autoImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
 	autoImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	if (mcVersion == 12006){
 		modImplementation ("curse.maven:reinforced-shulker-boxes-529874:6038315") { exclude group: "net.fabricmc.fabric-api" }
