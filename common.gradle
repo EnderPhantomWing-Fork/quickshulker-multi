@@ -21,7 +21,7 @@ repositories {
 	maven { url = 'https://maven.fallenbreath.me/releases' }
 	maven { url = 'https://jitpack.io' }
 	maven { url = 'https://raw.githubusercontent.com/Aton-Kish/mcmod/maven' }
-	maven { url = 'https://maven.terraformersmc.com/' }
+	maven { url = 'https://maven.terraformersmc.com/release' }
 }
 
 dependencies {
