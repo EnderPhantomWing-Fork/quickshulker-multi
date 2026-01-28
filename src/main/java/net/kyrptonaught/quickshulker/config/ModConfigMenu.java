@@ -38,7 +38,8 @@ public class ModConfigMenu {
         ConfigSection optionsSection = new ConfigSection(configScreen, Component.translatable("key.quickshulker.config.category.options"));
         optionsSection.addConfigItem(new BooleanItem(Component.translatable("key.quickshulker.config.rightClickClose"), options.rightClickClose, false).setSaveConsumer(value -> options.rightClickClose = value));
 
-        SubItem subItem = (SubItem) optionsSection.addConfigItem(new SubItem(Component.translatable("key.quickshulker.config.category.bundleing"), true));
+        @SuppressWarnings("unchecked")
+        SubItem<Boolean> subItem = (SubItem<Boolean>) optionsSection.addConfigItem(new SubItem<>(Component.translatable("key.quickshulker.config.category.bundleing"), true));
         subItem.addConfigItem(new BooleanItem(Component.translatable("key.quickshulker.config.supportsBundlingInsert"), options.supportsBundlingInsert, true).setSaveConsumer(value -> options.supportsBundlingInsert = value));
         subItem.addConfigItem(new BooleanItem(Component.translatable("key.quickshulker.config.supportsBundlingPickup"), options.supportsBundlingPickup, true).setSaveConsumer(value -> options.supportsBundlingPickup = value));
         subItem.addConfigItem(new BooleanItem(Component.translatable("key.quickshulker.config.supportsBundlingTransfer"), options.supportsBundlingTransfer, true).setSaveConsumer(value -> options.supportsBundlingTransfer = value));

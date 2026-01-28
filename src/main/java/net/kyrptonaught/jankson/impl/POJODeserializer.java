@@ -86,7 +86,9 @@ public class POJODeserializer {
             JsonElement elem = source.get(fieldName);
             source.remove(fieldName); //Prevent it from getting re-unpacked
             if (elem == null || elem == JsonNull.INSTANCE) {
-                boolean accessible = f.isAccessible();
+                // 'isAccessible()' 自版本 9 起已弃用
+                // boolean accessible = f.isAccessible();
+                boolean accessible = f.canAccess(parent);
                 if (!accessible) f.setAccessible(true);
                 try {
                     f.set(parent, null);

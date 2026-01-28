@@ -44,10 +44,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-/**
- * @deprecated For removal; please use {@link Marshaller}
- */
-@Deprecated
 public class MarshallerImpl implements Marshaller {
     private static final MarshallerImpl INSTANCE = new MarshallerImpl();
 
@@ -331,7 +327,9 @@ public class MarshallerImpl implements Marshaller {
                     Parameter[] params = m.getParameters();
                     if (params.length == 0) {
                         try {
-                            boolean access = m.isAccessible();
+                            // 'isAccessible()' 自版本 9 起已弃用
+                            // boolean access = m.isAccessible();
+                            boolean access = m.canAccess(obj);
                             if (!access) m.setAccessible(true);
                             JsonElement result = (JsonElement) m.invoke(obj);
                             if (!access) m.setAccessible(false);
@@ -344,7 +342,9 @@ public class MarshallerImpl implements Marshaller {
                     } else if (params.length == 1) {
                         if (Marshaller.class.isAssignableFrom(params[0].getType())) {
                             try {
-                                boolean access = m.isAccessible();
+                                // 'isAccessible()' 自版本 9 起已弃用
+                                // boolean access = m.isAccessible();
+                                boolean access = m.canAccess(obj);
                                 if (!access) m.setAccessible(true);
                                 JsonElement result = (JsonElement) m.invoke(obj, this);
                                 if (!access) m.setAccessible(false);
