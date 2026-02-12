@@ -79,6 +79,7 @@ public class TypeMagic {
                 try {
                     return Class.forName(className);
                 } catch (ClassNotFoundException ex) {
+                    return null;
                 }
             }
         }
@@ -107,7 +108,7 @@ public class TypeMagic {
              */
             Class<?> componentClass = classForType(arrayType.getGenericComponentType());
             try {
-                //We can always retrieve the class under a "dots" version of the binary name, as long as componentClass wound up resolving to a valid Object type
+                // We can always retrieve the class under a "dots" version of the binary name, as long as componentClass wound up resolving to a valid Object type
                 Class<?> arrayClass = Class.forName("[L" + componentClass.getCanonicalName() + ";");
 
                 return arrayClass;
@@ -181,7 +182,9 @@ public class TypeMagic {
         }
 
         try {
-            boolean available = noArg.isAccessible();
+            // 'isAccessible()' 自版本 9 起已弃用
+            // boolean available = noArg.isAccessible();
+            boolean available = noArg.canAccess(null);
             if (!available) noArg.setAccessible(true);
             U u = noArg.newInstance();
             if (!available) noArg.setAccessible(false); //restore accessibility
