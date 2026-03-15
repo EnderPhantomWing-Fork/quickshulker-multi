@@ -34,7 +34,7 @@ preprocess {
 	mc12105.link(mc12108, null)
 	mc12108.link(mc12110, null)
 	mc12110.link(mc12111, null)
-	mc12111.link(mc260100, null)
+	mc12111.link(mc260100, file("versions/mapping-1.21.11-26.1.txt"))
 
 	// See https://github.com/Fallen-Breath/fabric-mod-template/blob/1d72d77a1c5ce0bf060c2501270298a12adab679/build.gradle#L55-L63
 	for (final def node in getNodes()) {

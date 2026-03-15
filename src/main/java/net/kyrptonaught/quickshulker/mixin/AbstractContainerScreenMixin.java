@@ -96,14 +96,20 @@ public abstract class AbstractContainerScreenMixin {
     }
 
     @Inject(
-            //#if MC >= 1.21.6
+            //#if MC >= 26.1
+            //$$ method = "extractContents(Lnet/minecraft/client/gui/GuiGraphicsExtractor;IIF)V",
+            //#elseif MC >= 1.21.6
             //$$ method = "renderContents(Lnet/minecraft/client/gui/GuiGraphics;IIF)V",
             //#else
             method = "render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V",
             //#endif
             at = @At(
                     value = "INVOKE",
+                    //#if MC >= 26.1
+                    //$$ target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;extractLabels(Lnet/minecraft/client/gui/GuiGraphicsExtractor;II)V",
+                    //#else
                     target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderLabels(Lnet/minecraft/client/gui/GuiGraphics;II)V",
+                    //#endif
                     shift = At.Shift.AFTER
             )
     )

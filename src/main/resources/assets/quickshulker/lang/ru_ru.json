@@ -1,5 +1,6 @@
 {
-  "key.categories.quickshulker": "Quick Shulker",
+  "key.categories.quickshulker": "Quick Shulker Multi",
+  "key.category.quickshulker.main": "Quick Shulker Multi",
   "key.quickshulker.quickshulker": "Быстро открыть шалкеровый ящик в руке",
   "key.quickshulker.config.category.activation": "Функции",
   "key.quickshulker.config.keybinding": "Горячая клавиша открытия предмета",

@@ -1,5 +1,6 @@
 {
-  "key.categories.quickshulker": "Quick Shulker",
+  "key.categories.quickshulker": "Quick Shulker Multi",
+  "key.category.quickshulker.main": "Quick Shulker Multi",
   "key.quickshulker.quickshulker": "Open held Shulker Box",
   "key.quickshulker.config.category.title": "Quick Shulker Multi Config",
   "key.quickshulker.config.category.activation": "Activation Methods",

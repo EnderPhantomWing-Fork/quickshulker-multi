@@ -1,5 +1,6 @@
 {
-  "key.categories.quickshulker": "Quick Shulker",
+  "key.categories.quickshulker": "Quick Shulker Multi",
+  "key.category.quickshulker.main": "Quick Shulker Multi",
   "key.quickshulker.quickshulker": "손에 든 셜커 상자 빠르게 열기",
   "key.quickshulker.config.category.activation": "기능",
   "key.quickshulker.config.keybinding": "아이템 열기 단축키",
