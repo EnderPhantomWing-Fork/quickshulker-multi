@@ -50,21 +50,6 @@ jobs:
           BUILD_ID: ${{ github.run_number }}
           BUILD_RELEASE: ${{ inputs.release }}
 
-      - name: Upload artifacts (with a file structure)
-        uses: actions/upload-artifact@v6
-        with:
-          name: build-artifacts
-          path: versions/*/build/libs/
-
-      - name: Collect all jars
-        run: |
-          shopt -s extglob
-          mkdir all-jars
-          for jar in versions/*/build/libs/*.jar; do
-              cp -p "$jar" all-jars/
-          done
-          ls -l all-jars
-
       - name: Collect mod jars
         run: |
           shopt -s extglob
@@ -74,16 +59,10 @@ jobs:
           done
           ls -l mod-jars
 
-      - name: Upload all jars
-        uses: actions/upload-artifact@v4
-        with:
-          name: quickshulker-all-${{ env.COMMIT_HASH }}
-          path: all-jars/*.jar
-
       - name: Upload mod jars
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
-          name: quickshulker-mod-${{ env.COMMIT_HASH }}
+          name: quickshulker-${{ env.COMMIT_HASH }}
           path: mod-jars/*.jar
 
   summary:
