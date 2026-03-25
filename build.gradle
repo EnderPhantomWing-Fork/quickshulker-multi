@@ -66,3 +66,6 @@ tasks.register('buildAndGather') {
 		}
 	}
 }
+
+// Reinforced Shulker Boxes
+// https://github.com/EnderPhantomWing/quickshulker-multi/commit/57023fb12d3472ada4d84de93e59ebec083a4bd0

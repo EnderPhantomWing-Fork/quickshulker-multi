@@ -11,7 +11,7 @@
 package net.kyrptonaught.quickshulker.compat.reinfshulker;
 
 //TODO: 等待Reinforced Shulker Box更新
-//#if MC >= 1.21.11
+//#if MC >= 26.1
 //#else
 import atonkish.reinfcore.screen.ReinforcedStorageScreenHandler;
 import atonkish.reinfcore.util.ReinforcingMaterial;
@@ -34,7 +34,7 @@ import java.util.function.BiConsumer;
 
 public class ReinfshulkerOpenableRegistry {
 
-    //#if MC >= 1.21.11
+    //#if MC >= 26.1
     //#else
     private static final BiConsumer<Player, ItemStack> REINFORCED_SHULKER_BOX_CONSUMER = (Player player, ItemStack stack) -> {
         ReinforcedShulkerBoxBlock block = (ReinforcedShulkerBoxBlock) ((BlockItem) stack.getItem()).getBlock();

@@ -150,9 +150,9 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                             //#endif
                     .register();
 
-        //#if MC >= 1.21.11
+        //#if MC >= 26.1
         //#else
-        if(ModUtils.isModLoad(ModIds.reinfshulker) && QuickShulkerMod.getConfig().quickShulkerBox) {
+        if (ModUtils.isModLoad(ModIds.reinfshulker) && QuickShulkerMod.getConfig().quickShulkerBox) {
             ReinfshulkerOpenableRegistry.registerProviders();
         }
         //#endif

@@ -10,7 +10,7 @@
 
 package net.kyrptonaught.quickshulker.mixin.compat.reinfshulker;
 
-//#if MC >= 1.21.11
+//#if MC >= 26.1
 //$$ import net.minecraft.server.MinecraftServer;
 //$$ import org.spongepowered.asm.mixin.Mixin;
 //$$ import org.spongepowered.asm.mixin.injection.At;
@@ -21,7 +21,7 @@ package net.kyrptonaught.quickshulker.mixin.compat.reinfshulker;
 //$$ public abstract class ReinforcingMaterialSettingsMixin {
 //$$     @Inject(method = "runServer", at = @At("HEAD"))
 //$$     private void onRun(CallbackInfo ci) {
-//$$         System.err.println("1.21.11+ Reinforced Shulker Box is not yet supported.<2>");
+//$$         System.err.println("26.1+ Reinforced Shulker Box is not yet supported.");
 //$$     }
 //$$ }
 //#else
