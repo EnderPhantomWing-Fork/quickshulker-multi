@@ -25,7 +25,7 @@ jobs:
           distribution: 'temurin'
           java-version: '25'
 
-      - name: Cache Gradle dependencies (public caches)
+      - name: Cache Gradle dependencies
         uses: actions/cache@v5
         with:
           path: |
@@ -33,9 +33,10 @@ jobs:
             ~/.gradle/wrapper
             ./.gradle
           # 固定缓存键（公共缓存），不依赖文件哈希
-          key: ${{ runner.os }}-gradle-common
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           # 恢复键与主键一致，确保优先使用公共缓存
           restore-keys: |
+            ${{ runner.os }}-gradle-
             ${{ runner.os }}-gradle-
 
       - name: Make Gradle wrapper executable
