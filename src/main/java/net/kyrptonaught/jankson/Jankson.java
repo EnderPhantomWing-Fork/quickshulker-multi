@@ -54,25 +54,13 @@ public class Jankson {
 
     private int retries = 0;
     private SyntaxError delayedError = null;
+    private AnnotatedElement rootElement;
 
     private Jankson(Builder builder) {
     }
 
-    @Nonnull
-    public JsonObject load(String s) throws SyntaxError {
-        ByteArrayInputStream in = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
-        try {
-            return load(in);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex); //ByteArrayInputStream never throws
-        }
-    }
-
-    @Nonnull
-    public JsonObject load(File f) throws IOException, SyntaxError {
-        try (InputStream in = new FileInputStream(f)) {
-            return load(in);
-        }
+    public static Builder builder() {
+        return new Builder();
     }
 	
 	/*
@@ -139,6 +127,23 @@ public class Jankson {
 		//we know it's 0b10xx_xxxx down here, so it's an orphaned low surrogate.
 		return BAD_CHARACTER;
 	}*/
+
+    @Nonnull
+    public JsonObject load(String s) throws SyntaxError {
+        ByteArrayInputStream in = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
+        try {
+            return load(in);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex); //ByteArrayInputStream never throws
+        }
+    }
+
+    @Nonnull
+    public JsonObject load(File f) throws IOException, SyntaxError {
+        try (InputStream in = new FileInputStream(f)) {
+            return load(in);
+        }
+    }
 
     @Nonnull
     public JsonObject load(InputStream in) throws IOException, SyntaxError {
@@ -214,8 +219,6 @@ public class Jankson {
             return loadElement(in);
         }
     }
-
-    private AnnotatedElement rootElement;
 
     /**
      * Experimental: Parses the supplied InputStream as a JsonElement, which may or may not be an object at the root level
@@ -361,7 +364,6 @@ public class Jankson {
         }
     }
 
-
     /**
      * Pushes a context onto the stack. MAY ONLY BE CALLED BY THE ACTIVE CONTEXT
      */
@@ -376,8 +378,9 @@ public class Jankson {
         return marshaller;
     }
 
-    public static Builder builder() {
-        return new Builder();
+    public void throwDelayed(SyntaxError syntaxError) {
+        syntaxError.setEndParsing(line, column);
+        delayedError = syntaxError;
     }
 
     public static class Builder {
@@ -500,10 +503,5 @@ public class Jankson {
         public void supply() throws SyntaxError {
             consumer.accept(context.getResult());
         }
-    }
-
-    public void throwDelayed(SyntaxError syntaxError) {
-        syntaxError.setEndParsing(line, column);
-        delayedError = syntaxError;
     }
 }

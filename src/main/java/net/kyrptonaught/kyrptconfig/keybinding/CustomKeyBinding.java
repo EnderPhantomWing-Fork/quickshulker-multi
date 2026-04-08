@@ -21,12 +21,13 @@ import org.lwjgl.glfw.GLFW;
 import java.util.Optional;
 
 public class CustomKeyBinding implements CustomSerializable {
+    private final String MOD_ID;
     public boolean unknownIsActivated = false;
     public String rawKey = "";
     public String defaultKey = "";
     public InputConstants.Key parsedKey;
     public boolean doParseKey = true;
-    private final String MOD_ID;
+    boolean holding = false;
 
     public CustomKeyBinding(String MOD_ID) {
         this.MOD_ID = MOD_ID;
@@ -49,8 +50,6 @@ public class CustomKeyBinding implements CustomSerializable {
         holding = false;
         return this;
     }
-
-    boolean holding = false;
 
     public boolean wasPressed() {
         boolean pressed = isKeybindPressed();

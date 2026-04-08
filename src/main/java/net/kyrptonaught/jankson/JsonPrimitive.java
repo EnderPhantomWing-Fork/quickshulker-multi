@@ -80,6 +80,42 @@ public class JsonPrimitive extends JsonElement {
         }
     }
 
+    public static JsonPrimitive of(@Nonnull String s) {
+        JsonPrimitive result = new JsonPrimitive();
+        result.value = s;
+        return result;
+    }
+
+    public static JsonPrimitive of(@Nonnull BigInteger n) {
+        JsonPrimitive result = new JsonPrimitive();
+        result.value = n.toString(16);
+        return result;
+    }
+
+    public static JsonPrimitive of(@Nonnull BigDecimal n) {
+        JsonPrimitive result = new JsonPrimitive();
+        result.value = n.toString(); //Appropriate for `new BigDecimal(s)`
+        return result;
+    }
+
+    public static JsonPrimitive of(@Nonnull Double d) {
+        JsonPrimitive result = new JsonPrimitive();
+        result.value = d;
+        return result;
+    }
+
+    public static JsonPrimitive of(@Nonnull Long l) {
+        JsonPrimitive result = new JsonPrimitive();
+        result.value = l;
+        return result;
+    }
+
+    public static JsonPrimitive of(@Nonnull Boolean b) {
+        JsonPrimitive result = new JsonPrimitive();
+        result.value = b;
+        return result;
+    }
+
     @Nonnull
     public String asString() {
         if (value == null) return "null";
@@ -252,42 +288,6 @@ public class JsonPrimitive extends JsonElement {
     public JsonPrimitive clone() {
         JsonPrimitive result = new JsonPrimitive();
         result.value = this.value;
-        return result;
-    }
-
-    public static JsonPrimitive of(@Nonnull String s) {
-        JsonPrimitive result = new JsonPrimitive();
-        result.value = s;
-        return result;
-    }
-
-    public static JsonPrimitive of(@Nonnull BigInteger n) {
-        JsonPrimitive result = new JsonPrimitive();
-        result.value = n.toString(16);
-        return result;
-    }
-
-    public static JsonPrimitive of(@Nonnull BigDecimal n) {
-        JsonPrimitive result = new JsonPrimitive();
-        result.value = n.toString(); //Appropriate for `new BigDecimal(s)`
-        return result;
-    }
-
-    public static JsonPrimitive of(@Nonnull Double d) {
-        JsonPrimitive result = new JsonPrimitive();
-        result.value = d;
-        return result;
-    }
-
-    public static JsonPrimitive of(@Nonnull Long l) {
-        JsonPrimitive result = new JsonPrimitive();
-        result.value = l;
-        return result;
-    }
-
-    public static JsonPrimitive of(@Nonnull Boolean b) {
-        JsonPrimitive result = new JsonPrimitive();
-        result.value = b;
         return result;
     }
 }

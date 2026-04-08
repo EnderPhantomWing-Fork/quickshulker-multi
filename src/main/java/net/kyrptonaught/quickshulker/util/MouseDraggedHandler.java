@@ -38,22 +38,23 @@ import net.minecraft.world.inventory.ClickType;
 import java.util.Set;
 
 public class MouseDraggedHandler {
-    private static DragMode dragMode;
     private static final Set<Slot> DRAGGED_SLOTS = Sets.<Slot>newHashSet();
+    private static DragMode dragMode;
 
-    public static boolean canInsertIntoContainer(Player player, ItemStack hostStack, ItemStack insertStack){
+    public static boolean canInsertIntoContainer(Player player, ItemStack hostStack, ItemStack insertStack) {
         Container inv = Util.getQuickItemInventory(player, hostStack);
-        if(inv == null) return false;
-        for(int i = inv.getContainerSize() - 1; i >= 0; i--){
+        if (inv == null) return false;
+        for (int i = inv.getContainerSize() - 1; i >= 0; i--) {
             ItemStack pickStack = inv.getItem(i);
-            if(pickStack.isEmpty() || (ItemStack.isSameItemSameComponents(pickStack, insertStack) && pickStack.getCount() < pickStack.getMaxStackSize())) return true;
+            if (pickStack.isEmpty() || (ItemStack.isSameItemSameComponents(pickStack, insertStack) && pickStack.getCount() < pickStack.getMaxStackSize()))
+                return true;
         }
         return false;
     }
 
-    public static boolean isContainerEmpty(Player player, ItemStack hostStack){
+    public static boolean isContainerEmpty(Player player, ItemStack hostStack) {
         Container inv = Util.getQuickItemInventory(player, hostStack);
-        if(inv != null){
+        if (inv != null) {
             return inv.isEmpty();
         }
         return true;
@@ -62,23 +63,23 @@ public class MouseDraggedHandler {
     //#if MC >= 1.21.10
     //$$ public static boolean beforeMouseClick(AbstractContainerScreen<?> screen, MouseButtonEvent click){
     //#else
-    public static boolean beforeMouseClick(AbstractContainerScreen<?> screen, double mouseX, double mouseY, int button){
+    public static boolean beforeMouseClick(AbstractContainerScreen<?> screen, double mouseX, double mouseY, int button) {
     //#endif
-        if(!QuickShulkerMod.getConfig().supportsMouseDragged) return false;
+        if (!QuickShulkerMod.getConfig().supportsMouseDragged) return false;
         //#if MC >= 1.21.10
         //$$ Slot slot = ((AbstractContainerScreenInvoker) screen).QS$getSlotAt(click.x(), click.y());
         //$$ if(slot != null && click.button() == 1){
         //#else
         Slot slot = ((AbstractContainerScreenInvoker) screen).QS$getSlotAt(mouseX, mouseY);
-        if(slot != null && button == 1){
+        if (slot != null && button == 1) {
         //#endif
             Minecraft client = ((ScreenAccessor) screen).getClient();
-            ItemStack itemStack  = screen.getMenu().getCarried();
+            ItemStack itemStack = screen.getMenu().getCarried();
             Container inv = Util.getQuickItemInventory(client.player, itemStack);
-            if(inv == null) return false;
-            if(slot.hasItem()){
+            if (inv == null) return false;
+            if (slot.hasItem()) {
                 dragMode = DragMode.BUNDLE;
-            }else{
+            } else {
                 dragMode = DragMode.UNBUNDLE;
             }
             DRAGGED_SLOTS.clear();
@@ -90,18 +91,18 @@ public class MouseDraggedHandler {
     //#if MC >= 1.21.10
     //$$ public static boolean beforeMouseDragged(AbstractContainerScreen<?> screen, MouseButtonEvent click){
     //#else
-    public static boolean beforeMouseDragged(AbstractContainerScreen<?> screen, double mouseX, double mouseY, int button){
+    public static boolean beforeMouseDragged(AbstractContainerScreen<?> screen, double mouseX, double mouseY, int button) {
     //#endif
-        if(!QuickShulkerMod.getConfig().supportsMouseDragged) return false;
+        if (!QuickShulkerMod.getConfig().supportsMouseDragged) return false;
         boolean result = false;
-        if(dragMode != null){
+        if (dragMode != null) {
             Minecraft client = ((ScreenAccessor) screen).getClient();
             AbstractContainerMenu handler = screen.getMenu();
             ItemStack itemStack = handler.getCarried();
             //#if MC >= 1.21.10
             //$$ if(click.button() != 1){
             //#else
-            if(button != 1){
+            if (button != 1) {
             //#endif
                 dragMode = null;
                 DRAGGED_SLOTS.clear();
@@ -112,9 +113,9 @@ public class MouseDraggedHandler {
             //#else
             Slot slot = ((AbstractContainerScreenInvoker) screen).QS$getSlotAt(mouseX, mouseY);
             //#endif
-            if(slot != null && (handler.canDragTo(slot) || slot.mayPickup(client.player))) {
-                if(dragMode == DragMode.BUNDLE){
-                    if(slot.hasItem() && canInsertIntoContainer(client.player, itemStack, slot.getItem()) && !ShulkerUtils.isShulkerItem(slot.getItem()) && !DRAGGED_SLOTS.contains(slot)){
+            if (slot != null && (handler.canDragTo(slot) || slot.mayPickup(client.player))) {
+                if (dragMode == DragMode.BUNDLE) {
+                    if (slot.hasItem() && canInsertIntoContainer(client.player, itemStack, slot.getItem()) && !ShulkerUtils.isShulkerItem(slot.getItem()) && !DRAGGED_SLOTS.contains(slot)) {
                         DRAGGED_SLOTS.add(slot);
                         //#if MC >= 26.1
                         //$$ ((AbstractContainerScreenInvoker) screen).QS$onMouseClick(slot, slot.index, click.button(), ContainerInput.PICKUP);
@@ -125,8 +126,8 @@ public class MouseDraggedHandler {
                         //#endif
                         result = true;
                     }
-                }else{
-                    if(!slot.hasItem() && !isContainerEmpty(client.player, itemStack) && !DRAGGED_SLOTS.contains(slot)){
+                } else {
+                    if (!slot.hasItem() && !isContainerEmpty(client.player, itemStack) && !DRAGGED_SLOTS.contains(slot)) {
                         DRAGGED_SLOTS.add(slot);
                         //#if MC >= 26.1
                         //$$ ((AbstractContainerScreenInvoker) screen).QS$onMouseClick(slot, slot.index, click.button(), ContainerInput.PICKUP);
@@ -146,15 +147,15 @@ public class MouseDraggedHandler {
     //#if MC >= 1.21.10
     //$$ public static boolean beforeMouseReleased(AbstractContainerScreen<?> screen, MouseButtonEvent click){
     //#else
-    public static boolean beforeMouseReleased(AbstractContainerScreen<?> screen, double mouseX, double mouseY, int button){
+    public static boolean beforeMouseReleased(AbstractContainerScreen<?> screen, double mouseX, double mouseY, int button) {
     //#endif
-        if(!QuickShulkerMod.getConfig().supportsMouseDragged) return false;
-        if(dragMode != null){
+        if (!QuickShulkerMod.getConfig().supportsMouseDragged) return false;
+        if (dragMode != null) {
             dragMode = null;
             //#if MC >= 1.21.10
             //$$ if(click.button() == 1 && !DRAGGED_SLOTS.isEmpty()){
             //#else
-            if(button == 1 && !DRAGGED_SLOTS.isEmpty()){
+            if (button == 1 && !DRAGGED_SLOTS.isEmpty()) {
             //#endif
                 DRAGGED_SLOTS.clear();
                 return true;
@@ -163,16 +164,16 @@ public class MouseDraggedHandler {
         return false;
     }
 
-    public static void beforeDrawForeground(AbstractContainerScreen<?> screen, GuiGraphics context, int mouseX, int mouseY){
+    public static void beforeDrawForeground(AbstractContainerScreen<?> screen, GuiGraphics context, int mouseX, int mouseY) {
         AbstractContainerMenu handler = screen.getMenu();
-        for(Slot slot : handler.slots){
-            if(DRAGGED_SLOTS.contains(slot)){
+        for (Slot slot : handler.slots) {
+            if (DRAGGED_SLOTS.contains(slot)) {
                 context.fill(slot.x, slot.y, slot.x + 16, slot.y + 16, 0x80FFFFFF);
             }
         }
     }
 
-    private enum DragMode{
+    private enum DragMode {
         BUNDLE,
         UNBUNDLE
     }

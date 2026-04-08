@@ -41,9 +41,9 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
      * This pattern matches JsonObject keys that are permitted to appear unquoted
      */
     private static final Predicate<String> CAN_BE_UNQUOTED = Pattern.compile("^[a-zA-Z0-9]+$").asPredicate();
+    private final List<Entry> entries = new ArrayList<>();
     @SuppressWarnings("deprecation")
     protected Marshaller marshaller = MarshallerImpl.getFallback();
-    private final List<Entry> entries = new ArrayList<>();
 
     /**
      * If there is an entry at this key, and that entry is a json object, return it. Otherwise returns null.
@@ -305,12 +305,12 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
         return entries.hashCode();
     }
 
-    public void setMarshaller(Marshaller marshaller) {
-        this.marshaller = marshaller;
-    }
-
     public Marshaller getMarshaller() {
         return this.marshaller;
+    }
+
+    public void setMarshaller(Marshaller marshaller) {
+        this.marshaller = marshaller;
     }
 
     @Nullable
@@ -467,40 +467,6 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
         throw new IllegalArgumentException("Cannot get from broken key '" + key + "'");
     }
 
-
-    private static final class Entry {
-        private String comment;
-        private String key;
-        private JsonElement value;
-
-        @Override
-        public boolean equals(Object other) {
-            if (other == null || !(other instanceof Entry o)) return false;
-            if (!Objects.equals(comment, o.comment)) return false;
-            if (!key.equals(o.key)) return false;
-            return value.equals(o.value);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(comment, key, value);
-        }
-
-        public String getComment() {
-            return this.comment;
-        }
-
-        public void setComment(String comment) {
-            if (comment != null && !comment.trim().isEmpty()) {
-                this.comment = comment;
-            } else {
-                this.comment = null;
-            }
-        }
-    }
-
-    //implements Cloneable {
-
     @Override
     public JsonObject clone() {
         JsonObject result = new JsonObject();
@@ -511,9 +477,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
         return result;
     }
 
-    //}
-
-    //implements Map<JsonElement> {
+    //implements Cloneable {
 
     /**
      * Replaces a key-value mapping in this object if it exists, or adds the mapping to the end of the object if it
@@ -537,6 +501,10 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
         entries.add(entry);
         return null;
     }
+
+    //}
+
+    //implements Map<JsonElement> {
 
     @Override
     public void clear() {
@@ -664,6 +632,37 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
             values.add(entry.value);
         }
         return values;
+    }
+
+    private static final class Entry {
+        private String comment;
+        private String key;
+        private JsonElement value;
+
+        @Override
+        public boolean equals(Object other) {
+            if (other == null || !(other instanceof Entry o)) return false;
+            if (!Objects.equals(comment, o.comment)) return false;
+            if (!key.equals(o.key)) return false;
+            return value.equals(o.value);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(comment, key, value);
+        }
+
+        public String getComment() {
+            return this.comment;
+        }
+
+        public void setComment(String comment) {
+            if (comment != null && !comment.trim().isEmpty()) {
+                this.comment = comment;
+            } else {
+                this.comment = null;
+            }
+        }
     }
     //}
 }

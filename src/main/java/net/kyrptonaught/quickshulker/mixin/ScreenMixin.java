@@ -46,7 +46,8 @@ public abstract class ScreenMixin {
     @Final
     protected AbstractContainerMenu menu;
 
-    @Shadow private boolean skipNextRelease;
+    @Shadow
+    private boolean skipNextRelease;
 
     @Inject(method = "init", at = @At("TAIL"))
     private void fixMouse(CallbackInfo ci) {
@@ -70,7 +71,7 @@ public abstract class ScreenMixin {
     private void QS$keyPressed(int keyCode, int scanCode, int modifiers, CallbackInfoReturnable<Boolean> cir) {
         if (QuickShulkerMod.getConfig().keybingInInv) {
             if (QuickShulkerModClient.getKeybinding().matches(keyCode, InputConstants.Type.KEYSYM)) {
-    //#endif
+                //#endif
                 if (handleTrigger())
                     cir.setReturnValue(true);
             }

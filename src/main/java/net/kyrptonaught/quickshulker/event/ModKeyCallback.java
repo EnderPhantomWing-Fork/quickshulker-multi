@@ -20,10 +20,10 @@ import net.minecraft.world.entity.player.Player;
 
 public class ModKeyCallback {
 
-    public static void onKeyPressed(ClientLevel clientWorld){
+    public static void onKeyPressed(ClientLevel clientWorld) {
         Minecraft mc = Minecraft.getInstance();
         ConfigOptions configs = QuickShulkerMod.getConfig();
-        if(configs.openSettingGui.wasPressed()){
+        if (configs.openSettingGui.wasPressed()) {
             //#if MC >= 26.2
             //$$ mc.gui.setScreen(ModConfigMenu.getModConfigMenu(mc.gui.screen()));
             //#else

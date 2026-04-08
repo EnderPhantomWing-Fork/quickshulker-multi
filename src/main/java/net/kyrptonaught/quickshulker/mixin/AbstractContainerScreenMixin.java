@@ -40,10 +40,10 @@ public abstract class AbstractContainerScreenMixin {
     //$$     AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) (Object) this;
     //$$     boolean result = MouseDraggedHandler.beforeMouseClick(screen, click);
     //#else
-    private void QS$mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir){
+    private void QS$mouseClicked(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
         AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) (Object) this;
         boolean result = MouseDraggedHandler.beforeMouseClick(screen, mouseX, mouseY, button);
-    //#endif
+        //#endif
         if (result) {
             cir.setReturnValue(true);
         }
@@ -63,11 +63,11 @@ public abstract class AbstractContainerScreenMixin {
     //$$     AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) (Object) this;
     //$$     boolean result = MouseDraggedHandler.beforeMouseDragged(screen, click);
     //#else
-    private void QS$mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY, CallbackInfoReturnable<Boolean> cir){
+    private void QS$mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY, CallbackInfoReturnable<Boolean> cir) {
         AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) (Object) this;
         boolean result = MouseDraggedHandler.beforeMouseDragged(screen, mouseX, mouseY, button);
-    //#endif
-        if(result){
+        //#endif
+        if (result) {
             cir.setReturnValue(true);
         }
     }
@@ -86,11 +86,11 @@ public abstract class AbstractContainerScreenMixin {
     //$$     AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) (Object) this;
     //$$     boolean result = MouseDraggedHandler.beforeMouseReleased(screen, click);
     //#else
-    private void QS$mouseReleased(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir){
+    private void QS$mouseReleased(double mouseX, double mouseY, int button, CallbackInfoReturnable<Boolean> cir) {
         AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) (Object) this;
         boolean result = MouseDraggedHandler.beforeMouseReleased(screen, mouseX, mouseY, button);
-    //#endif
-        if(result){
+        //#endif
+        if (result) {
             cir.setReturnValue(true);
         }
     }
@@ -113,8 +113,8 @@ public abstract class AbstractContainerScreenMixin {
                     shift = At.Shift.AFTER
             )
     )
-    private void QS$drawForeground(GuiGraphics context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci){
-        AbstractContainerScreen<?> screen  = (AbstractContainerScreen<?>) (Object) this;
+    private void QS$drawForeground(GuiGraphics context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
+        AbstractContainerScreen<?> screen = (AbstractContainerScreen<?>) (Object) this;
         MouseDraggedHandler.beforeDrawForeground(screen, context, mouseX, mouseY);
     }
 }

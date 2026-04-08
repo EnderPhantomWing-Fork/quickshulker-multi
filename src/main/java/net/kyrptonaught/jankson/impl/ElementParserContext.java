@@ -107,7 +107,7 @@ public class ElementParserContext implements ParserContext<AnnotatedElement> {
                             break;
                         default:
                             setResult(it);
-                            //loader.throwDelayed(new SyntaxError("Found unrecognized token '"+it.asString()+"' while looking for a json element of any type."));
+                            //loader.throwDelayed(new SyntaxError("Found unrecognized token '"+it.asString()+"' while looking for a JSON element of any type."));
                             break;
                     }
 				/*
@@ -120,7 +120,7 @@ public class ElementParserContext implements ParserContext<AnnotatedElement> {
 				} else if (it.asString().toLowerCase(Locale.ROOT).equals("infinity")) {
 					setResult(new JsonPrimitive(Double.POSITIVE_INFINITY));
 				} else {
-					loader.throwDelayed(new SyntaxError("Found unrecognized token '"+it.asString()+"' while looking for a json element of any type."));
+					loader.throwDelayed(new SyntaxError("Found unrecognized token '"+it.asString()+"' while looking for a JSON element of any type."));
 				}*/
                 });
                 childActive = true;
@@ -128,10 +128,6 @@ public class ElementParserContext implements ParserContext<AnnotatedElement> {
                 return true;
         }
 
-    }
-
-    public void setResult(JsonElement elem) {
-        result = new AnnotatedElement(elem, comment);
     }
 
     @Override
@@ -148,6 +144,10 @@ public class ElementParserContext implements ParserContext<AnnotatedElement> {
     @Override
     public AnnotatedElement getResult() throws SyntaxError {
         return result;
+    }
+
+    public void setResult(JsonElement elem) {
+        result = new AnnotatedElement(elem, comment);
     }
 
 }

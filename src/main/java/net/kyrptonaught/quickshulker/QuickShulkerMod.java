@@ -55,6 +55,10 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
     public static double lastMouseX, lastMouseY;
     public static Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+    public static ConfigOptions getConfig() {
+        return (ConfigOptions) config.getConfig();
+    }
+
     @Override
     public void onInitialize() {
         config.load();
@@ -97,10 +101,6 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
         FabricLoader.getInstance().getEntrypoints(MOD_ID, RegisterQuickShulker.class).forEach(RegisterQuickShulker::registerProviders);
     }
 
-    public static ConfigOptions getConfig() {
-        return (ConfigOptions) config.getConfig();
-    }
-
     @Override
     public void registerProviders() {
         if (getConfig().quickShulkerBox)
@@ -129,7 +129,7 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                             //$$ new CraftingMenu(i, playerInventory, ContainerLevelAccess.create(player.level(), player.blockPosition())), Component.translatable("container.crafting")))))
                             //#else
                             new CraftingMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.crafting")))))
-                            //#endif
+                    //#endif
                     .register();
 
         if (getConfig().quickStonecutter)
@@ -141,7 +141,7 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                             //$$ new StonecutterMenu(i, playerInventory, ContainerLevelAccess.create(player.level(), player.blockPosition())), Component.translatable("container.stonecutter")))))
                             //#else
                             new StonecutterMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.stonecutter")))))
-                            //#endif
+                    //#endif
                     .register();
 
         //#if MC >= 26.1

@@ -69,17 +69,16 @@ public class JsonGrammar {
     protected boolean bareRootObject = false;
     protected boolean printUnquotedKeys = false;
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public boolean hasComments() {
         return comments;
     }
 
     public boolean shouldOutputWhitespace() {
         return printWhitespace;
-    }
-
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder {

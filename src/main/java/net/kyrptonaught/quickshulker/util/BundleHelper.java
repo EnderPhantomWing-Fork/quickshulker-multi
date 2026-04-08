@@ -13,6 +13,7 @@ package net.kyrptonaught.quickshulker.util;
 //#if MC >= 26.1
 //$$ import net.fabricmc.fabric.api.transfer.v1.item.ContainerStorage;
 //#else
+
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 //#endif
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -36,13 +37,13 @@ public class BundleHelper {
 
     public static boolean shouldAttemptUnBundle(Player player, ClickAction clickType, ItemStack hostStack, ItemStack insertStack, boolean enabledInConfig) {
         Container stackInv = Util.getQuickItemInventory(player, hostStack);
-        if(stackInv != null){
+        if (stackInv != null) {
             return (enabledInConfig && clickType == ClickAction.SECONDARY && hostStack.getCount() == 1 && !stackInv.isEmpty() && insertStack.isEmpty());
         }
         return false;
     }
 
-    public static boolean shouldAttemptTransfer(Player player, ClickAction clickType, ItemStack hostStack, ItemStack insertStack, boolean enabledInConfig){
+    public static boolean shouldAttemptTransfer(Player player, ClickAction clickType, ItemStack hostStack, ItemStack insertStack, boolean enabledInConfig) {
         return enabledInConfig && clickType == ClickAction.SECONDARY && ShulkerUtils.isShulkerItem(hostStack) && hostStack.getCount() == 1 && Util.getQuickItemInventory(player, hostStack) != null && isAcceptedTransferItem(player, insertStack);
     }
 
@@ -59,8 +60,8 @@ public class BundleHelper {
             cir.setReturnValue(true);
     }
 
-    public static void bundleItemIntoStack(Player player, ItemStack hostStack, ItemStack insertStack, Slot slot, CallbackInfoReturnable<Boolean> cir){
-        if(bundleItem(player, hostStack, insertStack, slot) != null && cir != null){
+    public static void bundleItemIntoStack(Player player, ItemStack hostStack, ItemStack insertStack, Slot slot, CallbackInfoReturnable<Boolean> cir) {
+        if (bundleItem(player, hostStack, insertStack, slot) != null && cir != null) {
             cir.setReturnValue(true);
         }
     }
@@ -73,10 +74,10 @@ public class BundleHelper {
         }
     }
 
-    public static void transferItemsToShulker(Player player, ItemStack hostStack, ItemStack insertStack, CallbackInfoReturnable<Boolean> cir){
+    public static void transferItemsToShulker(Player player, ItemStack hostStack, ItemStack insertStack, CallbackInfoReturnable<Boolean> cir) {
         SimpleContainer source = (SimpleContainer) Util.getQuickItemInventory(player, insertStack);
         SimpleContainer target = (SimpleContainer) Util.getQuickItemInventory(player, hostStack);
-        if(source != null && target != null) {
+        if (source != null && target != null) {
             int temp = 0;
             for (int i = source.getContainerSize() - 1; i >= 0; i--) {
                 ItemStack stack = source.getItem(i);
@@ -86,7 +87,7 @@ public class BundleHelper {
                     temp++;
                 }
             }
-            if(temp > 0 && cir != null){
+            if (temp > 0 && cir != null) {
                 target.stopOpen(player);
                 source.stopOpen(player);
                 cir.setReturnValue(true);
@@ -127,7 +128,7 @@ public class BundleHelper {
     private static ItemStack bundleItem(Player player, ItemStack hostStack, ItemStack insertStack) {
         Container bundlingInv = Util.getQuickItemInventory(player, hostStack);
         int amount = insertIntoInv(bundlingInv, player, hostStack, insertStack);
-        if(amount != 0){
+        if (amount != 0) {
             insertStack.shrink(amount);
             return insertStack;
         }
@@ -135,10 +136,10 @@ public class BundleHelper {
     }
 
     private static ItemStack bundleItem(Player player, ItemStack hostStack, ItemStack insertStack, Slot slot) {
-        if(!slot.mayPickup(player)) return null;
+        if (!slot.mayPickup(player)) return null;
         Container bundlingInv = Util.getQuickItemInventory(player, hostStack);
         int amount = insertIntoInv(bundlingInv, player, hostStack, insertStack);
-        if(amount != 0){
+        if (amount != 0) {
             insertStack = slot.safeTake(amount, insertStack.getCount(), player);
             return insertStack;
         }
@@ -148,7 +149,7 @@ public class BundleHelper {
     private static int insertIntoInv(Container bundlingInv, Player player, ItemStack hostStack, ItemStack insertStack) {
         QuickShulkerData qsdata = QuickOpenableRegistry.getQuickie(hostStack.getItem());
         int amount = 0;
-        if(bundlingInv != null && qsdata.canBundleInsertItem(player, bundlingInv, hostStack, insertStack)){
+        if (bundlingInv != null && qsdata.canBundleInsertItem(player, bundlingInv, hostStack, insertStack)) {
             try (Transaction transaction = Transaction.openOuter()) {
                 //#if MC >= 26.1
                 //$$ amount = (int) ContainerStorage.of(bundlingInv, null).insert(ItemVariant.of(insertStack), insertStack.getCount(), transaction);

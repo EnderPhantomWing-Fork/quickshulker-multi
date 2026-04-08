@@ -248,13 +248,12 @@ public class JsonArray extends JsonElement implements List<JsonElement>, Iterabl
         return marshaller.marshall(clazz, elem);
     }
 
+    public Marshaller getMarshaller() {
+        return this.marshaller;
+    }
 
     public void setMarshaller(Marshaller marshaller) {
         this.marshaller = marshaller;
-    }
-
-    public Marshaller getMarshaller() {
-        return this.marshaller;
     }
 
     //IMPLEMENTATION for Cloneable

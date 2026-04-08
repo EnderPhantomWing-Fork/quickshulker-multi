@@ -27,9 +27,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ConfigSection extends Screen {
 
-    Component title;
     public List<ConfigItem<?>> configs = new CopyOnWriteArrayList<>();
     public NotSuckyButton sectionSelectionBTN;
+    Component title;
     int selectionIndex = 0;
     int scrollOffset = 0;
 
@@ -127,7 +127,7 @@ public class ConfigSection extends Screen {
         for (ConfigItem<?> configItem : configs) {
             configItem.mouseClicked(mouseX, mouseY, button);
         }
-        mouseScrolled(mouseX, mouseY, 0,0); // update scroll if option changes screen size
+        mouseScrolled(mouseX, mouseY, 0, 0); // update scroll if option changes screen size
         return false;
     }
     //#endif

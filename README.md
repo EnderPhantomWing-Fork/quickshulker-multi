@@ -19,6 +19,7 @@ Please choose the appropriate mod for your Minecraft version.
 * [The Newest SNAPSHOT (GitHub Actions)](https://github.com/EnderPhantomWing/quickshulker-multi/actions)
 
 ### Thanks
+
 - [kyrptonaught/quickshulker](https://github.com/kyrptonaught/quickshulker) Mod author
 - [Grayer0113/quickshulker](https://github.com/Grayer0113/quickshulker/tree/1.20) Support MC 1.20.4
 - [Haocen2004/quickshulker](https://github.com/Haocen2004/quickshulker) Support MC 1.20.6 & 1.21(.1)

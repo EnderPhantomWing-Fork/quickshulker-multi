@@ -13,7 +13,6 @@ package net.kyrptonaught.quickshulker.network;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.kyrptonaught.quickshulker.QuickShulkerMod;
 import net.kyrptonaught.quickshulker.util.PacketUtils;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -58,7 +57,8 @@ public class EnderChestS2CSyncPacket {
         public static final StreamCodec<RegistryFriendlyByteBuf, S2CEChestSlotPacket> CODEC = StreamCodec.ofMember(
                 (value, buf) -> {
                     buf.writeInt(value.slotId);
-                    PacketUtils.writeItemStack(buf, value.itemStack);},
+                    PacketUtils.writeItemStack(buf, value.itemStack);
+                },
                 buf -> new S2CEChestSlotPacket(buf.readInt(), PacketUtils.readItemStack(buf)));
 
         public static void send(ServerPlayer player, int slotId, ItemStack itemStack) {

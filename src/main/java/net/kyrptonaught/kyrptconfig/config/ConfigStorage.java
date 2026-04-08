@@ -20,9 +20,9 @@ import java.nio.file.StandardOpenOption;
 
 public class ConfigStorage {
     private final Path saveFile;
-    public AbstractConfigFile config;
     private final AbstractConfigFile defaultConfig;
     private final JsonLoader jsonLoader;
+    public AbstractConfigFile config;
 
     public ConfigStorage(Path fileName, AbstractConfigFile defaultConfig, JsonLoader jsonLoader) {
         this.saveFile = fileName;

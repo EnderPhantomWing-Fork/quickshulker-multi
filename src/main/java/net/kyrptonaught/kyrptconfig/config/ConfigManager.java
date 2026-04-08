@@ -23,8 +23,8 @@ import java.nio.file.Path;
 import java.util.HashMap;
 
 public class ConfigManager {
-    protected JsonLoader JANKSON;
     protected final HashMap<String, ConfigStorage> configs = new HashMap<>();
+    protected JsonLoader JANKSON;
     protected Path dir;
     protected String MOD_ID;
 

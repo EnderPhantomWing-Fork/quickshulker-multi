@@ -46,7 +46,8 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
     private static final StreamCodec<RegistryFriendlyByteBuf, QuickBundlePacket> CODEC = StreamCodec.ofMember(
             (value, buf) -> {
                 buf.writeInt(value.slotId);
-                PacketUtils.writeItemStack(buf, value.stackToBundle);},
+                PacketUtils.writeItemStack(buf, value.stackToBundle);
+            },
             buf -> new QuickBundlePacket(buf.readInt(), PacketUtils.readItemStack(buf)));
 
     public static void registerReceivePacket() {
@@ -127,7 +128,9 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
         private static final Type<UnbundlePacket> QUICK_UNBUNDLE_PACKET_ID = new Type<>(QUICK_UNBUNDLE_PACKET);
         private static final StreamCodec<RegistryFriendlyByteBuf, UnbundlePacket> CODEC = StreamCodec.ofMember(
                 (value, buf) -> {
-                    buf.writeInt(value.slotId); PacketUtils.writeItemStack(buf, value.unbundleStack);},
+                    buf.writeInt(value.slotId);
+                    PacketUtils.writeItemStack(buf, value.unbundleStack);
+                },
                 buf -> new UnbundlePacket(buf.readInt(), PacketUtils.readItemStack(buf)));
 
         public static void registerReceivePacket() {

@@ -22,7 +22,7 @@ import net.minecraft.locale.Language;
 //$$ import net.minecraft.client.input.MouseButtonEvent;
 //#else
 //#endif
-import net.minecraft.ChatFormatting;
+
 //#if MC >= 1.21.2
 //$$ import net.minecraft.util.ARGB;
 //#else
@@ -34,11 +34,11 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public abstract class ConfigItem<T> {
-    private Component fieldTitle;
-    private List<Component> toolTipText;
     protected Consumer<T> saveConsumer, valueUpdatedEvent;
     protected NotSuckyButton resetButton;
     protected T value, defaultValue;
+    private Component fieldTitle;
+    private List<Component> toolTipText;
     private boolean requiresRestart = false;
     private boolean isHidden = false;
 
@@ -64,7 +64,7 @@ public abstract class ConfigItem<T> {
         return this;
     }
 
-    public Component getTitleText(){
+    public Component getTitleText() {
         return fieldTitle;
     }
 
@@ -93,13 +93,13 @@ public abstract class ConfigItem<T> {
         return this;
     }
 
+    public boolean isHidden() {
+        return isHidden;
+    }
+
     public ConfigItem<?> setHidden(boolean hidden) {
         this.isHidden = hidden;
         return this;
-    }
-
-    public boolean isHidden() {
-        return isHidden;
     }
 
     public boolean requiresRestart() {

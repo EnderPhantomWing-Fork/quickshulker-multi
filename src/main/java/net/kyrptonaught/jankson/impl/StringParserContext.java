@@ -33,9 +33,9 @@ import java.util.Locale;
 public class StringParserContext implements ParserContext<JsonPrimitive> {
     private static final String HEX_DIGITS = "0123456789abcdefABCDEF";
     private final int quote;
+    private final StringBuilder builder = new StringBuilder();
     private boolean escape = false;
     private int unicodeUs = 0;
-    private final StringBuilder builder = new StringBuilder();
     private boolean complete = false;
     private String unicodeSequence = "";
 

@@ -21,12 +21,11 @@ import java.util.function.BiFunction;
 
 public class QuickShulkerData {
     public BiConsumer<Player, ItemStack> openConsumer;
-    BiFunction<Player, ItemStack, Container> bundleInvGetter;
-    CanBundleInsertItemFunction canBundleInsertItem;
-
     public boolean supportsBundleing = false;
     public boolean ignoreSingleStackCheck = false;
     public boolean canOpenInHand = true;
+    BiFunction<Player, ItemStack, Container> bundleInvGetter;
+    CanBundleInsertItemFunction canBundleInsertItem;
 
     public QuickShulkerData() {
 

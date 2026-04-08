@@ -19,8 +19,8 @@ import com.mojang.blaze3d.platform.InputConstants;
 import java.util.function.Consumer;
 
 public class DisplayOnlyKeyBind extends KeyMapping {
-    private CustomKeyBinding customKeyBinding;
     private final Consumer<InputConstants.Key> keySet;
+    private CustomKeyBinding customKeyBinding;
 
     //#if MC >= 1.21.10
     //$$ public DisplayOnlyKeyBind(String translationKey, InputConstants.Type type, int code, KeyMapping.Category category) {

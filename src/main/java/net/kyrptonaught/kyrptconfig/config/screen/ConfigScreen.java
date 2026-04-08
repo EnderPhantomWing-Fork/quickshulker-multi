@@ -41,10 +41,10 @@ public class ConfigScreen extends Screen {
 
     int selectedSection = 0;
     List<ConfigSection> sections = new ArrayList<>();
-    private Runnable saveRunnable;
     Screen previousScreen;
-    private NotSuckyButton scrollLeftBTN, scrollRightBTN;
     int horizontalScrollOffset = -1;
+    private Runnable saveRunnable;
+    private NotSuckyButton scrollLeftBTN, scrollRightBTN;
     //#if MC <= 1.20.6
     //$$ private static final ResourceLocation SCROLLER_TEXTURE = ResourceLocation.tryParse("widget/scroller");
     //$$ private static final ResourceLocation OPTIONS_BACKGROUND_TEXTURE = ResourceLocation.tryParse("textures/block/dirt.png");
@@ -286,7 +286,9 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {}
+    public void renderBackground(GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
+    }
+
     //#if MC >= 1.21.6
     //$$ private void renderBackgroundTexture(GuiGraphics context) {
     //$$     context.blit(RenderPipelines.GUI_TEXTURED, OPTIONS_BACKGROUND_TEXTURE, 0, 0, 0, 0, this.width, this.height, 32, 32);
@@ -325,7 +327,7 @@ public class ConfigScreen extends Screen {
     private void drawHeaderAndFooterSeparators(GuiGraphics context) {
         RenderSystem.enableBlend();
         context.blit(Screen.HEADER_SEPARATOR, 0, 55, 0.0f, 0.0f, this.width, 2, 32, 2);
-        context.blit(Screen.FOOTER_SEPARATOR, 0, this.height -30, 0.0f, 0.0f, this.width, 2, 32, 2);
+        context.blit(Screen.FOOTER_SEPARATOR, 0, this.height - 30, 0.0f, 0.0f, this.width, 2, 32, 2);
         RenderSystem.disableBlend();
     }
 

@@ -1,6 +1,6 @@
 name: Bug Report [CN]
 description: 感觉哪里不对劲，可能是个bug。
-labels: []
+labels: [ ]
 body:
   - type: textarea
     id: description

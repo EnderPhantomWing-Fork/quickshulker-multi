@@ -59,13 +59,13 @@ public class KeybindItem extends ConfigItem<String> {
         return Component.literal(str.substring(str.length() - 1).toUpperCase());
     }
 
-    public void updateMessage(){
-        if(!isListening){
+    public void updateMessage() {
+        if (!isListening) {
             duplicate = false;
             MutableComponent mutableText = Component.empty();
-            if(isInvalidKeyValue()) {
+            if (isInvalidKeyValue()) {
                 for (KeyMapping keyBinding : Minecraft.getInstance().options.keyMappings) {
-                    if(KeyBindingRegister.MAIN.equals(keyBinding.getCategory())){
+                    if (KeyBindingRegister.MAIN.equals(keyBinding.getCategory())) {
                         continue;
                     }
                     Component t1 = Component.translatable(keyBinding.getName());
@@ -98,7 +98,7 @@ public class KeybindItem extends ConfigItem<String> {
         }
     }
 
-    private boolean isInvalidKeyValue(){
+    private boolean isInvalidKeyValue() {
         return this.value != null && !this.value.isEmpty() && !this.value.isBlank() && !this.value.equals("key.keyboard.unknown");
     }
 
@@ -158,7 +158,7 @@ public class KeybindItem extends ConfigItem<String> {
 
         keyButton.render(context, mouseX, mouseY, delta);
 
-        if(duplicate){
+        if (duplicate) {
             int m = keyButton.getX() - 6;
             context.fill(m, y, m + 3, keyButton.getBottom(), -65536);
         }

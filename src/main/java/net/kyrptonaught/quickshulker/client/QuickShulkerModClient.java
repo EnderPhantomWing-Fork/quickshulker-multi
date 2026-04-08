@@ -31,6 +31,10 @@ import net.minecraft.world.inventory.PlayerEnderChestContainer;
 @Environment(EnvType.CLIENT)
 public class QuickShulkerModClient implements ClientModInitializer {
 
+    public static CustomKeyBinding getKeybinding() {
+        return QuickShulkerMod.getConfig().keybinding;
+    }
+
     @Override
     public void onInitializeClient() {
         //#if MC >= 26.1
@@ -53,9 +57,5 @@ public class QuickShulkerModClient implements ClientModInitializer {
         }));
 
         FabricLoader.getInstance().getEntrypoints(QuickShulkerMod.MOD_ID + "_client", RegisterQuickShulkerClient.class).forEach(RegisterQuickShulkerClient::registerClient);
-    }
-
-    public static CustomKeyBinding getKeybinding() {
-        return QuickShulkerMod.getConfig().keybinding;
     }
 }

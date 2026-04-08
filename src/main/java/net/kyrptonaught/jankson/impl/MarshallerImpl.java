@@ -46,50 +46,11 @@ import java.util.function.Supplier;
 
 public class MarshallerImpl implements Marshaller {
     private static final MarshallerImpl INSTANCE = new MarshallerImpl();
-
-    public static Marshaller getFallback() {
-        return INSTANCE;
-    }
-
     private final Map<Class<?>, Function<Object, ?>> primitiveMarshallers = new HashMap<>();
-    Map<Class<?>, Function<JsonObject, ?>> typeAdapters = new HashMap<>();
-
     private final Map<Class<?>, BiFunction<Object, Marshaller, JsonElement>> serializers = new HashMap<>();
     private final Map<Class<?>, DeserializerFunctionPool<?>> deserializers = new HashMap<>();
     private final Map<Class<?>, Supplier<?>> typeFactories = new HashMap<>();
-
-    public <T> void register(Class<T> clazz, Function<Object, T> marshaller) {
-        primitiveMarshallers.put(clazz, marshaller);
-    }
-
-    public <T> void registerTypeAdapter(Class<T> clazz, Function<JsonObject, T> adapter) {
-        typeAdapters.put(clazz, adapter);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> void registerSerializer(Class<T> clazz, Function<T, JsonElement> serializer) {
-        serializers.put(clazz, (it, marshaller) -> serializer.apply((T) it));
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> void registerSerializer(Class<T> clazz, BiFunction<T, Marshaller, JsonElement> serializer) {
-        serializers.put(clazz, (BiFunction<Object, Marshaller, JsonElement>) serializer);
-    }
-
-    public <T> void registerTypeFactory(Class<T> clazz, Supplier<T> supplier) {
-        typeFactories.put(clazz, supplier);
-    }
-
-    public <A, B> void registerDeserializer(Class<A> sourceClass, Class<B> targetClass, DeserializerFunction<A, B> function) {
-        @SuppressWarnings("unchecked")
-        DeserializerFunctionPool<B> pool = (DeserializerFunctionPool<B>) deserializers.get(targetClass);
-        if (pool == null) {
-            pool = new DeserializerFunctionPool<B>(targetClass);
-            deserializers.put(targetClass, pool);
-        }
-        pool.registerUnsafe(sourceClass, function);
-    }
-
+    Map<Class<?>, Function<JsonObject, ?>> typeAdapters = new HashMap<>();
     public MarshallerImpl() {
         register(Void.class, (it) -> null);
 
@@ -135,6 +96,42 @@ public class MarshallerImpl implements Marshaller {
         registerSerializer(Float.TYPE, (it) -> new JsonPrimitive(Double.valueOf(it)));
         registerSerializer(Double.TYPE, JsonPrimitive::new);
         registerSerializer(Boolean.TYPE, JsonPrimitive::new);
+    }
+
+    public static Marshaller getFallback() {
+        return INSTANCE;
+    }
+
+    public <T> void register(Class<T> clazz, Function<Object, T> marshaller) {
+        primitiveMarshallers.put(clazz, marshaller);
+    }
+
+    public <T> void registerTypeAdapter(Class<T> clazz, Function<JsonObject, T> adapter) {
+        typeAdapters.put(clazz, adapter);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> void registerSerializer(Class<T> clazz, Function<T, JsonElement> serializer) {
+        serializers.put(clazz, (it, marshaller) -> serializer.apply((T) it));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> void registerSerializer(Class<T> clazz, BiFunction<T, Marshaller, JsonElement> serializer) {
+        serializers.put(clazz, (BiFunction<Object, Marshaller, JsonElement>) serializer);
+    }
+
+    public <T> void registerTypeFactory(Class<T> clazz, Supplier<T> supplier) {
+        typeFactories.put(clazz, supplier);
+    }
+
+    public <A, B> void registerDeserializer(Class<A> sourceClass, Class<B> targetClass, DeserializerFunction<A, B> function) {
+        @SuppressWarnings("unchecked")
+        DeserializerFunctionPool<B> pool = (DeserializerFunctionPool<B>) deserializers.get(targetClass);
+        if (pool == null) {
+            pool = new DeserializerFunctionPool<B>(targetClass);
+            deserializers.put(targetClass, pool);
+        }
+        pool.registerUnsafe(sourceClass, function);
     }
 
     /**

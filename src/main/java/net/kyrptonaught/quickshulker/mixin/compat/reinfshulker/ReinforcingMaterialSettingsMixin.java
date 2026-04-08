@@ -25,6 +25,7 @@ package net.kyrptonaught.quickshulker.mixin.compat.reinfshulker;
 //$$     }
 //$$ }
 //#else
+
 import atonkish.reinfshulker.util.ReinforcingMaterialSettings;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;
 import me.fallenbreath.conditionalmixin.api.annotation.Restriction;
@@ -41,8 +42,8 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class ReinforcingMaterialSettingsMixin {
 
     @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
-    private static Item.Properties itemSettings(Item.Properties itemSettings){
-            return itemSettings.component(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
+    private static Item.Properties itemSettings(Item.Properties itemSettings) {
+        return itemSettings.component(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
     }
 }
 //#endif

@@ -34,7 +34,7 @@ public class KeyBindingRegister {
     public static final String MAIN = "key.categories.quickshulker";
     //#endif
 
-    public static void register(){
+    public static void register() {
         //#if MC >= 26.1
         //$$ KeyMappingHelper.registerKeyMapping(new DisplayOnlyKeyBind(
         //#else

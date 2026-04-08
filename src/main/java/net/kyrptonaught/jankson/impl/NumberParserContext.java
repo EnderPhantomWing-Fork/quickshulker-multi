@@ -31,9 +31,9 @@ import net.kyrptonaught.jankson.api.SyntaxError;
 import java.util.Locale;
 
 public class NumberParserContext implements ParserContext<JsonPrimitive> {
+    private final String acceptedChars = "0123456789.+-eExabcdefInityNn";
     private String numberString = "";
     private boolean complete = false;
-    private final String acceptedChars = "0123456789.+-eExabcdefInityNn";
 
     public NumberParserContext(int firstCodePoint) {
         numberString += (char) firstCodePoint;

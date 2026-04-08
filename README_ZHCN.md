@@ -19,6 +19,7 @@
 * [最新快照 (GitHub Actions)](https://github.com/EnderPhantomWing/quickshulker-multi/actions)
 
 ### 感谢
+
 - [kyrptonaught/quickshulker](https://github.com/kyrptonaught/quickshulker) 模组作者
 - [Grayer0113/quickshulker](https://github.com/Grayer0113/quickshulker/tree/1.20) 支持 MC 1.20.4
 - [Haocen2004/quickshulker](https://github.com/Haocen2004/quickshulker) 支持 MC 1.20.6 和 1.21(.1)

@@ -32,6 +32,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AbstractContainerMenu.class)
 public abstract class ContainerMixin implements ItemInventoryContainer {
 
+    @Shadow
+    @Final
+    public NonNullList<Slot> slots;
     int playerInvSlot = -1;
 
     public int getUsedSlotInPlayerInv() {
@@ -41,10 +44,6 @@ public abstract class ContainerMixin implements ItemInventoryContainer {
     public void setUsedSlot(int playerInvSlotID) {
         this.playerInvSlot = playerInvSlotID;
     }
-
-    @Shadow
-    @Final
-    public NonNullList<Slot> slots;
 
     @Inject(method = "clicked", at = @At("HEAD"), cancellable = true)
     //#if MC >= 26.1

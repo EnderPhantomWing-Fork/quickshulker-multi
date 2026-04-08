@@ -13,6 +13,7 @@ package net.kyrptonaught.quickshulker.compat.reinfshulker;
 //TODO: 等待Reinforced Shulker Box更新
 //#if MC >= 26.1
 //#else
+
 import atonkish.reinfcore.screen.ReinforcedStorageScreenHandler;
 import atonkish.reinfcore.util.ReinforcingMaterial;
 import atonkish.reinfshulker.block.ReinforcedShulkerBoxBlock;

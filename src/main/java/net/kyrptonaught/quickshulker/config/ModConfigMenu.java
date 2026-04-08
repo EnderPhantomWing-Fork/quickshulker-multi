@@ -20,7 +20,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 public class ModConfigMenu {
-    public static Screen getModConfigMenu(Screen screen){
+    public static Screen getModConfigMenu(Screen screen) {
         ConfigOptions options = QuickShulkerMod.getConfig();
 
         ConfigScreen configScreen = new ConfigScreen(screen, Component.translatable("key.quickshulker.config.category.title"));

@@ -25,6 +25,7 @@ package net.kyrptonaught.quickshulker.mixin.compat.reinfshulker;
 //$$     }
 //$$ }
 //#else
+
 import atonkish.reinfcore.util.ReinforcingMaterial;
 import atonkish.reinfshulker.block.ReinforcedShulkerBoxBlock;
 import me.fallenbreath.conditionalmixin.api.annotation.Condition;

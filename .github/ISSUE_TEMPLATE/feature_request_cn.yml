@@ -1,6 +1,6 @@
 name: Feature Request [CN]
 description: 为这个项目提出一个想法
-labels: []
+labels: [ ]
 body:
   - type: textarea
     id: motivation
