@@ -24,11 +24,19 @@ public class ModKeyCallback {
         Minecraft mc = Minecraft.getInstance();
         ConfigOptions configs = QuickShulkerMod.getConfig();
         if(configs.openSettingGui.wasPressed()){
+            //#if MC >= 26.2
+            //$$ mc.gui.setScreen(ModConfigMenu.getModConfigMenu(mc.gui.screen()));
+            //#else
             mc.setScreen(ModConfigMenu.getModConfigMenu(mc.screen));
+            //#endif
         }
         if (configs.keybinding.isKeybindPressed()) {
             Player player = mc.player;
+            //#if MC >= 26.2
+            //$$ if (mc.gui.screen() == null && QuickShulkerMod.getConfig().keybind && player != null && !player.isSpectator()) {
+            //#else
             if (mc.screen == null && QuickShulkerMod.getConfig().keybind && player != null && !player.isSpectator()) {
+            //#endif
                 if (player.getMainHandItem().isEmpty() && !player.getOffhandItem().isEmpty())
                     ClientUtil.CheckAndSend(player.getOffhandItem(), 45);
                 else

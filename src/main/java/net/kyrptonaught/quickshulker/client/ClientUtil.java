@@ -41,7 +41,11 @@ public class ClientUtil {
 
     public static int getSlotId(AbstractContainerMenu handler, Slot slot) {
         if (handler instanceof CreativeModeInventoryScreen.ItemPickerMenu) {
+            //#if MC >= 26.2
+            //$$ if (((CreativeModeInventoryScreen) Minecraft.getInstance().gui.screen()).isInventoryOpen() && slot instanceof CreativeModeInventoryScreen.SlotWrapper) {
+            //#else
             if (((CreativeModeInventoryScreen) Minecraft.getInstance().screen).isInventoryOpen() && slot instanceof CreativeModeInventoryScreen.SlotWrapper) {
+            //#endif
                 return ((CreativeSlotMixin) slot).getTarget().index;
             } else {
                 return slot.index - 9;
@@ -52,7 +56,11 @@ public class ClientUtil {
 
     public static int getPlayerInvSlot(AbstractContainerMenu handler, Slot slot) {
         if (handler instanceof CreativeModeInventoryScreen.ItemPickerMenu) {
+            //#if MC >= 26.2
+            //$$ if (((CreativeModeInventoryScreen) Minecraft.getInstance().gui.screen()).isInventoryOpen() && slot instanceof CreativeModeInventoryScreen.SlotWrapper) {
+            //#else
             if (((CreativeModeInventoryScreen) Minecraft.getInstance().screen).isInventoryOpen() && slot instanceof CreativeModeInventoryScreen.SlotWrapper) {
+            //#endif
                 return ((CreativeSlotMixin) slot).getTarget().getContainerSlot();
             }
         }
