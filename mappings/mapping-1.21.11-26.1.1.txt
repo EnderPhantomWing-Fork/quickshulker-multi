@@ -1,9 +1,15 @@
 net.minecraft.client.gui.GuiGraphics net.minecraft.client.gui.GuiGraphicsExtractor
 net.minecraft.client.gui.GuiGraphics drawString() text()
 net.minecraft.client.gui.GuiGraphics drawCenteredString() text()
+
 net.minecraft.client.gui.screens.Screen renderBackground() extractBackground()
 net.minecraft.client.gui.screens.Screen render() extractRenderState()
+
 net.minecraft.client.gui.components.AbstractButton renderDefaultSprite() extractDefaultSprite()
 net.minecraft.client.gui.components.AbstractButton renderDefaultLabel() extractDefaultLabel()
 net.minecraft.client.gui.components.AbstractWidget render() extractRenderState()
+
+net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry playC2S() serverboundPlay()
+net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry playS2C() clientboundPlay()
+
 net.kyrptonaught.kyrptconfig.config.screen.NotSuckyButton renderContents() extractContents()

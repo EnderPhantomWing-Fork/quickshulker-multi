@@ -20,8 +20,8 @@ import net.kyrptonaught.quickshulker.api.Util;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload.Type;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 //#if MC >= 1.21.11
 //$$ import net.minecraft.resources.Identifier;
 //#endif
@@ -41,13 +41,8 @@ public record OpenShulkerPacket(int invSlot) implements CustomPacketPayload {
     public static final StreamCodec<FriendlyByteBuf, OpenShulkerPacket> CODEC = StreamCodec.ofMember((value, buf) -> buf.writeInt(value.invSlot), buf -> new OpenShulkerPacket(buf.readInt()));
 
     public static void registerReceivePacket() {
-        //#if MC >= 26.1
-        //$$ PayloadTypeRegistry.clientboundPlay().register(OpenShulkerPacket.OPEN_SHULKER_PACKET_ID, OpenShulkerPacket.CODEC);
-        //$$ PayloadTypeRegistry.serverboundPlay().register(OpenShulkerPacket.OPEN_SHULKER_PACKET_ID, OpenShulkerPacket.CODEC);
-        //#else
         PayloadTypeRegistry.playC2S().register(OpenShulkerPacket.OPEN_SHULKER_PACKET_ID, OpenShulkerPacket.CODEC);
         PayloadTypeRegistry.playS2C().register(OpenShulkerPacket.OPEN_SHULKER_PACKET_ID, OpenShulkerPacket.CODEC);
-        //#endif
         ServerPlayNetworking.registerGlobalReceiver(OpenShulkerPacket.OPEN_SHULKER_PACKET_ID, (payload, context) -> context.server().execute(() -> Util.openItem(context.player(), payload.invSlot)));
     }
 
@@ -57,7 +52,7 @@ public record OpenShulkerPacket(int invSlot) implements CustomPacketPayload {
     }
 
     @Override
-    public Type<? extends CustomPacketPayload> type() {
+    public @NotNull Type<? extends CustomPacketPayload> type() {
         return OPEN_SHULKER_PACKET_ID;
     }
 }
