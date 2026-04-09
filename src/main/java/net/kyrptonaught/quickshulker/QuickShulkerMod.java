@@ -26,15 +26,8 @@ import net.kyrptonaught.quickshulker.network.OpenInventoryPacket;
 import net.kyrptonaught.quickshulker.network.OpenShulkerPacket;
 import net.kyrptonaught.quickshulker.network.QuickBundlePacket;
 import net.minecraft.world.SimpleMenuProvider;
-import net.minecraft.world.inventory.ChestMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.CraftingMenu;
-import net.minecraft.world.inventory.ShulkerBoxMenu;
-import net.minecraft.world.inventory.StonecutterMenu;
-import net.minecraft.world.level.block.CraftingTableBlock;
-import net.minecraft.world.level.block.EnderChestBlock;
-import net.minecraft.world.level.block.ShulkerBoxBlock;
-import net.minecraft.world.level.block.StonecutterBlock;
+import net.minecraft.world.inventory.*;
+import net.minecraft.world.level.block.*;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -129,7 +122,7 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                             //$$ new CraftingMenu(i, playerInventory, ContainerLevelAccess.create(player.level(), player.blockPosition())), Component.translatable("container.crafting")))))
                             //#else
                             new CraftingMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.crafting")))))
-                    //#endif
+                            //#endif
                     .register();
 
         if (getConfig().quickStonecutter)
@@ -141,7 +134,19 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                             //$$ new StonecutterMenu(i, playerInventory, ContainerLevelAccess.create(player.level(), player.blockPosition())), Component.translatable("container.stonecutter")))))
                             //#else
                             new StonecutterMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.stonecutter")))))
-                    //#endif
+                            //#endif
+                    .register();
+
+        if (getConfig().quickAnvil)
+            new QuickOpenableRegistry.Builder()
+                    .setItem(AnvilBlock.class)
+                    .ignoreSingleStackCheck(true)
+                    .setOpenAction(((player, stack) -> player.openMenu(new SimpleMenuProvider((i, playerInventory, playerEntity) ->
+                            //#if MC >= 1.21.6
+                            //$$  new AnvilMenu(i, playerInventory, ContainerLevelAccess.create(player.level(), player.blockPosition())), Component.translatable("container.repair")))))
+                            //#else
+                            new AnvilMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.repair")))))
+                            //#endif
                     .register();
 
         //#if MC >= 26.1

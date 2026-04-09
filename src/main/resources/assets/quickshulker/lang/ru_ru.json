@@ -23,6 +23,7 @@
   "key.quickshulker.config.quickCraftingTable": "Включить открытие верстаков",
   "key.quickshulker.config.quickStonecutter": "Включить открытие камнерезов",
   "key.quickshulker.config.quickEChest": "Включить открытие эндер-сундуков",
+  "key.quickshulker.config.quickAnvil": "Включить открытие Наковальня",
   "key.kyrptconfig.config.restartRequired": "Вступит в силу после перезапуска",
   "key.quickshulker.config.savedValue": "Сохранённое значение: %s",
   "key.quickshulker.config.keybindinsConflict": "\nЭта клавиша также используется для: %s",

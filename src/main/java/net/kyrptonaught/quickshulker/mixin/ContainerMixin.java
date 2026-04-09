@@ -24,6 +24,7 @@ import net.minecraft.core.NonNullList;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -35,13 +36,14 @@ public abstract class ContainerMixin implements ItemInventoryContainer {
     @Shadow
     @Final
     public NonNullList<Slot> slots;
+    @Unique
     int playerInvSlot = -1;
 
-    public int getUsedSlotInPlayerInv() {
+    public int QS$getUsedSlotInPlayerInv() {
         return playerInvSlot;
     }
 
-    public void setUsedSlot(int playerInvSlotID) {
+    public void QS$setUsedSlot(int playerInvSlotID) {
         this.playerInvSlot = playerInvSlotID;
     }
 
