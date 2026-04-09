@@ -38,7 +38,7 @@ public class ElementParserContext implements ParserContext<AnnotatedElement> {
     boolean childActive = false;
 
     @Override
-    public boolean consume(int codePoint, Jankson loader) throws SyntaxError {
+    public boolean consume(int codePoint, Jankson loader) {
         //Figure out element type and dispatch down to
 
         if (Character.isWhitespace(codePoint)) return true; //Whitespace
@@ -142,7 +142,7 @@ public class ElementParserContext implements ParserContext<AnnotatedElement> {
     }
 
     @Override
-    public AnnotatedElement getResult() throws SyntaxError {
+    public AnnotatedElement getResult() {
         return result;
     }
 

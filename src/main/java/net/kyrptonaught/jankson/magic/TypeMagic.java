@@ -29,9 +29,12 @@ import net.kyrptonaught.jankson.api.DeserializationException;
 import javax.annotation.Nullable;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TypeMagic {
     private static final Map<Class<?>, Class<?>> concreteClasses = new HashMap<>();
+    private static final Logger logger = Logger.getLogger(TypeMagic.class.getName());
 
     static {
         concreteClasses.put(Map.class, HashMap.class);
@@ -57,17 +60,17 @@ public class TypeMagic {
         if (t instanceof ParameterizedType) {
             Type subtype = ((ParameterizedType) t).getRawType();
 
-            /**
-             * Testing for kind of a unicorn case here. Because getRawType returns a Type, there's always the nasty
-             * possibility we get a recursively parameterized type. Now, that's not supposed to happen, but let's not
-             * rely on "supposed to".
+            /*
+              Testing for kind of unicorn case here. Because getRawType returns a Type, there's always the nasty
+              possibility we get a recursively parameterized type. Now, that's not supposed to happen, but let's not
+              rely on "supposed to".
              */
             if (subtype instanceof Class) {
                 return (Class<?>) subtype;
             } else {
-                /**
-                 * We're here at the unicorn case, against all odds. Let's take a lexical approach: The typeName will
-                 * always start with the FQN of the class, followed by
+                /*
+                  We're here at the unicorn case, against all odds. Let's take a lexical approach: The typeName will
+                  always start with the FQN of the class, followed by
                  */
 
                 String className = t.getTypeName();
@@ -109,9 +112,10 @@ public class TypeMagic {
             Class<?> componentClass = classForType(arrayType.getGenericComponentType());
             try {
                 // We can always retrieve the class under a "dots" version of the binary name, as long as componentClass wound up resolving to a valid Object type
-                Class<?> arrayClass = Class.forName("[L" + componentClass.getCanonicalName() + ";");
 
-                return arrayClass;
+                if (componentClass != null) {
+                    return Class.forName("[L" + componentClass.getCanonicalName() + ";");
+                }
             } catch (ClassNotFoundException ex2) {
                 return Object[].class; //This is probably what we're serving up anyway, so we might as well give the known-at-compile-time one out as a last resort.
             }
@@ -133,14 +137,14 @@ public class TypeMagic {
     @Nullable
     public static <U> U createAndCast(Type t) {
         try {
-            return (U) createAndCast(classForType(t), false);
+            return (U) createAndCast(Objects.requireNonNull(classForType(t)), false);
         } catch (Throwable ex) {
-            ex.printStackTrace();
+            logger.log(Level.SEVERE, "Error in createAndCast for type: " + t, ex);
             return null;
         }
     }
 
-    public static <U> U createAndCastCarefully(Type t) throws DeserializationException {
+    public static <U> U createAndCastCarefully(Type t) {
         return createAndCast(classForType(t));
     }
 
@@ -152,7 +156,6 @@ public class TypeMagic {
      * @param t   the source type. The object will be created as this type.
      * @return a new object of type U. If any part of this process fails, this method silently returns null instead.
      */
-    @SuppressWarnings("unchecked")
     @Nullable
     public static <U> U createAndCast(Class<U> t, boolean failFast) throws DeserializationException {
         if (t.isInterface()) {
@@ -167,7 +170,7 @@ public class TypeMagic {
         /* Using getConstructor instead of class::newInstance takes some errors we can't otherwise detect, and
          * instead wraps them in InvocationTargetExceptions which we *can* catch.
          */
-        Constructor<U> noArg = null;
+        Constructor<U> noArg;
         try {
             noArg = t.getConstructor();
         } catch (Throwable ex2) {

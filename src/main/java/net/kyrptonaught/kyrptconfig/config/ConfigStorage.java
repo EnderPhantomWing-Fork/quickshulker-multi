@@ -17,11 +17,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ConfigStorage {
     private final Path saveFile;
     private final AbstractConfigFile defaultConfig;
     private final JsonLoader jsonLoader;
+    private static final Logger logger = Logger.getLogger(ConfigStorage.class.getName());
     public AbstractConfigFile config;
 
     public ConfigStorage(Path fileName, AbstractConfigFile defaultConfig, JsonLoader jsonLoader) {
@@ -36,7 +39,7 @@ public class ConfigStorage {
             out.write(json);
         } catch (Exception e) {
             System.out.println(getConfigName(MOD_ID, "Failed to save #CONFIG"));
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Failed to save config", e);
         }
     }
 
@@ -52,7 +55,7 @@ public class ConfigStorage {
             config = jsonLoader.loadFromInputStream(in, defaultConfig.getClass());
         } catch (Exception e) {
             failed = true;
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Failed to load config", e);
         }
         if (failed || (config == null)) {
             System.out.println(getConfigName(MOD_ID, "Failed to load #CONFIG! Overwriting with default config"));

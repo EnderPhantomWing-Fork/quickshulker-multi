@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.NotNull;
 
 public class Util {
 
@@ -30,7 +31,7 @@ public class Util {
     }
 
     public static void openItem(Player player, int invSlot, int playerInvIndex) {
-        if (QuickShulkerMod.getConfig().rightClickClose && playerInvIndex == ((ItemInventoryContainer) player.containerMenu).getUsedSlotInPlayerInv()) {
+        if (QuickShulkerMod.getConfig().rightClickClose && playerInvIndex == ((ItemInventoryContainer) player.containerMenu).quickshulker_multi$getUsedSlotInPlayerInv()) {
             ((ServerPlayer) player).closeContainer();
             OpenInventoryPacket.send((ServerPlayer) player);
             return;
@@ -40,7 +41,7 @@ public class Util {
         QuickShulkerData qsData = QuickOpenableRegistry.getQuickie(stack.getItem());
         if (qsData != null) {
             qsData.openConsumer.accept(player, stack);
-            ((ItemInventoryContainer) player.containerMenu).setUsedSlot(playerInvIndex);
+            ((ItemInventoryContainer) player.containerMenu).quickshulker_multi$setUsedSlot(playerInvIndex);
             player.containerMenu.addSlotListener(forceCloseScreenIfNotPresent(player, playerInvIndex, stack));
         }
     }
@@ -75,12 +76,12 @@ public class Util {
     public static ContainerListener forceCloseScreenIfNotPresent(Player player, int slotID, ItemStack stack) {
         return new ContainerListener() {
             @Override
-            public void slotChanged(AbstractContainerMenu handler, int slotId, ItemStack stack) {
+            public void slotChanged(@NotNull AbstractContainerMenu handler, int slotId, @NotNull ItemStack stack) {
                 isValid();
             }
 
             @Override
-            public void dataChanged(AbstractContainerMenu handler, int property, int value) {
+            public void dataChanged(@NotNull AbstractContainerMenu handler, int property, int value) {
                 isValid();
             }
 

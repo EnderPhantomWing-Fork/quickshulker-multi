@@ -12,12 +12,12 @@ package net.kyrptonaught.quickshulker.api;
 
 public interface ItemInventoryContainer {
 
-    int getUsedSlotInPlayerInv();
+    int quickshulker_multi$getUsedSlotInPlayerInv();
 
     default boolean hasItem() {
-        return getUsedSlotInPlayerInv() >= 0;
+        return quickshulker_multi$getUsedSlotInPlayerInv() >= 0;
     }
 
-    void setUsedSlot(int playerInvSlotID);
+    void quickshulker_multi$setUsedSlot(int playerInvSlotID);
 
 }

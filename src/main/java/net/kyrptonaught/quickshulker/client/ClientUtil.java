@@ -44,11 +44,9 @@ public class ClientUtil {
             //#if MC >= 26.2
             //$$ if (((CreativeModeInventoryScreen) Minecraft.getInstance().gui.screen()).isInventoryOpen() && slot instanceof CreativeModeInventoryScreen.SlotWrapper) {
             //#else
-            if (((CreativeModeInventoryScreen) Minecraft.getInstance().screen).isInventoryOpen() && slot instanceof CreativeModeInventoryScreen.SlotWrapper) {
-            //#endif
+            if (Minecraft.getInstance().screen != null && ((CreativeModeInventoryScreen) Minecraft.getInstance().screen).isInventoryOpen() && slot instanceof CreativeModeInventoryScreen.SlotWrapper) {
+                //#endif
                 return ((CreativeSlotMixin) slot).getTarget().index;
-            } else {
-                return slot.index - 9;
             }
         }
         return slot.index;
@@ -59,8 +57,8 @@ public class ClientUtil {
             //#if MC >= 26.2
             //$$ if (((CreativeModeInventoryScreen) Minecraft.getInstance().gui.screen()).isInventoryOpen() && slot instanceof CreativeModeInventoryScreen.SlotWrapper) {
             //#else
-            if (((CreativeModeInventoryScreen) Minecraft.getInstance().screen).isInventoryOpen() && slot instanceof CreativeModeInventoryScreen.SlotWrapper) {
-            //#endif
+            if (Minecraft.getInstance().screen != null && ((CreativeModeInventoryScreen) Minecraft.getInstance().screen).isInventoryOpen() && slot instanceof CreativeModeInventoryScreen.SlotWrapper) {
+                //#endif
                 return ((CreativeSlotMixin) slot).getTarget().getContainerSlot();
             }
         }

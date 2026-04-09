@@ -27,6 +27,7 @@ package net.kyrptonaught.jankson;
 import net.kyrptonaught.jankson.api.Marshaller;
 import net.kyrptonaught.jankson.impl.MarshallerImpl;
 import net.kyrptonaught.jankson.impl.serializer.CommentSerializer;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -42,11 +43,10 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
      */
     private static final Predicate<String> CAN_BE_UNQUOTED = Pattern.compile("^[a-zA-Z0-9]+$").asPredicate();
     private final List<Entry> entries = new ArrayList<>();
-    @SuppressWarnings("deprecation")
     protected Marshaller marshaller = MarshallerImpl.getFallback();
 
     /**
-     * If there is an entry at this key, and that entry is a json object, return it. Otherwise returns null.
+     * If there is an entry at this key, and that entry is a JSON object, return it. Otherwise, returns null.
      */
     @Nullable
     public JsonObject getObject(@Nonnull String name) {
@@ -106,7 +106,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
     }
 
     /**
-     * May return null if the existing object can't be marshalled to elem's class
+     * May return null if the existing object can't be marshaled to elem's class
      */
     @SuppressWarnings("unchecked")
     @Nullable
@@ -115,7 +115,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
     }
 
     /**
-     * May return null if the existing object can't be marshalled to the target class
+     * May return null if the existing object can't be marshaled to the target class
      */
     @Nullable
     public <T> T putDefault(@Nonnull String key, @Nonnull T elem, Class<? extends T> clazz, @Nullable String comment) {
@@ -144,7 +144,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
      *   <li>If a key is an object, a deep (recursive) comparison occurs. Comments are ignored in this comparison.
      *   <li>All other types, including lists, receive a shallow comparison of its value. The comment is ignored in this comparison.
      *   <li>Whether deep or shallow, if the key is found to be identical in value to its default, it is skipped.
-     *   <li>If the key is found to be different than its default, the key, value, and comment are represented in the
+     *   <li>If the key is found to be different from its default, the key, value, and comment are represented in the
      *       output.
      * </ul>
      */
@@ -162,12 +162,10 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
             if (entry.value instanceof JsonObject) {
                 if (defaultValue instanceof JsonObject) {
                     JsonObject subDelta = ((JsonObject) entry.value).getDelta((JsonObject) defaultValue);
-                    if (subDelta.isEmpty()) {
-                        continue;
-                    } else {
+                    if (!subDelta.isEmpty()) {
                         result.put(entry.key, subDelta, entry.getComment());
-                        continue;
                     }
+                    continue;
                 }
             }
 
@@ -219,7 +217,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
         if (!skipBraces) {
             w.append("{");
 
-            if (grammar.printWhitespace && entries.size() > 0) {
+            if (grammar.printWhitespace && !entries.isEmpty()) {
                 w.append('\n');
             } else {
                 w.append(' ');
@@ -265,7 +263,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
         }
 
         if (!skipBraces) {
-            if (entries.size() > 0) {
+            if (!entries.isEmpty()) {
                 if (grammar.printWhitespace) {
                     for (int j = 0; j < effectiveDepth; j++) {
                         w.append("\t");
@@ -286,7 +284,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
 
     @Override
     public boolean equals(Object other) {
-        if (other == null || !(other instanceof JsonObject otherObject)) return false;
+        if (!(other instanceof JsonObject otherObject)) return false;
         if (entries.size() != otherObject.entries.size()) return false;
 
         //Lists are identical sizes, but if the contents, comments, or ordering are at all different, fail them
@@ -325,7 +323,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
 
     public boolean getBoolean(@Nonnull String key, boolean defaultValue) {
         JsonElement elem = get(key);
-        if (elem != null && elem instanceof JsonPrimitive) {
+        if (elem instanceof JsonPrimitive) {
             return ((JsonPrimitive) elem).asBoolean(defaultValue);
         }
         return defaultValue;
@@ -333,7 +331,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
 
     public byte getByte(@Nonnull String key, byte defaultValue) {
         JsonElement elem = get(key);
-        if (elem != null && elem instanceof JsonPrimitive) {
+        if (elem instanceof JsonPrimitive) {
             return ((JsonPrimitive) elem).asByte(defaultValue);
         }
         return defaultValue;
@@ -341,7 +339,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
 
     public char getChar(@Nonnull String key, char defaultValue) {
         JsonElement elem = get(key);
-        if (elem != null && elem instanceof JsonPrimitive) {
+        if (elem instanceof JsonPrimitive) {
             return ((JsonPrimitive) elem).asChar(defaultValue);
         }
         return defaultValue;
@@ -349,7 +347,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
 
     public short getShort(@Nonnull String key, short defaultValue) {
         JsonElement elem = get(key);
-        if (elem != null && elem instanceof JsonPrimitive) {
+        if (elem instanceof JsonPrimitive) {
             return ((JsonPrimitive) elem).asShort(defaultValue);
         }
         return defaultValue;
@@ -357,7 +355,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
 
     public int getInt(@Nonnull String key, int defaultValue) {
         JsonElement elem = get(key);
-        if (elem != null && elem instanceof JsonPrimitive) {
+        if (elem instanceof JsonPrimitive) {
             return ((JsonPrimitive) elem).asInt(defaultValue);
         }
         return defaultValue;
@@ -365,7 +363,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
 
     public long getLong(@Nonnull String key, long defaultValue) {
         JsonElement elem = get(key);
-        if (elem != null && elem instanceof JsonPrimitive) {
+        if (elem instanceof JsonPrimitive) {
             return ((JsonPrimitive) elem).asLong(defaultValue);
         }
         return defaultValue;
@@ -373,7 +371,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
 
     public float getFloat(@Nonnull String key, float defaultValue) {
         JsonElement elem = get(key);
-        if (elem != null && elem instanceof JsonPrimitive) {
+        if (elem instanceof JsonPrimitive) {
             return ((JsonPrimitive) elem).asFloat(defaultValue);
         }
         return defaultValue;
@@ -381,7 +379,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
 
     public double getDouble(@Nonnull String key, double defaultValue) {
         JsonElement elem = get(key);
-        if (elem != null && elem instanceof JsonPrimitive) {
+        if (elem instanceof JsonPrimitive) {
             return ((JsonPrimitive) elem).asDouble(defaultValue);
         }
         return defaultValue;
@@ -407,7 +405,6 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
                 //elem must be a JsonObject or we're sunk
                 if (elem instanceof JsonObject) {
                     cur = (JsonObject) elem;
-                    continue;
                 } else {
                     return null;
                 }
@@ -446,12 +443,10 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
                 //elem must be a JsonObject or we're sunk
                 if (elem instanceof JsonObject) {
                     cur = (JsonObject) elem;
-                    continue;
                 } else {
                     JsonObject replacement = new JsonObject();
                     cur.put(s, replacement);
                     cur = replacement;
-                    continue;
                 }
             } else {
                 if (elem != null && clazz.isAssignableFrom(elem.getClass())) {
@@ -541,10 +536,10 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
      * Creates a semi-live shallow copy instead of a live view
      */
     @Override
-    public Set<Map.Entry<String, JsonElement>> entrySet() {
+    public @NotNull Set<Map.Entry<String, JsonElement>> entrySet() {
         Set<Map.Entry<String, JsonElement>> result = new LinkedHashSet<>();
         for (Entry entry : entries) {
-            result.add(new Map.Entry<String, JsonElement>() {
+            result.add(new Map.Entry<>() {
                 @Override
                 public String getKey() {
                     return entry.key;
@@ -571,7 +566,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
     @Override
     @Nullable
     public JsonElement get(@Nullable Object key) {
-        if (key == null || !(key instanceof String)) return null;
+        if (!(key instanceof String)) return null;
 
         for (Entry entry : entries) {
             if (entry.key.equalsIgnoreCase((String) key)) {
@@ -609,7 +604,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
     @Override
     @Nullable
     public JsonElement remove(@Nullable Object key) {
-        if (key == null || !(key instanceof String)) return null;
+        if (!(key instanceof String)) return null;
 
         for (int i = 0; i < entries.size(); i++) {
             Entry entry = entries.get(i);
@@ -626,7 +621,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
     }
 
     @Override
-    public Collection<JsonElement> values() {
+    public @NotNull Collection<JsonElement> values() {
         List<JsonElement> values = new ArrayList<>();
         for (Entry entry : entries) {
             values.add(entry.value);
@@ -641,7 +636,7 @@ public class JsonObject extends JsonElement implements Map<String, JsonElement> 
 
         @Override
         public boolean equals(Object other) {
-            if (other == null || !(other instanceof Entry o)) return false;
+            if (!(other instanceof Entry o)) return false;
             if (!Objects.equals(comment, o.comment)) return false;
             if (!key.equals(o.key)) return false;
             return value.equals(o.value);

@@ -17,6 +17,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 //#if MC >= 1.21.11
 //$$ import net.minecraft.resources.Identifier;
 //#endif
@@ -39,11 +40,10 @@ public class OpenInventoryPacket implements CustomPacketPayload {
         ServerPlayNetworking.send(player, new OpenInventoryPacket());
     }
 
-    private void write(FriendlyByteBuf buf) {
-    }
+    private void write(FriendlyByteBuf buf) {}
 
     @Override
-    public Type<? extends CustomPacketPayload> type() {
+    public @NotNull Type<? extends CustomPacketPayload> type() {
         return OPEN_INV_ID;
     }
 

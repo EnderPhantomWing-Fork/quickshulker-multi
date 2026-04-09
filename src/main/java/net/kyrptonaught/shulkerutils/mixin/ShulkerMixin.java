@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.Mixin;
 public class ShulkerMixin implements UpgradableShulker {
 
     @Override
-    public int getInventorySize() {
+    public int quickshulker_multi$getInventorySize() {
         return 27;
     }
 

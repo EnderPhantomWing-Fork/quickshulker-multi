@@ -130,7 +130,6 @@ public class StringParserContext implements ParserContext<JsonPrimitive> {
 
             if (codePoint < 0xFFFF) {
                 builder.append((char) codePoint);
-                return true;
             } else {
                 //Construct a high and low surrogate pair for this code point
 
@@ -141,8 +140,8 @@ public class StringParserContext implements ParserContext<JsonPrimitive> {
                 builder.append((char) highSurrogate);
                 builder.append((char) lowSurrogate);
 
-                return true;
             }
+            return true;
         }
     }
 
@@ -150,9 +149,12 @@ public class StringParserContext implements ParserContext<JsonPrimitive> {
         if (unicodeUs > 1) {
             unicodeUs--;
             builder.append("\\");
-            for (int i = 0; i < unicodeUs; i++) builder.append('u');
-            while (unicodeSequence.length() < 4)
-                unicodeSequence = "0" + unicodeSequence; //TODO: THIS IS A QUIRK. CONSIDER THROWING INSTEAD
+            builder.append("u".repeat(unicodeUs));
+            //while (unicodeSequence.length() < 4)
+            //    unicodeSequence = "0" + unicodeSequence; //TODO: THIS IS A QUIRK. CONSIDER THROWING INSTEAD
+            if (unicodeSequence.length() < 4) {
+                unicodeSequence = "0".repeat(4 - unicodeSequence.length()) + unicodeSequence;
+            }
             builder.append(unicodeSequence.toLowerCase(Locale.ROOT));
         } else {
             //we unbox and cast all the way from Long to int because parseInt has some problems with the top bit being set
