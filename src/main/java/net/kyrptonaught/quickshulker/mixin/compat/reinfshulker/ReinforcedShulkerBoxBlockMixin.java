@@ -43,7 +43,7 @@ public abstract class ReinforcedShulkerBoxBlockMixin implements UpgradableShulke
     public abstract ReinforcingMaterial getMaterial();
 
     @Override
-    public int getInventorySize() {
+    public int QS$getInventorySize() {
         return this.getMaterial().getSize();
     }
 }
