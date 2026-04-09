@@ -24,6 +24,7 @@
   "key.quickshulker.config.quickStonecutter": "Enable opening Stonecutter",
   "key.quickshulker.config.quickEChest": "Enable opening EnderChest",
   "key.quickshulker.config.quickAnvil": "Enable opening Anvil",
+  "key.quickshulker.config.quickGrindstone": "Enable opening Grindstone",
   "key.kyrptconfig.config.restartRequired": "Restart is Required",
   "key.quickshulker.config.savedValue": "Saved Value: %s",
   "key.quickshulker.config.keybindinsConflict": "\nThis key is also used for: %s",

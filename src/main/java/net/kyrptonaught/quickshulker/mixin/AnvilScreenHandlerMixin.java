@@ -22,31 +22,31 @@ import java.util.function.BiConsumer;
 
 @Mixin(AnvilMenu.class)
 public abstract class AnvilScreenHandlerMixin {
-
-    @WrapOperation(method = "onTake", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/ContainerLevelAccess;execute(Ljava/util/function/BiConsumer;)V"))
-    public void QS$execute(ContainerLevelAccess instance, BiConsumer<Level, BlockPos> biConsumer, Operation<Void> original) {
-        if(instance instanceof ModContainerLevelAccess context) {
-            instance.execute((level, pos) -> {
-                Player player = context.player;
-                ItemStack stack = context.stack;
-                int slotInInv = ((ItemInventoryContainer) player.containerMenu).QS$getUsedSlotInPlayerInv();
-                if (!player.isCreative() && stack.is(ItemTags.ANVIL) && player.getRandom().nextFloat() < 0.12F) {
-                    if(stack.getItem() == Items.ANVIL){
-                        player.getInventory().setItem(slotInInv, new ItemStack(Items.CHIPPED_ANVIL));
-                        level.levelEvent(LevelEvent.SOUND_ANVIL_USED, pos, 0);
-                    } else if(stack.getItem() == Items.CHIPPED_ANVIL) {
-                        player.getInventory().setItem(slotInInv, new ItemStack(Items.DAMAGED_ANVIL));
-                        level.levelEvent(LevelEvent.SOUND_ANVIL_USED, pos, 0);
-                    } else {
-                        player.getInventory().removeItemNoUpdate(slotInInv);
-                        level.levelEvent(LevelEvent.SOUND_ANVIL_BROKEN, pos, 0);
-                    }
-                } else {
-                    level.levelEvent(LevelEvent.SOUND_ANVIL_USED, pos, 0);
-                }
-            });
-        } else {
-            original.call(instance, biConsumer);
-        }
-    }
+//
+//    @WrapOperation(method = "onTake", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/ContainerLevelAccess;execute(Ljava/util/function/BiConsumer;)V"))
+//    public void QS$execute(ContainerLevelAccess instance, BiConsumer<Level, BlockPos> biConsumer, Operation<Void> original) {
+//        if(instance instanceof ModContainerLevelAccess context) {
+//            instance.execute((level, pos) -> {
+//                Player player = context.player;
+//                ItemStack stack = context.stack;
+//                int slotInInv = ((ItemInventoryContainer) player.containerMenu).QS$getUsedSlotInPlayerInv();
+//                if (!player.isCreative() && stack.is(ItemTags.ANVIL) && player.getRandom().nextFloat() < 0.12F) {
+//                    if(stack.getItem() == Items.ANVIL){
+//                        player.getInventory().setItem(slotInInv, new ItemStack(Items.CHIPPED_ANVIL));
+//                        level.levelEvent(LevelEvent.SOUND_ANVIL_USED, pos, 0);
+//                    } else if(stack.getItem() == Items.CHIPPED_ANVIL) {
+//                        player.getInventory().setItem(slotInInv, new ItemStack(Items.DAMAGED_ANVIL));
+//                        level.levelEvent(LevelEvent.SOUND_ANVIL_USED, pos, 0);
+//                    } else {
+//                        player.getInventory().removeItemNoUpdate(slotInInv);
+//                        level.levelEvent(LevelEvent.SOUND_ANVIL_BROKEN, pos, 0);
+//                    }
+//                } else {
+//                    level.levelEvent(LevelEvent.SOUND_ANVIL_USED, pos, 0);
+//                }
+//            });
+//        } else {
+//            original.call(instance, biConsumer);
+//        }
+//    }
 }

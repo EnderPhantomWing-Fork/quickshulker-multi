@@ -96,7 +96,7 @@ public class ConfigScreen extends Screen {
 
     public void addConfigSection(ConfigSection item) {
         item.selectionIndex = sections.size();
-        if (sections.size() == 0)
+        if (sections.isEmpty())
             item.sectionSelectionBTN.setX(10);
         else
             item.sectionSelectionBTN.setX(sections.get(sections.size() - 1).sectionSelectionBTN.getX() + sections.get(sections.size() - 1).sectionSelectionBTN.getWidth() + 3);

@@ -53,5 +53,7 @@ public class ConfigOptions implements AbstractConfigFile {
     public boolean quickEChest = true;
     @Comment("Enable opening Anvil")
     public boolean quickAnvil = true;
+    @Comment("Enable opening Grindstone")
+    public boolean quickGrindstone = true;
 
 }

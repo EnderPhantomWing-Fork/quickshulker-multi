@@ -52,6 +52,7 @@ public class ModConfigMenu {
         enabledSection.addConfigItem(new BooleanItem(Component.translatable("key.quickshulker.config.quickStonecutter"), options.quickStonecutter, true).setSaveConsumer(value -> options.quickStonecutter = value).setRequiresRestart());
         enabledSection.addConfigItem(new BooleanItem(Component.translatable("key.quickshulker.config.quickEChest"), options.quickEChest, true).setSaveConsumer(value -> options.quickEChest = value).setRequiresRestart());
         enabledSection.addConfigItem(new BooleanItem(Component.translatable("key.quickshulker.config.quickAnvil"), options.quickAnvil, true).setSaveConsumer(value -> options.quickAnvil = value).setRequiresRestart());
+        enabledSection.addConfigItem(new BooleanItem(Component.translatable("key.quickshulker.config.quickGrindstone"), options.quickGrindstone, true).setSaveConsumer(value -> options.quickGrindstone = value).setRequiresRestart());
 
         return configScreen;
     }

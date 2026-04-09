@@ -148,6 +148,17 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                             new AnvilMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.repair")))))
                             //#endif
                     .register();
+        if (getConfig().quickGrindstone)
+            new QuickOpenableRegistry.Builder()
+                    .setItem(GrindstoneBlock.class)
+                    .ignoreSingleStackCheck(true)
+                    .setOpenAction(((player, stack) -> player.openMenu(new SimpleMenuProvider((i, playerInventory, playerEntity) ->
+                            //#if MC >= 1.21.6
+                            //$$ new GrindstoneMenu(i, playerInventory, ContainerLevelAccess.create(player.level(), player.blockPosition())), Component.translatable("container.grindstone_title")))))
+                            //#else
+                            new GrindstoneMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.grindstone_title")))))
+                            //#endif
+                    .register();
 
         //#if MC >= 26.1
         //#else
