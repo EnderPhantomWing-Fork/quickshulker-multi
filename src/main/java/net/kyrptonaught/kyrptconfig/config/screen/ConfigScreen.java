@@ -25,6 +25,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 //#if MC >= 1.21.10
 //$$ import net.minecraft.client.input.CharacterEvent;
 //$$ import net.minecraft.client.input.KeyEvent;
@@ -64,18 +65,24 @@ public class ConfigScreen extends Screen {
     protected void init() {
         int center = this.width / 2;
         this.addRenderableWidget(new NotSuckyButton(center - 153, height - 25, 150, 20, Component.translatable("key.kyrptconfig.config.exit"), widget -> {
-            this.minecraft.setScreen(previousScreen);
+            if (this.minecraft != null) {
+                this.minecraft.setScreen(previousScreen);
+            }
         }));
 
         this.addRenderableWidget(new NotSuckyButton(center + 3, height - 25, 150, 20, Component.translatable("key.kyrptconfig.config.saveExit"), widget -> {
             save();
-            this.minecraft.setScreen(previousScreen);
+            if (this.minecraft != null) {
+                this.minecraft.setScreen(previousScreen);
+            }
         }));
         for (ConfigSection section : sections) {
             //#if MC >= 1.21.11
             //$$ section.init(width, height - 57 - 30);
             //#else
-            section.init(minecraft, width, height - 57 - 30);
+            if (minecraft != null) {
+                section.init(minecraft, width, height - 57 - 30);
+            }
             //#endif
         }
 
@@ -99,17 +106,17 @@ public class ConfigScreen extends Screen {
         if (sections.isEmpty())
             item.sectionSelectionBTN.setX(10);
         else
-            item.sectionSelectionBTN.setX(sections.get(sections.size() - 1).sectionSelectionBTN.getX() + sections.get(sections.size() - 1).sectionSelectionBTN.getWidth() + 3);
+            item.sectionSelectionBTN.setX(sections.getLast().sectionSelectionBTN.getX() + sections.getLast().sectionSelectionBTN.getWidth() + 3);
         item.sectionSelectionBTN.setWidth(Minecraft.getInstance().font.width(item.title) + 10);
 
         this.sections.add(item);
     }
 
     public boolean adjustForHorizontalScroll(int maxWidth) {
-        NotSuckyButton lastBTN = sections.get(sections.size() - 1).sectionSelectionBTN;
+        NotSuckyButton lastBTN = sections.getLast().sectionSelectionBTN;
 
         this.scrollLeftBTN = new NotSuckyButton(10, 32, 10, 20, Component.literal("<"), widget -> {
-            NotSuckyButton nextBtn = sections.get(0).sectionSelectionBTN;
+            NotSuckyButton nextBtn = sections.getFirst().sectionSelectionBTN;
             for (int i = sections.size() - 1; i >= 0; i--) {
                 if (sections.get(i).sectionSelectionBTN.getX() < scrollLeftBTN.getX() + scrollLeftBTN.getWidth() + 3) {
                     nextBtn = sections.get(i).sectionSelectionBTN;
@@ -149,8 +156,12 @@ public class ConfigScreen extends Screen {
             return true;
         }
 
-        scrollLeftBTN.active = scrollLeftBTN.visible = false;
-        scrollRightBTN.active = scrollRightBTN.visible = false;
+        scrollLeftBTN.active = false;
+        scrollLeftBTN.visible = false;
+
+        scrollRightBTN.active = false;
+        scrollRightBTN.visible = false;
+
         horizontalScrollOffset = -1;
         return false;
     }
@@ -222,7 +233,7 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
+    public void render(@NotNull GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
         super.renderBackground(context, mouseX, mouseY, deltaTicks);
 
         ConfigSection section = sections.get(selectedSection);
@@ -232,7 +243,11 @@ public class ConfigScreen extends Screen {
         section.render(context, 57, mouseX, mouseY, deltaTicks);
         context.disableScissor();
 
+        //#if MC >= 26.1
+        //$$ context.centeredText(this.font, this.title, this.width / 2, 13, -1);
+        //#else
         context.drawCenteredString(this.font, this.title, this.width / 2, 13, -1);
+        //#endif
         drawHeaderAndFooterSeparators(context);
 
         boolean noHover = scrollLeftBTN.detectHover(mouseX, mouseY) | scrollRightBTN.detectHover(mouseX, mouseY);
@@ -286,7 +301,7 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
+    public void renderBackground(@NotNull GuiGraphics context, int mouseX, int mouseY, float deltaTicks) {
     }
 
     //#if MC >= 1.21.6
