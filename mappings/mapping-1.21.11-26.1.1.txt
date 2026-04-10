@@ -1,6 +1,6 @@
 net.minecraft.client.gui.GuiGraphics net.minecraft.client.gui.GuiGraphicsExtractor
 net.minecraft.client.gui.GuiGraphics drawString() text()
-net.minecraft.client.gui.GuiGraphics drawCenteredString() text()
+net.minecraft.client.gui.GuiGraphics drawCenteredString() centeredText()
 
 net.minecraft.client.gui.screens.Screen renderBackground() extractBackground()
 net.minecraft.client.gui.screens.Screen render() extractRenderState()

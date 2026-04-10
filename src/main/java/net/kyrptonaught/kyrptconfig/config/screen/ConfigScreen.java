@@ -243,11 +243,7 @@ public class ConfigScreen extends Screen {
         section.render(context, 57, mouseX, mouseY, deltaTicks);
         context.disableScissor();
 
-        //#if MC >= 26.1
-        //$$ context.centeredText(this.font, this.title, this.width / 2, 13, -1);
-        //#else
         context.drawCenteredString(this.font, this.title, this.width / 2, 13, -1);
-        //#endif
         drawHeaderAndFooterSeparators(context);
 
         boolean noHover = scrollLeftBTN.detectHover(mouseX, mouseY) | scrollRightBTN.detectHover(mouseX, mouseY);
