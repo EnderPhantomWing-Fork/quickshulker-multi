@@ -52,7 +52,7 @@ jobs:
           BUILD_RELEASE: ${{ inputs.release }}
 
       - name: Upload artifacts (summary part need)
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: build-artifacts
           path: versions/*/build/libs/
@@ -67,7 +67,7 @@ jobs:
           ls -l mod-jars
 
       - name: Upload mod jars
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: quickshulker-${{ env.COMMIT_HASH }}
           path: mod-jars/*.jar
@@ -86,7 +86,7 @@ jobs:
           python-version: 3.12
 
       - name: Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: build-artifacts
           path: build-artifacts

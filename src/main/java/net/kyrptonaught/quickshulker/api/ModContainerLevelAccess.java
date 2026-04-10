@@ -16,7 +16,7 @@ public class ModContainerLevelAccess implements ContainerLevelAccess {
     public Level level;
     public BlockPos pos;
 
-    public ModContainerLevelAccess(Player player, ItemStack itemStack){
+    public ModContainerLevelAccess(Player player, ItemStack itemStack) {
         this.stack = itemStack;
         this.player = player;
         this.level = player.level();
