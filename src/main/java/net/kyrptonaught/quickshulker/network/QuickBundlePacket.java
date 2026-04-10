@@ -72,7 +72,9 @@ public record QuickBundlePacket(int slotId, ItemStack stackToBundle) implements 
     }
 
     public static void sendCreativeSlotUpdate(ItemStack output, Slot slot) {
-        Minecraft.getInstance().gameMode.handleCreativeModeItemAdd(output, slot.index);
+        if (Minecraft.getInstance().gameMode != null) {
+            Minecraft.getInstance().gameMode.handleCreativeModeItemAdd(output, slot.index);
+        }
     }
 
     @Override

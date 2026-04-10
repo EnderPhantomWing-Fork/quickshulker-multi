@@ -15,6 +15,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 //#if MC >= 1.21.10
 //$$ import net.minecraft.client.input.CharacterEvent;
 //$$ import net.minecraft.client.input.KeyEvent;
@@ -36,9 +37,7 @@ public class ConfigSection extends Screen {
     public ConfigSection(ConfigScreen configScreen, Component title) {
         super(title);
         this.title = title;
-        this.sectionSelectionBTN = new NotSuckyButton(0, 32, 10, 20, title, widget -> {
-            configScreen.setSelectedSection(selectionIndex);
-        });
+        this.sectionSelectionBTN = new NotSuckyButton(0, 32, 10, 20, title, widget -> configScreen.setSelectedSection(selectionIndex));
         configScreen.addConfigSection(this);
     }
 
@@ -165,6 +164,6 @@ public class ConfigSection extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics context, int mouseX, int mouseY, float delta) {
+    public void renderBackground(@NotNull GuiGraphics context, int mouseX, int mouseY, float delta) {
     }
 }

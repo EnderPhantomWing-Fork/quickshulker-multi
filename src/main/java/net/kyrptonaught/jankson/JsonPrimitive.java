@@ -35,16 +35,16 @@ import java.util.Objects;
 
 public class JsonPrimitive extends JsonElement {
     /**
-     * Convenience instance of json "true". Don't use identity comparison (==) on these! Use equals instead.
+     * Convenience instance of JSON "true". Don't use identity comparison (==) on these! Use equals instead.
      */
     public static JsonPrimitive TRUE = new JsonPrimitive(Boolean.TRUE);
     /**
-     * Convenience instance of json "false". Don't use identity comparison (==) on these! Use equals instead.
+     * Convenience instance of JSON "false". Don't use identity comparison (==) on these! Use equals instead.
      */
     public static JsonPrimitive FALSE = new JsonPrimitive(Boolean.FALSE);
 
     @Nonnull
-    private Object value;
+    private Object value = new Object();
 
     private JsonPrimitive() {
     }
@@ -56,27 +56,19 @@ public class JsonPrimitive extends JsonElement {
      * is well-formed. Please use one of the JsonPrimitive.of(x) static factory variants if possible,
      * because using function polymorphism often winds up validating the results "for free".
      *
-     * @param value
      */
     public JsonPrimitive(@Nonnull Object value) {
-        if (value instanceof Character) {
-            this.value = String.valueOf(value);
-        } else if (value instanceof Long) {
-            this.value = value;
-        } else if (value instanceof Double) {
-            this.value = value;
-        } else if (value instanceof BigInteger) {
-            this.value = ((BigInteger) value).toString(16);
-        } else if (value instanceof Float) {
-            this.value = Double.valueOf((Float) value);
-        } else if (value instanceof Number) {
-            this.value = ((Number) value).longValue();
-        } else if (value instanceof CharSequence) {
-            this.value = value.toString();
-        } else if (value instanceof Boolean) {
-            this.value = value;
-        } else {
-            throw new IllegalArgumentException("Object of type '" + value.getClass().getCanonicalName() + "' not allowed as a JsonPrimitive");
+        switch (value) {
+            case Character c -> this.value = String.valueOf(value);
+            case Long l -> this.value = value;
+            case Double v -> this.value = value;
+            case BigInteger bigInteger -> this.value = bigInteger.toString(16);
+            case Float v -> this.value = Double.valueOf(v);
+            case Number number -> this.value = number.longValue();
+            case CharSequence charSequence -> this.value = value.toString();
+            case Boolean b -> this.value = value;
+            default ->
+                    throw new IllegalArgumentException("Object of type '" + value.getClass().getCanonicalName() + "' not allowed as a JsonPrimitive");
         }
     }
 
@@ -118,13 +110,12 @@ public class JsonPrimitive extends JsonElement {
 
     @Nonnull
     public String asString() {
-        if (value == null) return "null";
         return value.toString();
     }
 
     public boolean asBoolean(boolean defaultValue) {
         if (value instanceof Boolean) {
-            return ((Boolean) value).booleanValue();
+            return (Boolean) value;
         } else {
             return defaultValue;
         }
@@ -139,18 +130,23 @@ public class JsonPrimitive extends JsonElement {
     }
 
     public char asChar(char defaultValue) {
-        if (value instanceof Number) {
-            return (char) ((Number) value).intValue();
-        } else if (value instanceof Character) {
-            return ((Character) value).charValue();
-        } else if (value instanceof String) {
-            if (((String) value).length() == 1) {
-                return ((String) value).charAt(0);
-            } else {
+        switch (value) {
+            case Number number -> {
+                return (char) number.intValue();
+            }
+            case Character c -> {
+                return c;
+            }
+            case String s -> {
+                if (s.length() == 1) {
+                    return s.charAt(0);
+                } else {
+                    return defaultValue;
+                }
+            }
+            default -> {
                 return defaultValue;
             }
-        } else {
-            return defaultValue;
         }
     }
 
@@ -247,35 +243,33 @@ public class JsonPrimitive extends JsonElement {
     @Override
     public void toJson(Writer writer, JsonGrammar grammar, int depth) throws IOException {
 
-        if (value == null) {
-            writer.write("null");
-            return;
-        }
-
-        if (value instanceof Double && grammar.bareSpecialNumerics) {
-            double d = ((Double) value).doubleValue();
-            if (Double.isNaN(d)) {
-                writer.write("NaN");
-                return;
-            }
-            if (Double.isInfinite(d)) {
-                if (d < 0) {
-                    writer.write("-Infinity");
-                    return;
-                } else {
-                    writer.write("Infinity");
+        switch (value) {
+            case Double d when grammar.bareSpecialNumerics -> {
+                if (Double.isNaN(d)) {
+                    writer.write("NaN");
                     return;
                 }
+                if (Double.isInfinite(d)) {
+                    if (d < 0) {
+                        writer.write("-Infinity");
+                    } else {
+                        writer.write("Infinity");
+                    }
+                    return;
+                }
+                writer.write(value.toString());
+                return;
             }
-            writer.write(value.toString());
-            return;
-        } else if (value instanceof Number) {
-            writer.write(value.toString());
-            return;
-        }
-        if (value instanceof Boolean) {
-            writer.write(value.toString());
-            return;
+            case Number number -> {
+                writer.write(value.toString());
+                return;
+            }
+            case Boolean b -> {
+                writer.write(value.toString());
+                return;
+            }
+            default -> {
+            }
         }
 
         writer.write('\"');

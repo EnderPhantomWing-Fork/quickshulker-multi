@@ -41,7 +41,7 @@ public class ArrayParserContext implements ParserContext<JsonArray> {
     }
 
     @Override
-    public boolean consume(int codePoint, Jankson loader) throws SyntaxError {
+    public boolean consume(int codePoint, Jankson loader) {
         result.setMarshaller(loader.getMarshaller());
         if (foundClosingBrace) return false;
         if (Character.isWhitespace(codePoint) || codePoint == ',') return true;
@@ -76,7 +76,7 @@ public class ArrayParserContext implements ParserContext<JsonArray> {
     }
 
     @Override
-    public JsonArray getResult() throws SyntaxError {
+    public JsonArray getResult() {
         return result;
     }
 

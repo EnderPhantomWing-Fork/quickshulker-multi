@@ -31,7 +31,6 @@ import net.kyrptonaught.jankson.api.SyntaxError;
 import java.util.Locale;
 
 public class NumberParserContext implements ParserContext<JsonPrimitive> {
-    private final String acceptedChars = "0123456789.+-eExabcdefInityNn";
     private String numberString = "";
     private boolean complete = false;
 
@@ -40,9 +39,10 @@ public class NumberParserContext implements ParserContext<JsonPrimitive> {
     }
 
     @Override
-    public boolean consume(int codePoint, Jankson loader) throws SyntaxError {
+    public boolean consume(int codePoint, Jankson loader) {
         if (complete) return false;
 
+        String acceptedChars = "0123456789.+-eExabcdefInityNn";
         if (acceptedChars.indexOf(codePoint) != -1) {
             numberString += (char) codePoint;
             return true;
@@ -53,7 +53,7 @@ public class NumberParserContext implements ParserContext<JsonPrimitive> {
     }
 
     @Override
-    public void eof() throws SyntaxError {
+    public void eof() {
         complete = true;
     }
 
@@ -66,12 +66,16 @@ public class NumberParserContext implements ParserContext<JsonPrimitive> {
     public JsonPrimitive getResult() throws SyntaxError {
         //parse special values
         String lc = numberString.toLowerCase(Locale.ROOT);
-        if (lc.equals("infinity") || lc.equals("+infinity")) {
-            return JsonPrimitive.of(Double.POSITIVE_INFINITY);
-        } else if (lc.equals("-infinity")) {
-            return JsonPrimitive.of(Double.NEGATIVE_INFINITY);
-        } else if (lc.equals("nan")) {
-            return JsonPrimitive.of(Double.NaN);
+        switch (lc) {
+            case "infinity", "+infinity" -> {
+                return JsonPrimitive.of(Double.POSITIVE_INFINITY);
+            }
+            case "-infinity" -> {
+                return JsonPrimitive.of(Double.NEGATIVE_INFINITY);
+            }
+            case "nan" -> {
+                return JsonPrimitive.of(Double.NaN);
+            }
         }
 
         //Fallback to the number parsers

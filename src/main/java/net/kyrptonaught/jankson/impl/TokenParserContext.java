@@ -26,7 +26,6 @@ package net.kyrptonaught.jankson.impl;
 
 import net.kyrptonaught.jankson.Jankson;
 import net.kyrptonaught.jankson.JsonPrimitive;
-import net.kyrptonaught.jankson.api.SyntaxError;
 
 public class TokenParserContext implements ParserContext<JsonPrimitive> {
     private String token = "";
@@ -37,14 +36,13 @@ public class TokenParserContext implements ParserContext<JsonPrimitive> {
     }
 
     @Override
-    public boolean consume(int codePoint, Jankson loader) throws SyntaxError {
+    public boolean consume(int codePoint, Jankson loader) {
         if (complete) return false;
 
         if (codePoint == '~' || Character.isUnicodeIdentifierPart(codePoint)) {
 
             if (codePoint < 0xFFFF) {
                 token += ((char) codePoint);
-                return true;
             } else {
                 //Construct a high and low surrogate pair for this code point
                 //TODO: Finish implementing
@@ -55,8 +53,8 @@ public class TokenParserContext implements ParserContext<JsonPrimitive> {
                 token += (char) highSurrogate;
                 token += (char) lowSurrogate;
 
-                return true;
             }
+            return true;
 
         } else {
             complete = true;
@@ -65,7 +63,7 @@ public class TokenParserContext implements ParserContext<JsonPrimitive> {
     }
 
     @Override
-    public void eof() throws SyntaxError {
+    public void eof() {
         complete = true;
     }
 
@@ -75,7 +73,7 @@ public class TokenParserContext implements ParserContext<JsonPrimitive> {
     }
 
     @Override
-    public JsonPrimitive getResult() throws SyntaxError {
+    public JsonPrimitive getResult() {
         return JsonPrimitive.of(token);
     }
 }

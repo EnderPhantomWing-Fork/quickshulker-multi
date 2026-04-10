@@ -47,7 +47,7 @@ public class POJODeserializer {
     public static void unpackObject(Object target, JsonObject source) {
         try {
             unpackObject(target, source, false);
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
     }
 
@@ -115,11 +115,9 @@ public class POJODeserializer {
     @Nullable
     public static Object unpack(Type t, JsonElement elem, Marshaller marshaller) {
         Class<?> rawClass = TypeMagic.classForType(t);
-        if (rawClass.isPrimitive())
-            return null; //We can't unpack a primitive into an object of primitive type. Maybe in the future we can return a boxed type?
+        //We can't unpack a primitive into an object of primitive type. Maybe in the future we can return a boxed type?
 
-        if (elem == null) return null;
-		/*
+        /*
 		if (type instanceof Class) {
 			try {
 				return marshaller.marshall((Class<?>) type, elem);
@@ -160,7 +158,7 @@ public class POJODeserializer {
         try {
             field.setAccessible(true);
         } catch (Throwable t) {
-            return false; //skip this field probably.
+            return false; //skip this field, probably.
         }
 
         if (elem == JsonNull.INSTANCE) {
@@ -229,7 +227,7 @@ public class POJODeserializer {
                 Object k = marshaller.marshall(keyType, new JsonPrimitive(entry.getKey()));
                 Object v = marshaller.marshall(valueType, entry.getValue());
                 if (k != null && v != null) map.put(k, v);
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
             }
         }
     }
@@ -288,15 +286,15 @@ public class POJODeserializer {
             //return null;
         } else if (params.length == 2) {
             //if (params[0].getClass().isAssignableFrom(sourceClass)) {
-            if (params[1].getClass().equals(Marshaller.class)) {
-                return (Object o, Marshaller marshaller) -> {
-                    try {
-                        return (B) m.invoke(null, o, marshaller);
-                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                        throw new DeserializationException(ex);
-                    }
-                };
-            }
+            //if (params[1].getClass().equals(Marshaller.class)) {
+            //    return (Object o, Marshaller marshaller) -> {
+            //        try {
+            //            return (B) m.invoke(null, o, marshaller);
+            //        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            //            throw new DeserializationException(ex);
+            //        }
+            //    };
+            //}
             //}
             return null;
         } else {

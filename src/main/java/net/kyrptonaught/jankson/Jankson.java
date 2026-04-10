@@ -30,6 +30,7 @@ import net.kyrptonaught.jankson.api.Marshaller;
 import net.kyrptonaught.jankson.api.SyntaxError;
 import net.kyrptonaught.jankson.impl.*;
 import net.kyrptonaught.kyrptconfig.config.CustomMarshaller;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.io.*;
@@ -48,7 +49,6 @@ public class Jankson {
     private int line = 0;
     private int column = 0;
     private int withheldCodePoint = -1;
-    @SuppressWarnings("deprecation")
     private Marshaller marshaller = MarshallerImpl.getFallback();
     private boolean allowBareRootObject = false;
 
@@ -72,7 +72,7 @@ public class Jankson {
 	public int getCodePoint(InputStream in) throws IOException {
 		int i = in.read();
 		if (i==-1) return -1;
-		if ((i & 0b10000000)==0) return i; // \u0000..\u00FF is easy
+		if ((i & 0b10000000)==0) return i; // \u0000..ÿ is easy
 		
 		if ((i & 0b1111_1000) == 0b1111_0000) { //Character is 4 UTF-8 code points
 			int codePoint = i & 0b111;
@@ -152,9 +152,7 @@ public class Jankson {
         withheldCodePoint = -1;
         root = null;
 
-        push(new ObjectParserContext(allowBareRootObject), (it) -> {
-            root = it;
-        });
+        push(new ObjectParserContext(allowBareRootObject), (it) -> root = it);
 
         //int codePoint = 0;
         while (root == null) {
@@ -171,19 +169,7 @@ public class Jankson {
                 int inByte = reader.read();
                 if (inByte == -1) {
                     //Walk up the stack sending EOF to things until either an error occurs or the stack completes
-                    while (!contextStack.isEmpty()) {
-                        ParserFrame<?> frame = contextStack.pop();
-                        try {
-                            frame.context.eof();
-                            if (frame.context.isComplete()) {
-                                frame.supply();
-                            }
-                        } catch (SyntaxError error) {
-                            error.setStartParsing(frame.startLine, frame.startCol);
-                            error.setEndParsing(line, column);
-                            throw error;
-                        }
-                    }
+                    processEofForAllFrames();
                     if (root == null) {
                         root = new JsonObject();
                         root.marshaller = marshaller;
@@ -197,11 +183,26 @@ public class Jankson {
         return root;
     }
 
+    private void processEofForAllFrames() throws SyntaxError {
+        while (!contextStack.isEmpty()) {
+            ParserFrame<?> frame = contextStack.pop();
+            try {
+                frame.context.eof();
+                if (frame.context.isComplete()) {
+                    frame.supply();
+                }
+            } catch (SyntaxError error) {
+                error.setStartParsing(frame.startLine, frame.startCol);
+                error.setEndParsing(line, column);
+                throw error;
+            }
+        }
+    }
+
     /**
      * Experimental: Parses the supplied String as a JsonElement, which may or may not be an object at the root level
      */
-    @Nonnull
-    public JsonElement loadElement(String s) throws SyntaxError {
+    public @Nullable JsonElement loadElement(String s) throws SyntaxError {
         ByteArrayInputStream in = new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
         try {
             return loadElement(in);
@@ -213,8 +214,7 @@ public class Jankson {
     /**
      * Experimental: Parses the supplied File as a JsonElement, which may or may not be an object at the root level
      */
-    @Nonnull
-    public JsonElement loadElement(File f) throws IOException, SyntaxError {
+    public @Nullable JsonElement loadElement(File f) throws IOException, SyntaxError {
         try (InputStream in = new FileInputStream(f)) {
             return loadElement(in);
         }
@@ -223,16 +223,13 @@ public class Jankson {
     /**
      * Experimental: Parses the supplied InputStream as a JsonElement, which may or may not be an object at the root level
      */
-    @Nonnull
-    public JsonElement loadElement(InputStream in) throws IOException, SyntaxError {
+    public @Nullable JsonElement loadElement(InputStream in) throws IOException, SyntaxError {
         InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
 
         withheldCodePoint = -1;
         rootElement = null;
 
-        push(new ElementParserContext(), (it) -> {
-            rootElement = it;
-        });
+        push(new ElementParserContext(), (it) -> rootElement = it);
 
         //int codePoint = 0;
         while (rootElement == null) {
@@ -249,53 +246,46 @@ public class Jankson {
                 int inByte = reader.read();
                 if (inByte == -1) {
                     //Walk up the stack sending EOF to things until either an error occurs or the stack completes
-                    while (!contextStack.isEmpty()) {
-                        ParserFrame<?> frame = contextStack.pop();
-                        try {
-                            frame.context.eof();
-                            if (frame.context.isComplete()) {
-                                frame.supply();
-                            }
-                        } catch (SyntaxError error) {
-                            error.setStartParsing(frame.startLine, frame.startCol);
-                            error.setEndParsing(line, column);
-                            throw error;
-                        }
-                    }
+                    processEofForAllFrames();
                     if (rootElement == null) {
                         return JsonNull.INSTANCE;
                     } else {
-                        return rootElement.getElement();
+                        if (rootElement.getElement() != null) {
+                            return rootElement.getElement();
+                        }
                     }
                 }
                 processCodePoint(inByte);
             }
         }
 
-        return rootElement.getElement();
+        if (rootElement.getElement() != null) {
+            return rootElement.getElement();
+        }
+        return null;
     }
 
     public <T> T fromJson(JsonObject obj, Class<T> clazz) {
         return marshaller.marshall(clazz, obj);
     }
 
-    public <T> T fromJson(String json, Class<T> clazz) throws SyntaxError {
-        JsonObject obj = load(json);
+    public <T> T fromJson(String JSON, Class<T> clazz) throws SyntaxError {
+        JsonObject obj = load(JSON);
         return fromJson(obj, clazz);
     }
 
     /**
-     * Converts a String of json into an object of the specified class in fail-fast mode, throwing an exception
+     * Converts a String of JSON into an object of the specified class in fail-fast mode, throwing an exception
      * proactively if problems arise.
      *
-     * @param json  A string containing json data to be unpacked
+     * @param JSON  A string containing JSON data to be unpacked
      * @param clazz The class to convert the data into
-     * @return An object representing the data in json
-     * @throws SyntaxError              If the json cannot be parsed
+     * @return An object representing the data in JSON
+     * @throws SyntaxError              If the JSON cannot be parsed
      * @throws DeserializationException If the conversion into an instance of the specified type fails
      */
-    public <T> T fromJsonCarefully(String json, Class<T> clazz) throws SyntaxError, DeserializationException {
-        JsonObject obj = load(json);
+    public <T> T fromJsonCarefully(String JSON, Class<T> clazz) throws SyntaxError, DeserializationException {
+        JsonObject obj = load(JSON);
         return fromJsonCarefully(obj, clazz);
     }
 
@@ -305,7 +295,7 @@ public class Jankson {
      *
      * @param obj   A JsonObject holding the data to be unpacked
      * @param clazz The class to convert the data into
-     * @return An object of the specified class, holding the data from json
+     * @return An object of the specified class, holding the data from JSON
      * @throws DeserializationException If the conversion into an instance of the specified type fails
      */
     public <T> T fromJsonCarefully(JsonObject obj, Class<T> clazz) throws DeserializationException {
@@ -339,8 +329,11 @@ public class Jankson {
         }
 
         try {
-            boolean consumed = frame.context.consume(codePoint, this);
-            if (frame.context.isComplete()) {
+            boolean consumed = false;
+            if (frame != null) {
+                consumed = frame.context.consume(codePoint, this);
+            }
+            if (frame != null && frame.context.isComplete()) {
                 contextStack.pop();
                 frame.supply();
             }
@@ -368,7 +361,7 @@ public class Jankson {
      * Pushes a context onto the stack. MAY ONLY BE CALLED BY THE ACTIVE CONTEXT
      */
     public <T> void push(ParserContext<T> t, Consumer<T> consumer) {
-        ParserFrame<T> frame = new ParserFrame<T>(t, consumer);
+        ParserFrame<T> frame = new ParserFrame<>(t, consumer);
         frame.startLine = line;
         frame.startCol = column;
         contextStack.push(frame);
@@ -384,7 +377,6 @@ public class Jankson {
     }
 
     public static class Builder {
-        @SuppressWarnings("deprecation")
         MarshallerImpl marshaller = new MarshallerImpl();
         boolean allowBareRootObject = false;
 
@@ -412,8 +404,8 @@ public class Jankson {
         }
 
         /**
-         * Registers a marshaller for primitive types. Most built-in json and java types are already supported, but this
-         * allows one to change the deserialization behavior of Json primitives. Please note that these adapters are not
+         * Registers a marshaller for primitive types. Most built-in JSON and java types are already supported, but this
+         * allows one to change the deserialization behavior of JSON primitives. Please note that these adapters are not
          * suitable for generic types, as these types are erased during jvm execution.
          *
          * @param clazz   The class to register a type adapter for
@@ -428,20 +420,18 @@ public class Jankson {
         }
 
         /**
-         * Registers a function to serialize an object into json. This can be useful if a class's serialized form is not
+         * Registers a function to serialize an object into JSON. This can be useful if a class's serialized form is not
          * meant to resemble its live-memory form.
          *
          * @param clazz      The class to register a serializer for
          * @param serializer A function which takes the object and a Marshaller, and produces a serialized JsonElement
          * @return This Builder for further modificaton.
          */
-        @SuppressWarnings("deprecation")
         public <T> Builder registerSerializer(Class<T> clazz, BiFunction<T, Marshaller, JsonElement> serializer) {
             marshaller.registerSerializer(clazz, serializer);
             return this;
         }
 
-        @SuppressWarnings("deprecation")
         public <A, B> Builder registerDeserializer(Class<A> sourceClass, Class<B> targetClass, DeserializerFunction<A, B> function) {
             marshaller.registerDeserializer(sourceClass, targetClass, function);
             return this;
@@ -456,7 +446,6 @@ public class Jankson {
          * @param factory A Supplier which can create blank objects of class `clazz` for deserialization
          * @return This Builder for further modification.
          */
-        @SuppressWarnings("deprecation")
         public <T> Builder registerTypeFactory(Class<T> clazz, Supplier<T> factory) {
             marshaller.registerTypeFactory(clazz, factory);
             return this;

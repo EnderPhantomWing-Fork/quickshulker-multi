@@ -24,7 +24,10 @@
 
 package net.kyrptonaught.jankson.api;
 
+import java.io.Serial;
+
 public class DeserializationException extends Exception {
+    @Serial
     private static final long serialVersionUID = 8425560848572561283L;
 
     public DeserializationException() {

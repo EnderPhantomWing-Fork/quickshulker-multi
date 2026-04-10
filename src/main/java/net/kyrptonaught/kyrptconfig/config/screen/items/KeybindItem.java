@@ -54,7 +54,7 @@ public class KeybindItem extends ConfigItem<String> {
     public MutableComponent getCleanName(String str) {
         if (I18n.exists(value))
             return Component.translatable(str);
-        if (str == null || str.isBlank() || str.isEmpty())
+        if (str == null || str.isBlank())
             return Component.translatable("key.keyboard.unknown");
         return Component.literal(str.substring(str.length() - 1).toUpperCase());
     }

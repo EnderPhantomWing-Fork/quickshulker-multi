@@ -54,7 +54,7 @@ public class MarshallerImpl implements Marshaller {
     public MarshallerImpl() {
         register(Void.class, (it) -> null);
 
-        register(String.class, (it) -> it.toString());
+        register(String.class, Object::toString);
 
         register(Byte.class, (it) -> (it instanceof Number) ? ((Number) it).byteValue() : null);
         register(Character.class, (it) -> (it instanceof Number) ? (char) ((Number) it).shortValue() : it.toString().charAt(0));
@@ -128,7 +128,7 @@ public class MarshallerImpl implements Marshaller {
         @SuppressWarnings("unchecked")
         DeserializerFunctionPool<B> pool = (DeserializerFunctionPool<B>) deserializers.get(targetClass);
         if (pool == null) {
-            pool = new DeserializerFunctionPool<B>(targetClass);
+            pool = new DeserializerFunctionPool<>(targetClass);
             deserializers.put(targetClass, pool);
         }
         pool.registerUnsafe(sourceClass, function);
@@ -217,76 +217,93 @@ public class MarshallerImpl implements Marshaller {
 
         if (clazz.equals(String.class)) {
             //Almost everything has a String representation
-            if (elem instanceof JsonObject) return (T) elem.toJson(false, false);
-            if (elem instanceof JsonArray) return (T) elem.toJson(false, false);
-            if (elem instanceof JsonPrimitive) {
-                ((JsonPrimitive) elem).getValue();
-                return (T) ((JsonPrimitive) elem).asString();
+            switch (elem) {
+                case JsonObject jsonObject -> {
+                    return (T) elem.toJson(false, false);
+                }
+                case JsonArray jsonElements -> {
+                    return (T) elem.toJson(false, false);
+                }
+                case JsonPrimitive jsonPrimitive -> {
+                    //jsonPrimitive.getValue();
+                    return (T) jsonPrimitive.asString();
+                }
+                case JsonNull jsonNull -> {
+                    return (T) "null";
+                }
+                default -> {
+                }
             }
-            if (elem instanceof JsonNull) return (T) "null";
 
             if (failFast)
                 throw new DeserializationException("Encountered unexpected JsonElement type while deserializing to string: " + elem.getClass().getCanonicalName());
             return null;
         }
 
-        if (elem instanceof JsonPrimitive) {
-            Function<Object, ?> func = primitiveMarshallers.get(clazz);
-            if (func != null) {
-                return (T) func.apply(((JsonPrimitive) elem).getValue());
-            } else {
-                if (failFast)
-                    throw new DeserializationException("Don't know how to unpack value '" + elem + "' into target type '" + clazz.getCanonicalName() + "'");
-                return null;
-            }
-        } else if (elem instanceof JsonObject obj) {
-
-
-            if (clazz.isPrimitive())
-                throw new DeserializationException("Can't marshall json object into primitive type " + clazz.getCanonicalName());
-            if (JsonPrimitive.class.isAssignableFrom(clazz)) {
-                if (failFast) throw new DeserializationException("Can't marshall json object into a json primitive");
-                return null;
-            }
-
-            obj.setMarshaller(this);
-
-            if (typeAdapters.containsKey(clazz)) {
-                return (T) typeAdapters.get(clazz).apply((JsonObject) elem);
-            }
-
-            if (typeFactories.containsKey(clazz)) {
-                T result = (T) typeFactories.get(clazz).get();
-                try {
-                    POJODeserializer.unpackObject(result, obj, failFast);
-                    return result;
-                } catch (Throwable t) {
-                    if (failFast) throw t;
-                    return null;
-                }
-            } else {
-
-                try {
-                    T result = TypeMagic.createAndCast(clazz, failFast);
-                    POJODeserializer.unpackObject(result, obj, failFast);
-                    return result;
-                } catch (Throwable t) {
-                    if (failFast) throw t;
+        switch (elem) {
+            case JsonPrimitive jsonPrimitive -> {
+                Function<Object, ?> func = primitiveMarshallers.get(clazz);
+                if (func != null) {
+                    return (T) func.apply(jsonPrimitive.getValue());
+                } else {
+                    if (failFast)
+                        throw new DeserializationException("Don't know how to unpack value '" + elem + "' into target type '" + clazz.getCanonicalName() + "'");
                     return null;
                 }
             }
+            case JsonObject obj -> {
 
-        } else if (elem instanceof JsonArray) {
-            if (clazz.isPrimitive()) return null;
-            if (clazz.isArray()) {
-                Class<?> componentType = clazz.getComponentType();
-                JsonArray array = (JsonArray) elem;
 
-                T result = (T) Array.newInstance(componentType, array.size());
-                for (int i = 0; i < array.size(); i++) {
-                    Array.set(result, i, marshall(componentType, array.get(i)));
+                if (clazz.isPrimitive())
+                    throw new DeserializationException("Can't marshall json object into primitive type " + clazz.getCanonicalName());
+                if (JsonPrimitive.class.isAssignableFrom(clazz)) {
+                    if (failFast)
+                        throw new DeserializationException("Can't marshall json object into a json primitive");
+                    return null;
                 }
-                return result;
+
+                obj.setMarshaller(this);
+
+                if (typeAdapters.containsKey(clazz)) {
+                    return (T) typeAdapters.get(clazz).apply(obj);
+                }
+
+                if (typeFactories.containsKey(clazz)) {
+                    T result = (T) typeFactories.get(clazz).get();
+                    try {
+                        POJODeserializer.unpackObject(result, obj, failFast);
+                        return result;
+                    } catch (Throwable t) {
+                        if (failFast) throw t;
+                        return null;
+                    }
+                } else {
+
+                    try {
+                        T result = TypeMagic.createAndCast(clazz, failFast);
+                        if (result != null) {
+                            POJODeserializer.unpackObject(result, obj, failFast);
+                        }
+                        return result;
+                    } catch (Throwable t) {
+                        if (failFast) throw t;
+                        return null;
+                    }
+                }
+            }
+            case JsonArray array -> {
+                if (clazz.isPrimitive()) return null;
+                if (clazz.isArray()) {
+                    Class<?> componentType = clazz.getComponentType();
+
+                    T result = (T) Array.newInstance(componentType, array.size());
+                    for (int i = 0; i < array.size(); i++) {
+                        Array.set(result, i, marshall(componentType, array.get(i)));
+                    }
+                    return result;
+                }
+            }
+            default -> {
             }
         }
 
@@ -401,21 +418,7 @@ public class MarshallerImpl implements Marshaller {
                     Modifier.isTransient(f.getModifiers()) || //Never serialize
                     !CustomJankson.shouldSerializeField(obj, f)) continue;
 
-            f.setAccessible(true);
-            try {
-                Object child = f.get(obj);
-                String name = f.getName();
-                SerializedName nameAnnotation = f.getAnnotation(SerializedName.class);
-                if (nameAnnotation != null) name = nameAnnotation.value();
-
-                Comment comment = f.getAnnotation(Comment.class);
-                if (comment == null) {
-                    result.put(name, serialize(child));
-                } else {
-                    result.put(name, serialize(child), comment.value());
-                }
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-            }
+            setAccessible(obj, result, f);
         }
 
         //Add in what private fields we can reach
@@ -425,23 +428,27 @@ public class MarshallerImpl implements Marshaller {
                     Modifier.isTransient(f.getModifiers()) || //Never serialize
                     !CustomJankson.shouldSerializeField(obj, f)) continue;
 
-            f.setAccessible(true);
-            try {
-                Object child = f.get(obj);
-                String name = f.getName();
-                SerializedName nameAnnotation = f.getAnnotation(SerializedName.class);
-                if (nameAnnotation != null) name = nameAnnotation.value();
-
-                Comment comment = f.getAnnotation(Comment.class);
-                if (comment == null) {
-                    result.put(name, serialize(child));
-                } else {
-                    result.put(name, serialize(child), comment.value());
-                }
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-            }
+            setAccessible(obj, result, f);
         }
 
         return result;
+    }
+
+    private void setAccessible(Object obj, JsonObject result, Field f) {
+        f.setAccessible(true);
+        try {
+            Object child = f.get(obj);
+            String name = f.getName();
+            SerializedName nameAnnotation = f.getAnnotation(SerializedName.class);
+            if (nameAnnotation != null) name = nameAnnotation.value();
+
+            Comment comment = f.getAnnotation(Comment.class);
+            if (comment == null) {
+                result.put(name, serialize(child));
+            } else {
+                result.put(name, serialize(child), comment.value());
+            }
+        } catch (IllegalArgumentException | IllegalAccessException ignored) {
+        }
     }
 }

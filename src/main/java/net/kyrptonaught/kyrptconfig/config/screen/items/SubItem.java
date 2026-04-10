@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubItem<E> extends ConfigItem<E> {
-    protected boolean expanded = false;
+    protected boolean expanded;
     protected int subStart = 0;
     protected List<ConfigItem<?>> configs = new ArrayList<>();
 
@@ -53,10 +53,10 @@ public class SubItem<E> extends ConfigItem<E> {
 
     public boolean isValueDefault() {
         for (ConfigItem<?> item : configs) {
-            if (!item.isValueDefault())
-                return false;
+            if (item.isValueDefault())
+                return true;
         }
-        return true;
+        return false;
     }
 
     public void tick() {

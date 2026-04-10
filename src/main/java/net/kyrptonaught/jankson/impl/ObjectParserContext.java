@@ -87,8 +87,8 @@ public class ObjectParserContext implements ParserContext<JsonObject> {
                         throw new SyntaxError("Found spurious '}' while parsing an object with no open brace.");
                     closeBraceFound = true;
                     return true;
-                case ',':
-                    return true; //commas are basically whitespace to us
+                //case ',':
+                //    return true; //commas are basically whitespace to us
                 case '\'':
                 case '"':
                     loader.push(new StringParserContext(codePoint), (it) -> key = it.asString());
@@ -125,7 +125,9 @@ public class ObjectParserContext implements ParserContext<JsonObject> {
                 if (it.getComment() != null) resolvedComment += it.getComment();
 
                 //if (key==null) System.out.println("KEY WAS NULL! "+it.getElement()+" using saved key '"+elemKey+"'");
-                result.put(elemKey, it.getElement(), resolvedComment);
+                if (it.getElement() != null) {
+                    result.put(elemKey, it.getElement(), resolvedComment);
+                }
                 key = null;
                 colonFound = false;
                 comment = null;

@@ -24,9 +24,7 @@ public class ModConfigMenu {
         ConfigOptions options = QuickShulkerMod.getConfig();
 
         ConfigScreen configScreen = new ConfigScreen(screen, Component.translatable("key.quickshulker.config.category.title"));
-        configScreen.setSavingEvent(() -> {
-            QuickShulkerMod.config.save();
-        });
+        configScreen.setSavingEvent(() -> QuickShulkerMod.config.save());
         ConfigSection activationSection = new ConfigSection(configScreen, Component.translatable("key.quickshulker.config.category.activation"));
         activationSection.addConfigItem(new KeybindItem(Component.translatable("key.quickshulker.config.keybinding"), options.keybinding.rawKey, ConfigOptions.defualtKeybind).setSaveConsumer(value -> options.keybinding.setRaw(value)));
         activationSection.addConfigItem(new KeybindItem(Component.translatable("key.quickshulker.config.openSettingGui"), options.openSettingGui.rawKey, options.openSettingGui.defaultKey).setSaveConsumer(value -> options.openSettingGui.setRaw(value)));

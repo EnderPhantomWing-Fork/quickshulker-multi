@@ -28,7 +28,7 @@ import net.kyrptonaught.jankson.Jankson;
 import net.kyrptonaught.jankson.api.SyntaxError;
 
 public class CommentParserContext implements ParserContext<String> {
-    int firstChar = -1;
+    int firstChar;
     int secondChar = -1;
 
     StringBuilder result = new StringBuilder();
@@ -86,22 +86,19 @@ public class CommentParserContext implements ParserContext<String> {
             if (codePoint == '/' && prevChar == '*') {
                 result.deleteCharAt(result.length() - 1); //Get rid of the *
                 done = true;
-                return true;
             } else {
                 prevChar = codePoint;
                 result.append((char) codePoint);
-                return true;
             }
         } else {
             if (codePoint == '\n') {
                 done = true;
-                return true;
             } else {
                 prevChar = codePoint; //Not really necessary but whatever. For consistency! :)
                 result.append((char) codePoint);
-                return true;
             }
         }
+        return true;
     }
 
     @Override
@@ -115,7 +112,7 @@ public class CommentParserContext implements ParserContext<String> {
     }
 
     @Override
-    public String getResult() throws SyntaxError {
+    public String getResult() {
         return result.toString().trim();
     }
 

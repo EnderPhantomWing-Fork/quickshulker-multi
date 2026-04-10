@@ -12,6 +12,7 @@ package net.kyrptonaught.kyrptconfig.keybinding;
 
 import net.minecraft.client.KeyMapping;
 import com.mojang.blaze3d.platform.InputConstants;
+import org.jetbrains.annotations.NotNull;
 //#if MC >= 1.21.10
 //$$ import net.minecraft.resources.ResourceLocation;
 //#endif
@@ -43,7 +44,7 @@ public class DisplayOnlyKeyBind extends KeyMapping {
         updateSetKey();
     }
 
-    public void setKey(InputConstants.Key boundKey) {
+    public void setKey(InputConstants.@NotNull Key boundKey) {
         super.setKey(boundKey);
         if (customKeyBinding != null)
             customKeyBinding.setRaw(saveString());
@@ -58,20 +59,20 @@ public class DisplayOnlyKeyBind extends KeyMapping {
     //#if MC >= 1.21.10
     //$$ public KeyMapping.Category getCategory() {
     //#else
-    public String getCategory() {
+    public @NotNull String getCategory() {
     //#endif
         updateSetKey();
         return super.getCategory();
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         updateSetKey();
         return super.getName();
     }
 
     @Override
-    public InputConstants.Key getDefaultKey() {
+    public InputConstants.@NotNull Key getDefaultKey() {
         updateSetKey();
         return super.getDefaultKey();
     }

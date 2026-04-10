@@ -38,7 +38,7 @@ import net.minecraft.world.inventory.ClickType;
 import java.util.Set;
 
 public class MouseDraggedHandler {
-    private static final Set<Slot> DRAGGED_SLOTS = Sets.<Slot>newHashSet();
+    private static final Set<Slot> DRAGGED_SLOTS = Sets.newHashSet();
     private static DragMode dragMode;
 
     public static boolean canInsertIntoContainer(Player player, ItemStack hostStack, ItemStack insertStack) {
@@ -113,7 +113,7 @@ public class MouseDraggedHandler {
             //#else
             Slot slot = ((AbstractContainerScreenInvoker) screen).QS$getSlotAt(mouseX, mouseY);
             //#endif
-            if (slot != null && (handler.canDragTo(slot) || slot.mayPickup(client.player))) {
+            if (client.player != null && slot != null && (handler.canDragTo(slot) || slot.mayPickup(client.player))) {
                 if (dragMode == DragMode.BUNDLE) {
                     if (slot.hasItem() && canInsertIntoContainer(client.player, itemStack, slot.getItem()) && !ShulkerUtils.isShulkerItem(slot.getItem()) && !DRAGGED_SLOTS.contains(slot)) {
                         DRAGGED_SLOTS.add(slot);

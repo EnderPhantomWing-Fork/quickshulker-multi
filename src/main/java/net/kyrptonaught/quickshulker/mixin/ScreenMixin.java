@@ -104,7 +104,6 @@ public abstract class ScreenMixin {
                 if (handleTrigger()) {
                     this.skipNextRelease = true;
                     cir.setReturnValue(true);
-                    return;
                 }
             }
         }

@@ -19,6 +19,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 //#if MC >= 1.21.11
 //$$ import net.minecraft.resources.Identifier;
 //#endif
@@ -43,7 +44,7 @@ public class EnderChestS2CSyncPacket {
         }
 
         @Override
-        public Type<? extends CustomPacketPayload> type() {
+        public @NotNull Type<? extends CustomPacketPayload> type() {
             return S2C_ECHEST_CONTENT_PACKET_ID;
         }
     }
@@ -66,7 +67,7 @@ public class EnderChestS2CSyncPacket {
         }
 
         @Override
-        public Type<? extends CustomPacketPayload> type() {
+        public @NotNull Type<? extends CustomPacketPayload> type() {
             return S2C_ECHEST_SLOT_PACKET_ID;
         }
     }

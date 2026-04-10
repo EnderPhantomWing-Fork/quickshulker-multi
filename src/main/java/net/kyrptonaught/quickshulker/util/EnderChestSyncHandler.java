@@ -19,6 +19,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class EnderChestSyncHandler {
         syncEnderChestContent(player);
         chestMenu.addSlotListener(new ContainerListener() {
             @Override
-            public void slotChanged(AbstractContainerMenu handler, int slotId, ItemStack stack) {
+            public void slotChanged(@NotNull AbstractContainerMenu handler, int slotId, @NotNull ItemStack stack) {
                 Slot slot = handler.getSlot(slotId);
                 if (slot.container == player.getEnderChestInventory()) {
                     EnderChestS2CSyncPacket.S2CEChestSlotPacket.send(player, slot.getContainerSlot(), stack);
@@ -36,7 +37,7 @@ public class EnderChestSyncHandler {
             }
 
             @Override
-            public void dataChanged(AbstractContainerMenu handler, int property, int value) {
+            public void dataChanged(@NotNull AbstractContainerMenu handler, int property, int value) {
 
             }
         });

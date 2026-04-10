@@ -27,8 +27,8 @@ public class CustomMarshaller extends MarshallerImpl {
         return super.serialize(obj);
     }
 
-    public CustomSerializable marshallCustomSerializable(Class<CustomSerializable> clazz, CustomSerializable origianlObject, JsonElement elem) throws DeserializationException {
-        return origianlObject.fromJson(this, elem, clazz);
+    public CustomSerializable marshallCustomSerializable(Class<CustomSerializable> clazz, CustomSerializable originalObject, JsonElement elem) throws DeserializationException {
+        return originalObject.fromJson(this, elem, clazz);
     }
 
     public <T> T marshallNonCustom(Class<T> clazz, JsonElement elem, boolean failFast) throws DeserializationException {

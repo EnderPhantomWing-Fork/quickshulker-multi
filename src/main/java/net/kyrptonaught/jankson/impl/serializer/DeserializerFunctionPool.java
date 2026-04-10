@@ -28,6 +28,7 @@ import net.kyrptonaught.jankson.*;
 import net.kyrptonaught.jankson.api.DeserializationException;
 import net.kyrptonaught.jankson.api.Marshaller;
 
+import java.io.Serial;
 import java.util.HashMap;
 
 /**
@@ -50,7 +51,7 @@ public class DeserializerFunctionPool<B> {
     }
 
     public B apply(JsonElement elem, Marshaller marshaller) throws DeserializationException, FunctionMatchFailedException {
-        InternalDeserializerFunction<B> selected = null;
+        InternalDeserializerFunction<B> selected;
 
         //This whole block is pretty ugly but there's a very particular selection order
         if (elem instanceof JsonPrimitive) {
@@ -81,6 +82,7 @@ public class DeserializerFunctionPool<B> {
     }
 
     public static class FunctionMatchFailedException extends Exception {
+        @Serial
         private static final long serialVersionUID = -7909332778483440658L;
 
         public FunctionMatchFailedException(String message) {

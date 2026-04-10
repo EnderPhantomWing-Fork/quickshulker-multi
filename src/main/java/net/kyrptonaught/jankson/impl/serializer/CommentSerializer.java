@@ -59,22 +59,16 @@ public class CommentSerializer {
                     if (i != 0) builder.append("   ");
                     builder.append(line);
                     builder.append('\n');
-                    for (int j = 0; j < indent + 1; j++) {
-                        builder.append('\t');
-                    }
+                    builder.append("\t".repeat(Math.max(0, indent + 1)));
                 }
                 builder.append("*/\n");
-                for (int i = 0; i < indent + 1; i++) {
-                    builder.append('\t');
-                }
+                builder.append("\t".repeat(Math.max(0, indent + 1)));
             } else {
                 //Use a single-line comment
                 builder.append("// ");
                 builder.append(comment);
                 builder.append('\n');
-                for (int i = 0; i < indent + 1; i++) {
-                    builder.append('\t');
-                }
+                builder.append("\t".repeat(Math.max(0, indent + 1)));
             }
         } else {
             //Always use /* */ comments
@@ -83,8 +77,7 @@ public class CommentSerializer {
                 //Split the lines into separate /* */ comments and string them together inline.
 
                 String[] lines = comment.split("\\n");
-                for (int i = 0; i < lines.length; i++) {
-                    String line = lines[i];
+                for (String line : lines) {
                     builder.append("/* ");
                     builder.append(line);
                     builder.append(" */ ");

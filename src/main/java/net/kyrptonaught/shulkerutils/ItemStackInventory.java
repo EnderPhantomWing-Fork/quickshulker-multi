@@ -16,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
+import org.jetbrains.annotations.NotNull;
 //#if MC >= 1.21.10
 //$$ import net.minecraft.world.entity.ContainerUser;
 //#else
@@ -54,7 +55,7 @@ public class ItemStackInventory extends SimpleContainer {
     //#if MC >= 1.21.10
     //$$ public void stopOpen(ContainerUser user) {
     //#else
-    public void stopOpen(Player playerEntity) {
+    public void stopOpen(@NotNull Player playerEntity) {
     //#endif
         if (itemStack.getCount() > 1) {
             int count = itemStack.getCount();

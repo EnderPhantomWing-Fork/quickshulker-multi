@@ -26,17 +26,16 @@ package net.kyrptonaught.jankson.impl;
 
 import net.kyrptonaught.jankson.JsonElement;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 /**
  * Holds both a JsonElement and its associated comment, and any other relevant data
  */
 public class AnnotatedElement {
-    protected String comment;
+    protected  String comment;
     protected JsonElement elem;
 
-    public AnnotatedElement(@Nonnull JsonElement elem, @Nullable String comment) {
+    public AnnotatedElement(@Nullable JsonElement elem, @Nullable String comment) {
         this.comment = comment;
         this.elem = elem;
     }
@@ -46,7 +45,7 @@ public class AnnotatedElement {
         return comment;
     }
 
-    @Nonnull
+    @Nullable
     public JsonElement getElement() {
         return elem;
     }

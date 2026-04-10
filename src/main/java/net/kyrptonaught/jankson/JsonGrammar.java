@@ -25,8 +25,8 @@
 package net.kyrptonaught.jankson;
 
 /**
- * Represents a style of json written out, and a set of quirks to parse going in.
- * Typically you'll want to use a different grammar in than out.
+ * Represents a style of JSON written out, and a set of quirks to parse going in.
+ * Typically, you'll want to use a different grammar in than out.
  */
 public class JsonGrammar {
     /**
@@ -52,7 +52,7 @@ public class JsonGrammar {
             .build();
 
     /**
-     * A grammar which will print compactified JSON readable by almost all vanilla json parsers.
+     * A grammar which will print compactified JSON readable by almost all vanilla JSON parsers.
      * (Note: Jackson may read special numerics like NaN in as Strings)
      */
     public static final JsonGrammar COMPACT = builder()
@@ -94,7 +94,7 @@ public class JsonGrammar {
         }
 
         /**
-         * Indicates whether additional tabs and newlines should be printed to make json more
+         * Indicates whether additional tabs and newlines should be printed to make JSON more
          * readable for humans. If false, output will be somewhat minified to save space. Defaults
          * to true.
          */
@@ -114,7 +114,7 @@ public class JsonGrammar {
         }
 
         /**
-         * If true, JSON5 trailing commas will be printed in all objects and lists. Has no affect on
+         * If true, JSON5 trailing commas will be printed in all objects and lists. Has no effect on
          * parsing, and has no effect on output if {@link #printCommas(boolean)} is false. Defaults
          * to false.
          */

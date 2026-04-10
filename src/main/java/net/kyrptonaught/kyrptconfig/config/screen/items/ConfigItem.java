@@ -129,9 +129,7 @@ public abstract class ConfigItem<T> {
     }
 
     public void useDefaultResetBTN() {
-        this.resetButton = new NotSuckyButton(0, 0, 35, 20, Component.translatable("key.kyrptconfig.config.reset"), widget -> {
-            resetToDefault();
-        });
+        this.resetButton = new NotSuckyButton(0, 0, 35, 20, Component.translatable("key.kyrptconfig.config.reset"), widget -> resetToDefault());
     }
 
     public void resetToDefault() {
@@ -139,7 +137,7 @@ public abstract class ConfigItem<T> {
     }
 
     public boolean isValueDefault() {
-        return value.equals(defaultValue);
+        return !value.equals(defaultValue);
     }
 
     public void setValue(T value) {
@@ -198,7 +196,7 @@ public abstract class ConfigItem<T> {
         if (resetButton != null) {
             this.resetButton.setY(y);
             this.resetButton.setX(width - resetButton.getWidth() - 20);
-            resetButton.active = !isValueDefault();
+            resetButton.active = isValueDefault();
             resetButton.render(context, mouseX, mouseY, delta);
         }
 
