@@ -33,6 +33,7 @@ import net.kyrptonaught.quickshulker.compat.ModIds;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.Item;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -41,7 +42,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(ReinforcingMaterialSettings.class)
 public class ReinforcingMaterialSettingsMixin {
 
-    @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
+    @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true, name = "itemSettings")
     private static Item.Properties itemSettings(Item.Properties itemSettings) {
         return itemSettings.component(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
     }
