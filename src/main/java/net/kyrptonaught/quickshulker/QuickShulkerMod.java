@@ -159,6 +159,17 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                             new GrindstoneMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.grindstone_title")))))
                             //#endif
                     .register();
+        if (getConfig().quickSmithingTable)
+            new QuickOpenableRegistry.Builder()
+                    .setItem(SmithingTableBlock.class)
+                    .ignoreSingleStackCheck(true)
+                    .setOpenAction(((player, stack) -> player.openMenu(new SimpleMenuProvider((i, playerInventory, playerEntity) ->
+                            //#if MC >= 1.21.6
+                            //$$ new SmithingMenu(i, playerInventory, ContainerLevelAccess.create(player.level(), player.blockPosition())), Component.translatable("container.upgrade")))))
+                            //#else
+                            new SmithingMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.upgrade")))))
+                            //#endif
+                    .register();
 
         //#if MC >= 26.1
         //#else

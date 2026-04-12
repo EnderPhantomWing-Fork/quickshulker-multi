@@ -55,5 +55,7 @@ public class ConfigOptions implements AbstractConfigFile {
     public boolean quickAnvil = true;
     @Comment("Enable opening Grindstone")
     public boolean quickGrindstone = true;
+    @Comment("Enable opening Smithing Table")
+    public boolean quickSmithingTable = true;
 
 }
