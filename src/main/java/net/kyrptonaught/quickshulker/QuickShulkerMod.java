@@ -170,6 +170,17 @@ public class QuickShulkerMod implements ModInitializer, RegisterQuickShulker {
                             new SmithingMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.upgrade")))))
                             //#endif
                     .register();
+        if (getConfig().quickLoom)
+            new QuickOpenableRegistry.Builder()
+                    .setItem(LoomBlock.class)
+                    .ignoreSingleStackCheck(true)
+                    .setOpenAction(((player, stack) -> player.openMenu(new SimpleMenuProvider((i, playerInventory, playerEntity) ->
+                            //#if MC >= 1.21.6
+                            //$$ new LoomMenu(i, playerInventory, ContainerLevelAccess.create(player.level(), player.blockPosition())), Component.translatable("container.loom")))))
+                            //#else
+                            new LoomMenu(i, playerInventory, ContainerLevelAccess.create(player.getCommandSenderWorld(), player.blockPosition())), Component.translatable("container.loom")))))
+                            //#endif
+                    .register();
 
         //#if MC >= 26.1
         //#else
