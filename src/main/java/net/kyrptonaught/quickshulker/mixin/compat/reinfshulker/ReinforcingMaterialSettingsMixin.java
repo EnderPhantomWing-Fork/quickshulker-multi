@@ -59,7 +59,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(ReinforcingMaterialSettings.class)
 public class ReinforcingMaterialSettingsMixin {
 
-    @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true, name = "itemSettings")
+    @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
     private static Item.Properties itemSettings(Item.Properties itemSettings) {
         return itemSettings.component(DataComponents.CONTAINER, ItemContainerContents.EMPTY);
     }
