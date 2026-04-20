@@ -12,8 +12,8 @@ on:
       - published
   workflow_dispatch:
     inputs:
-      isRelease:
-        description: Whether to create a Release
+      isPreRelease:
+        description: Whether to create a Pre-Release
         type: boolean
         default: false
       target_subproject:
@@ -222,7 +222,7 @@ jobs:
 
           github-tag: ${{ steps.release_info.outputs.tag_name }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          github-prerelease: ${{ github.event.inputs.isRelease }}
+          github-prerelease: ${{ github.event.inputs.isPreRelease }}
 
           files: ${{ steps.file_info.outputs.path }}
 
