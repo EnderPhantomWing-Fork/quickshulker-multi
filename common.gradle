@@ -39,16 +39,18 @@ dependencies {
         //使用 mojang 映射 | Use mojang mappings
         mappings loom.officialMojangMappings()
     }
-    autoImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    autoImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
 
 // runtime mods
-    autoImplementation "com.terraformersmc:modmenu:${project.modmenu_version}"
-    autoImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+    autoImplementation("com.terraformersmc:modmenu:${project.modmenu_version}")
+    autoImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}")
     if (mcVersion >= 260000) {
         // None Reinforced Shulker Boxes and Reinforced Core in 26.1
     } else {
         autoImplementation("curse.maven:reinforced-shulker-boxes-529874:${project.reinforced_shulker_boxes_version}")
-        autoImplementation "atonkish.reinfcore:reinforced-core:${project.reinforced_core_version}"
+        autoImplementation("atonkish.reinfcore:reinforced-core:${project.reinforced_core_version}") {
+            exclude group: 'com.terraformersmc', module: 'modmenu'
+        }
     }
 
 
