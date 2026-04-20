@@ -12,6 +12,10 @@ on:
       - published
   workflow_dispatch:
     inputs:
+      isRelease:
+        description: Whether to create a Release
+        type: boolean
+        default: false
       target_subproject:
         description: |-
           The subproject name(s) of the specified Minecraft version to be released, seperated with ",".
@@ -218,6 +222,7 @@ jobs:
 
           github-tag: ${{ steps.release_info.outputs.tag_name }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-prerelease: ${{ github.event.inputs.isRelease }}
 
           files: ${{ steps.file_info.outputs.path }}
 
