@@ -7,10 +7,15 @@ on:
         required: false
         default: false
       target_subproject:
-        description: see release.yml, leave it empty to build all
+        description: See release.yml, leave it empty to build all
         type: string
         required: false
         default: ''
+      download_dependencies:
+        description: Download dependencies(Release)
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   build:
@@ -44,6 +49,13 @@ jobs:
 
       - name: Get latest short hash
         run: echo "COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+      - name: Download dependencies
+        if: inputs.download_dependencies == true
+        run: ./gradlew dependencies --stacktrace
+        env:
+          BUILD_ID: ${{ github.run_number }}
+          BUILD_RELEASE: ${{ inputs.release }}
 
       - name: Build
         run: ./gradlew build --stacktrace

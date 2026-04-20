@@ -48,9 +48,7 @@ dependencies {
         // None Reinforced Shulker Boxes and Reinforced Core in 26.1
     } else {
         autoImplementation("curse.maven:reinforced-shulker-boxes-529874:${project.reinforced_shulker_boxes_version}")
-        autoImplementation("atonkish.reinfcore:reinforced-core:${project.reinforced_core_version}") {
-            exclude group: 'com.terraformersmc', module: 'modmenu'
-        }
+        autoImplementation("atonkish.reinfcore:reinforced-core:${project.reinforced_core_version}")
     }
 
 

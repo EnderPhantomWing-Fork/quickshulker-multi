@@ -104,6 +104,7 @@ jobs:
     with:
       target_subproject: ${{ github.event.inputs.target_subproject }}
       release: true
+      download_dependencies: true
 
   release:
     needs:
