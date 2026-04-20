@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - name: Checkout all
+      - name: Checkout repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
