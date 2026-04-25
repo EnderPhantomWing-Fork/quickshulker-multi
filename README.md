@@ -1,5 +1,8 @@
 # Quick Shulker Multi
 
+[English] | [[简体中文]](docs/README_zh_cn.md)  
+[[Contributing Guide]](docs/Contributing.md) | [[Contributing Guide (简体中文)]](docs/Contributing_zh_cn.md)
+
 #### Quickly open shulker boxes(and more) without placing them down and refactor using preprocessor
 
 Support Minecraft from 1.20.6 to latest  

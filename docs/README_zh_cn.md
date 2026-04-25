@@ -1,5 +1,7 @@
 # Quick Shulker Multi
 
+[[English]](../README.md) | [简体中文]
+
 #### 无需放置 快速打开潜影盒（以及更多），并使用preprocessor进行重构
 
 支持 `1.20.6+` 的 `Minecraft Java版`  

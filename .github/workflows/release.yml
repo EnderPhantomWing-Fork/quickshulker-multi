@@ -212,10 +212,9 @@ jobs:
       - name: Publish Minecraft Mods
         uses: Kira-NT/mc-publish@v3.3
         with:
-          # disable upload to modrinth and curseforge
           # https://modrinth.com/settings/pats
-          # modrinth-id: jd0ptGv4
-          # modrinth-token: ${{ secrets.MODRINTH_API_TOKEN }}
+          modrinth-id: pWSdI9vn
+          modrinth-token: ${{ secrets.MODRINTH_API_TOKEN }}
 
           # https://legacy.curseforge.com/account/api-tokens
           # curseforge-id: 314159
