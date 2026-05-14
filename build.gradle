@@ -15,16 +15,16 @@ plugins {
 preprocess {
     strictExtraMappings = false
 
-    def mc12006 = createNode('1.20.6', 1_20_06, 'official')
-    def mc12101 = createNode('1.21.1', 1_21_01, 'official')
-    def mc12103 = createNode('1.21.3', 1_21_03, 'official')
-    def mc12104 = createNode('1.21.4', 1_21_04, 'official')
-    def mc12105 = createNode('1.21.5', 1_21_05, 'official')
-    def mc12108 = createNode('1.21.8', 1_21_08, 'official')
-    def mc12110 = createNode('1.21.10', 1_21_10, 'official')
-    def mc12111 = createNode('1.21.11', 1_21_11, 'official')
-    def mc260102 = createNode('26.1.2', 26_01_02, 'official')
-    def mc260200 = createNode('26.2', 26_02_00, 'official')
+    def mc12006     = createNode('1.20.6',  1_20_06,    'official')
+    def mc12101     = createNode('1.21.1',  1_21_01,    'official')
+    def mc12103     = createNode('1.21.3',  1_21_03,    'official')
+    def mc12104     = createNode('1.21.4',  1_21_04,    'official')
+    def mc12105     = createNode('1.21.5',  1_21_05,    'official')
+    def mc12108     = createNode('1.21.8',  1_21_08,    'official')
+    def mc12110     = createNode('1.21.10', 1_21_10,    'official')
+    def mc12111     = createNode('1.21.11', 1_21_11,    'official')
+    def mc260102    = createNode('26.1.2',  26_01_02,   'official')
+    def mc260200    = createNode('26.2',    26_02_00,   'official')
 
     //1.20.6~before
     mc12101.link(mc12006, null)

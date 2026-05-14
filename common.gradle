@@ -36,7 +36,7 @@ dependencies {
     // loom
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     if (!unobfuscated) {
-        //使用 mojang 映射 | Use mojang mappings
+        // Use mojang mappings
         mappings loom.officialMojangMappings()
     }
     autoImplementation("net.fabricmc:fabric-loader:${project.loader_version}")
@@ -108,10 +108,9 @@ loom {
 String modVersionSuffix = ''
 String artifactVersionSuffix = ''
 String artifactVersion = project.mod_version
-// 检测GitHub Actions环境变量 | detect github action environment variables
+// detect github action environment variables
 // https://docs.github.com/en/actions/learn-github-actions/environment-variables#default-environment-variables
 if (System.getenv("BUILD_RELEASE") != "true") {
-    // 正式版没有build后缀，action构建有后缀
     String buildNumber = System.getenv("BUILD_ID")
     modVersionSuffix += buildNumber != null ? ('+build.' + buildNumber) : '-SNAPSHOT'
     //buildNumber = null加'-SNAPSHOT', buildNumber != null加'+build.${{ buildNumber }}'
