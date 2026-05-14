@@ -39,10 +39,12 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.ChatFormatting;
+//#if MC >= 26.2
+//$$ import net.minecraft.locale.Language;
+//#endif
 //#if MC >= 1.21.10
 //$$ import net.minecraft.client.input.KeyEvent;
 //$$ import net.minecraft.client.input.MouseButtonEvent;
-//#else
 //#endif
 
 import org.lwjgl.glfw.GLFW;
@@ -69,7 +71,11 @@ public class KeybindItem extends ConfigItem<String> {
     }
 
     public MutableComponent getCleanName(String str) {
+        //#if MC >= 26.2
+        //$$ if (Language.getInstance().has(value))
+        //#else
         if (I18n.exists(value))
+        //#endif
             return Component.translatable(str);
         if (str == null || str.isBlank())
             return Component.translatable("key.keyboard.unknown");
