@@ -35,3 +35,5 @@ run/
 # collected mods
 
 mod-jars/
+
+publish/
