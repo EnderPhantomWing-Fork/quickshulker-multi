@@ -10,15 +10,18 @@ apply plugin: 'me.fallenbreath.yamlang'
 repositories {
     // Unified format
     mavenCentral()
-    maven { url = 'https://jitpack.io' }
     maven { url = 'https://maven.fallenbreath.me/releases' }                    // FallenBreath Maven
     maven { url = 'https://maven.fabricmc.net' }                                // Fabric Maven
     maven { url = 'https://cursemaven.com' }                                    // CurseForge Maven
     maven { url = 'https://api.modrinth.com/maven' }                            // Modrinth Maven
-    maven { url = 'https://maven.shedaniel.me/' }                                // Shedaniel Maven
-    maven { url = 'https://raw.githubusercontent.com/Aton-Kish/mcmod/maven' }    // AtonKish Maven
-    maven { url = 'https://maven.terraformersmc.com/releases' }                // TerraformersMC Maven
-    maven { url = 'https://maven.nucleoid.xyz/releases' }                        // Nucleoid Maven
+    maven { url = 'https://maven.shedaniel.me/' }                               // Shedaniel Maven
+    maven { url = 'https://raw.githubusercontent.com/Aton-Kish/mcmod/maven' }   // AtonKish Maven
+    maven { url = 'https://maven.terraformersmc.com/releases' }                 // TerraformersMC Maven
+    maven { url = 'https://maven.nucleoid.xyz/releases' }                       // Nucleoid Maven
+    maven {
+        url = 'https://jitpack.io'
+        content { includeGroupAndSubgroups('com.github') }
+    }
 }
 
 dependencies {
@@ -54,16 +57,6 @@ dependencies {
 
     include(autoImplementation("me.fallenbreath:conditional-mixin-fabric:${project.conditionalmixin_version}"))
     compileOnly group: "com.google.code.findbugs", name: "jsr305", version: "3.0.2"
-
-// example:
-//	if (mcVersion < 11904) {
-//		autoRuntimeOnly(mcVersion < 11900 ? "com.github.astei:lazydfu:0.1.2" : "com.github.Fallen-Breath:lazydfu:a7cfc44c0c")
-//	}
-//	// [FEATURE] MIXIN_AUDITOR
-//	autoRuntimeOnly 'me.fallenbreath:mixin-auditor:0.1.0'  // FIXME: update for unobfuscated version
-
-// dependencies
-
 }
 
 // Mixin config paths
@@ -116,6 +109,7 @@ if (System.getenv("BUILD_RELEASE") != "true") {
     //buildNumber = null加'-SNAPSHOT', buildNumber != null加'+build.${{ buildNumber }}'
     artifactVersionSuffix = '-SNAPSHOT'  // A non-release artifact is always a SNAPSHOT artifact
 }
+
 String fullModVersion = project.mod_version + modVersionSuffix
 String fullProjectVersion, fullArtifactVersion
 

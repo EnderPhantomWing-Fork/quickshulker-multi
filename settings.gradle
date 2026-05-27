@@ -9,6 +9,7 @@ pluginManagement {
         maven {
             name = 'Jitpack'
             url = 'https://jitpack.io'
+            content { includeGroupAndSubgroups('com.github') }
         }
         mavenCentral()
         gradlePluginPortal()
