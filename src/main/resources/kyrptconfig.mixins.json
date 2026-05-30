@@ -3,7 +3,7 @@
   "package": "net.kyrptonaught.kyrptconfig.mixin.displaykeybind",
   "compatibilityLevel": "{{COMPATIBILITY_LEVEL}}",
   "client": [
-    "GameOptions$VisitorMixin",
+    "GameOptionsVisitorMixin",
     "OptionsMixin"
   ],
   "injectors": {

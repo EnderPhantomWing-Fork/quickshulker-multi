@@ -34,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(targets = "net.minecraft.client.Options$3")
-public class GameOptions$VisitorMixin {
+public class GameOptionsVisitorMixin {
 
     @Inject(method = "process(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;", at = @At("HEAD"), cancellable = true)
     public void dontDoThat(String key, String current, CallbackInfoReturnable<String> cir) {
