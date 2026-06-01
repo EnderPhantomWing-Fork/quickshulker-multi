@@ -27,19 +27,20 @@
 
 package net.kyrptonaught.quickshulker.event;
 
+import net.kyrptonaught.kyrptconfig.keybinding.DisplayOnlyKeyBind;
+import net.kyrptonaught.quickshulker.QuickShulkerMod;
 //#if MC >= 26.1
 //$$ import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 //#else
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 //#endif
-import net.kyrptonaught.kyrptconfig.keybinding.DisplayOnlyKeyBind;
-import net.kyrptonaught.quickshulker.QuickShulkerMod;
 //#if MC >= 1.21.11
 //$$ import net.minecraft.resources.Identifier;
+//#elseif MC >=1.21.10
+//$$ import net.minecraft.resources.ResourceLocation;
 //#endif
 //#if MC >= 1.21.10
 //$$ import net.minecraft.client.KeyMapping;
-//$$ import net.minecraft.resources.ResourceLocation;
 //#endif
 
 public class KeyBindingRegister {

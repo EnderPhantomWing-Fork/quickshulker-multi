@@ -30,9 +30,6 @@ package net.kyrptonaught.kyrptconfig.keybinding;
 import net.minecraft.client.KeyMapping;
 import com.mojang.blaze3d.platform.InputConstants;
 import org.jetbrains.annotations.NotNull;
-//#if MC >= 1.21.10
-//$$ import net.minecraft.resources.ResourceLocation;
-//#endif
 
 import java.util.function.Consumer;
 
