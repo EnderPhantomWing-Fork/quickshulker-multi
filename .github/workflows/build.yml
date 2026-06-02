@@ -11,6 +11,10 @@ on:
         type: string
         required: false
         default: ''
+      target_release_tag:
+        description: The tag of the release you want to append the artifact to
+        type: string
+        required: false
       download_dependencies:
         description: Download dependencies (Release)
         type: boolean
@@ -101,6 +105,7 @@ jobs:
       - name: Release
         if: inputs.release == true
         uses: softprops/action-gh-release@v3
+        tag_name: ${{ github.event.release.tag_name || inputs.target_release_tag }}
         with:
           files: mod-jars/
 
