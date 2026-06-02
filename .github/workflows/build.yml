@@ -105,8 +105,8 @@ jobs:
       - name: Release
         if: inputs.release == true
         uses: softprops/action-gh-release@v3
-        tag_name: ${{ github.event.release.tag_name || inputs.target_release_tag }}
         with:
+          tag_name: ${{ github.event.release.tag_name || inputs.target_release_tag }}
           files: mod-jars/
 
   summary:
