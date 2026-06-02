@@ -40,5 +40,23 @@ preprocess {
     }
 }
 
-// Reinforced Shulker Boxes
-// https://github.com/EnderPhantomWing/quickshulker-multi/commit/57023fb12d3472ada4d84de93e59ebec083a4bd0
+tasks.register("buildAndGather") {
+    subprojects {
+        dependsOn(tasks.named("build"))
+    }
+    doFirst {
+        println("Gathering builds")
+        val buildLibs = { p: Project -> p.layout.buildDirectory.dir("libs").get().asFile.toPath() }
+        delete(fileTree(buildLibs(rootProject)) { include("*") })
+        subprojects {
+            copy {
+                from(buildLibs(project)) {
+                    include("*.jar")
+                    exclude("*-dev.jar", "*-sources.jar", "*-shadow.jar")
+                }
+                into(buildLibs(rootProject))
+                duplicatesStrategy = DuplicatesStrategy.INCLUDE
+            }
+        }
+    }
+}
