@@ -2,13 +2,7 @@ name: Dev Builds
 
 on:
   push:
-    branches: [ '**' ] # stop build tag commit
-    paths:
-      - "*.gradle"
-      - "gradle.properties"
-      - "src/**"
-      - "versions/**"
-      - ".github/**"
+    branches: [ '**' ] # stop build tag commits
   pull_request:
 
 jobs:
