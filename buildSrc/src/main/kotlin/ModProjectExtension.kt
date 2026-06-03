@@ -60,11 +60,11 @@ private fun getFullProjectVersion(mcVersion: String?, modVersion: String): Strin
             if (buildNumber != null) {
                 "$modVersion-mc$mcVersion-$commitHash-$buildNumber"
             } else {
-                "$modVersion-mc$mcVersion-local"
+                "$modVersion-mc$mcVersion-development"
             }
         }
         else -> {
-            "$modVersion-mc$mcVersion-local"
+            "$modVersion-mc$mcVersion-development"
         }
     }
 }
