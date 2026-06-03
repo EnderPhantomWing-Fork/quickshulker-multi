@@ -32,6 +32,8 @@ on:
         type: string
         required: true
 
+env:
+  IS_THIS_RELEASE: true
 
 jobs:
   show_action_parameters:
@@ -224,9 +226,9 @@ jobs:
           # curseforge-id: 314159
           # curseforge-token: ${{ secrets.CF_API_TOKEN }}
 
-          github-tag: ${{ steps.release_info.outputs.tag_name }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          github-prerelease: ${{ github.event.inputs.isPreRelease }}
+          # github-tag: ${{ steps.release_info.outputs.tag_name }}
+          # github-token: ${{ secrets.GITHUB_TOKEN }}
+          # github-prerelease: ${{ github.event.inputs.isPreRelease }}
 
           files: ${{ steps.file_info.outputs.path }}
 

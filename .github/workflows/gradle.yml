@@ -5,6 +5,9 @@ on:
     branches: [ '**' ] # stop build tag commits
   pull_request:
 
+env:
+  IS_THIS_RELEASE: false
+
 jobs:
   build:
     uses: ./.github/workflows/build.yml
