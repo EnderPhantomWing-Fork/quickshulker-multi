@@ -111,7 +111,7 @@ publishing {
         if (System.getenv("GITHUB_ACTIONS") == "true") {
             maven {
                 name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/EnderPhantomWing/quickshulker-multi")
+                url = uri("https://maven.pkg.github.com/EnderPhantomWing-Fork/quickshulker-multi")
                 credentials {
                     username = System.getenv("GITHUB_ACTOR")
                     password = System.getenv("GITHUB_TOKEN")
