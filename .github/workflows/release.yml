@@ -116,11 +116,15 @@ jobs:
       download_dependencies: true
 
   publish:
-    if: github.event.inputs.isPackages == true
+    if: github.event.inputs.isPackages != false
     uses: ./.github/workflows/publish.yml
     secrets: inherit
     needs:
       - build
+    with:
+      target_subproject: ${{ github.event.inputs.target_subproject }}
+      release: true
+      download_dependencies: true
 
   release:
     continue-on-error: true
