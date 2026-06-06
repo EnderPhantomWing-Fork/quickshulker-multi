@@ -92,15 +92,31 @@ license {
     mapping(mapOf("java" to "SLASHSTAR_STYLE_NEWLINE"))
 }
 
+java {
+    withSourcesJar()
+}
+
 publishing {
     publications {
-        register<MavenPublication>("mavenJava") {
+        register("mavenJava", MavenPublication::class) {
             from(components["java"])
+            artifactId = "${prop("mod_id")}-${prop("minecraft_version")}"
+            version = modVersion
         }
     }
 
     // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
     repositories {
         mavenLocal()
+        if (System.getenv("GITHUB_ACTIONS") == "true") {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/EnderPhantomWing/quickshulker-multi")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
+            }
+        }
     }
 }
